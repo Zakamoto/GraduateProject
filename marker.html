@@ -14,16 +14,11 @@
 	}
 	/* css กำหนดความกว้าง ความสูงของแผนที่ */
 	#map_canvas {
-		width:550px;
+		width:50%;
 		height:400px;
 		margin:0;
 		padding-top: 50px;
 	/*	margin-top:100px;*/
-	}
-	/* css กำหนดส่วนของการแสดง list menu */
-	div#list_menu_place{
-		width:550px;
-		margin:auto;
 	}
 </style>
 
@@ -55,25 +50,21 @@
   <nav class="navbar navbar-dark bg-primary"></nav>
 
 
-  <div class="row">
-      <div class="col-md-6 bg-info" id="showDDD">
-    <form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
-    ข้อมูลสถานที่<br />
-    <textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
-    </form>
-    <ol>
-      <li><a href="firstPage.php">Gooooooooooo</a></li>
-    </ol>
 
-    </div>
-  </div>
+<div class="row">
+	<div id="map_canvas"></div>
+		<div class="col-md-6 bg-info" id="showDDD">
+	<form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
+	ข้อมูลสถานที่<br />
+	<textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
+	</form>
+	<ol>
+		<li><a href="firstPage.php">Gooooooooooo</a></li>
+	</ol>
 
+	</div>
+</div>
 
-
-
-
-
-<div id="map_canvas"></div>
  <div id="showDD" style="margin:auto;padding-top:5px;width:550px;">
   <form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
   ข้อมูลสถานที่<br />
@@ -102,7 +93,6 @@ var geocoder; // กำหนดตัวแปร สำหรับใช้�
 var my_Marker;
 
 function initialize() { // ฟังก์ชันแสดงแผนที่
-	alert("Hello git");
 	GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
 	// กำหนดจุดเริ่มต้นของแผนที่
 	// 15.521832670176973
