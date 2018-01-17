@@ -31,6 +31,32 @@
 </head>
 
 <body>
+
+	<nav class="navbar navbar-dark bg-primary"></nav>
+  <nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="#"><h4>แผนที่การเกษตร</h4></a>
+  </nav>
+  <nav class="navbar navbar-dark bg-primary"></nav>
+
+
+  <div class="row">
+      <div class="col-md-6 bg-info" id="showDDD">
+    <form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
+    ข้อมูลสถานที่<br />
+    <textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
+    </form>
+    <ol>
+      <li><a href="firstPage.php">Gooooooooooo</a></li>
+    </ol>
+
+    </div>
+  </div>
+
+
+
+
+
+
 <div id="map_canvas"></div>
  <div id="showDD" style="margin:auto;padding-top:5px;width:550px;">
   <form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
@@ -178,6 +204,19 @@ $(function(){
 		// เอาคาจาก สist menu เข้าฟังก์ชัน go_to_select_place
 		//searchCommit();
 		codeAddress();
+	});
+
+	$('#showDD').delegate('a', 'click', function(e){
+		e.preventDefault();
+		var link = this.href;
+
+		/* ดึงเนื้อหาจากลิงค์ด้วย Ajax เมื่อผู้ใช้กดลิงค์ */
+		$.get(link, function(res){
+			/* อัพเดทเนื้อหาที่ได้จาก Ajax ไปที่ div ที่มี id="content" */
+			$('#showDDD').html(res);
+			/* หลังจากอัพเดทเนื้อหาเสร็จ เปลี่ยน URL ของเบราว์เซอร์ */
+			window.history.replaceState(null, null, link);
+		});
 	});
 	// โหลด สคริป google map api เมื่อเว็บโหลดเรียบร้อยแล้ว
 	// ค่าตัวแปร ที่ส่งไปในไฟล์ google map api
