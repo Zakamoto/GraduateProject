@@ -1,24 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
+<div id = "showDDD">
+  <form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
+  </br><center><h3>ข้อมูลสถานที่</h3></center><br />
 
+  ค้นหา
+  <input name="search" type="text" id="search" value="" size="6" />
+  <input type="button" name="button" id="button" value="ค้นหาตำแหน่ง" /></br>
 
+  <textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
+  </form>
 
-
-</head>
-<body bgcolor="#E6E6FA">
-  <div id = "showDDD">
-    <form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
-    ข้อมูลสถานที่<br />
-    <textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
-    </form>
-  <ol>
-    <li><a href="firstPage.php">go22222</a></li>
-  </ol>
+  <button id="linkArea" class="btn btn-info">ยืนยันตำแหน่งข้อมูล</button>
 </div>
 
-
-
-
-</body>
-</html>
+<script type="text/javascript">
+$(function(){
+$("#linkArea").click(function(e){
+e.preventDefault();
+var link = "Report.php";
+$.get(link, function(res){
+  $('#showDDD').html(res);
+  });
+});
+});
+</script>
