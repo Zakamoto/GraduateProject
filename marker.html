@@ -88,6 +88,12 @@ var GGM; // กำหนดตัวแปร GGM ไว้เก็บ google.m
 var geocoder; // กำหนดตัวแปร สำหรับใช้งานข้อมูลสถานที่จาก Google Map
 var my_Marker;
 var heatmap;
+var neighborhoods = [
+  {lat: 16.324, lng: 102.757},
+  {lat: 15.350, lng: 102.520},
+  {lat: 15.190, lng: 103.657},
+  {lat: 18.6716, lng: 98.9564}
+];
 
 function initialize() { // ฟังก์ชันแสดงแผนที่
 	GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
@@ -190,9 +196,20 @@ function go_to_select_place(placeVal){
 
 function toggleHeatmap() {
   heatmap.setMap(heatmap.getMap() ? null : map);
+  for (var i = 0; i < neighborhoods.length; i++) {
+    addMarkerWithTimeout(neighborhoods[i], i * 200);
+  }
 }
-function searchCommit(){
-	window.alert("This is fucking search");
+var riceImage = 'https://www.haleandhearty.com/static/olo/35/img/icons/icon-tag-vegetarian_36x36.png';
+function addMarkerWithTimeout(position, timeout) {
+  window.setTimeout(function() {
+    my_Marker.push(new google.maps.Marker({
+      position: position,
+      map: map,
+	  icon: riceImage,
+      animation: google.maps.Animation.DROP
+    }));
+  }, timeout);
 }
 function codeAddress() {
     var address = document.getElementById("search").value;
