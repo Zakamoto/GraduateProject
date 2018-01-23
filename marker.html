@@ -91,7 +91,9 @@ var map; // กำหนดตัวแปร map ไว้ด้านนอก
 var GGM; // กำหนดตัวแปร GGM ไว้เก็บ google.maps Object จะได้เรียกใช้งานได้ง่ายขึ้น
 var geocoder; // กำหนดตัวแปร สำหรับใช้งานข้อมูลสถานที่จาก Google Map
 var my_Marker;
+var producMarker = [];
 var heatmap;
+var isCheck = false;
 var neighborhoods = [
   {lat: 16.324, lng: 102.757},
   {lat: 15.350, lng: 102.520},
@@ -199,15 +201,24 @@ function go_to_select_place(placeVal){
 }
 
 function toggleHeatmap() {
-  heatmap.setMap(heatmap.getMap() ? null : map);
-  for (var i = 0; i < neighborhoods.length; i++) {
-    addMarkerWithTimeout(neighborhoods[i], i * 200);
+	for (var i = 0; i < producMarker.length; i++) {
+    producMarker[i].setMap(null);
   }
+  producMarker = [];
+  heatmap.setMap(heatmap.getMap() ? null : map);
+	if (!isCheck) {
+		for (var i = 0; i < neighborhoods.length; i++) {
+			addMarkerWithTimeout(neighborhoods[i], i * 200);
+		}
+		isCheck = true;
+	} else {
+		isCheck = false;
+	}
 }
 var riceImage = 'https://www.haleandhearty.com/static/olo/35/img/icons/icon-tag-vegetarian_36x36.png';
 function addMarkerWithTimeout(position, timeout) {
   window.setTimeout(function() {
-    my_Marker.push(new google.maps.Marker({
+    producMarker.push(new google.maps.Marker({
       position: position,
       map: map,
 	  icon: riceImage,
@@ -271,7 +282,7 @@ $(function(){
 	//	callback ให้เรียกใช้ฟังก์ชันแสดง แผนที่ initialize
 	$("<script/>", {
 	  "type": "text/javascript",
-	  src: "http://maps.google.com/maps/api/js?v=3.2&key=AIzaSyArl5scX8oLXsBZzkHNBn2sFAnarlYLMNs&sensor=false&language=th&callback=initialize&libraries=visualization"
+	  src: "http://maps.google.com/maps/api/js?v=3.2&key=AIzaSyArl5scX8oLXsBZzkHNBn2sFAnarlYLMNs&sensor=false&language=th&libraries=places&callback=initialize&libraries=visualization"
 	}).appendTo("body");
 });
 </script>
