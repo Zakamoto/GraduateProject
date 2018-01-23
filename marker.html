@@ -11,11 +11,16 @@
 	}
 	/* css กำหนดความกว้าง ความสูงของแผนที่ */
 	#map_canvas {
-		width:70%;
+		width:65%;
 		height:650px;
 		margin:0;
 		padding-top: 50px;
 	/*	margin-top:100px;*/
+	}
+	.btn.btn-warning.btn-block {
+    color: #212529;
+    background-color: #f02c54;
+    border-color: #f02c54;
 	}
 </style>
 
@@ -38,12 +43,9 @@
 	<nav class="navbar navbar-dark bg-primary"></nav>
 	<nav class="navbar navbar-dark bg-primary">
   <a class="navbar-brand" href="#">แผนที่การเกษตร</a>
-  <button onclick="toggleHeatmap()">Toggle Heatmap</button>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-  </div>
 	</nav>
   <nav class="navbar navbar-dark bg-primary"></nav>
 <!--End navbar-->
@@ -53,16 +55,15 @@
 	<div id="map_canvas"></div>
 
 	<!--start menu option-->
-		<div style="padding-left: 25px;" class="col-md-4" id="showDDD"></br>
+		<div style="padding-left: 25px; background-color:#a3ccff;" class="col-md-4" id="showDDD"></br>
 			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant"><h5>พืชทางการเกษตร</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
-					<li class="list-group-item"><input type="checkbox" name="rice"/><font style="padding-left: 25px;">ข้าว</font></li>
+					<li class="list-group-item"><input type="checkbox" onclick="toggleHeatmap()"><font style="padding-left: 25px;">ข้าว</font></li>
 					<li class="list-group-item"><input type="checkbox" name="cane"/><font style="padding-left: 25px;">อ้อย</font></li>
 					<li class="list-group-item"><input type="checkbox" name="parm"/><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
 					<li class="list-group-item"><input type="checkbox" name="rubber"/><font style="padding-left: 25px;">ยาง</font></li>
 					<li class="list-group-item"><input type="checkbox" name="cassava"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
-					<li class="list-group-item"><input type="checkbox" onclick="toggleHeatmap()"><font style="padding-left: 25px;">Toggle Heatmap</font></li>
 				</ul>
 			</div>
 
@@ -77,7 +78,7 @@
 		</div>
 
 
-		<button id="linkSearch" class="btn btn-warning btn-block"><h5>ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</h5></button>
+		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
 
 
 </div>
@@ -274,17 +275,6 @@ $(function(){
 	}).appendTo("body");
 });
 </script>
-
-
-<div class="row">
-<noscript class="alert-js"></noscript>
-<div class="above"><script src="/includes/Above.js"></script></div>
-
-
-<main role="main">
-<div class="col_11 col left box_shadow rounded">
-<article role="article">
-
 
 </body>
 </html>
