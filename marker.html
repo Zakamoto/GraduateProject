@@ -11,7 +11,7 @@
 	}
 	/* css กำหนดความกว้าง ความสูงของแผนที่ */
 	#map_canvas {
-		width:65%;
+		width:74%;
 		height:650px;
 		margin:0;
 		padding-top: 50px;
@@ -55,15 +55,15 @@
 	<div id="map_canvas"></div>
 
 	<!--start menu option-->
-		<div style="padding-left: 25px; background-color:#a3ccff;" class="col-md-4" id="showDDD"></br>
+		<div style="padding-left: 15px; background-color:#a3ccff;" class="col-md-3" id="showDDD"></br>
 			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant"><h5>พืชทางการเกษตร</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
 					<li class="list-group-item"><input type="checkbox" onclick="toggleHeatmap()"><font style="padding-left: 25px;">ข้าว</font></li>
-					<li class="list-group-item"><input type="checkbox" name="cane"/><font style="padding-left: 25px;">อ้อย</font></li>
-					<li class="list-group-item"><input type="checkbox" name="parm"/><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
-					<li class="list-group-item"><input type="checkbox" name="rubber"/><font style="padding-left: 25px;">ยาง</font></li>
-					<li class="list-group-item"><input type="checkbox" name="cassava"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
+					<li class="list-group-item"><input type="checkbox" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font></li>
+					<li class="list-group-item"><input type="checkbox" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
+					<li class="list-group-item"><input type="checkbox" onclick="rubber()"/><font style="padding-left: 25px;">ยาง</font></li>
+					<li class="list-group-item"><input type="checkbox" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
 				</ul>
 			</div>
 
@@ -71,18 +71,35 @@
 		<button class="btn btn-success btn-block" data-toggle="collapse" data-target="#itemWeather"><h5>สภาพอากาศ</h5></button>
 		<div id="itemWeather" class="panel-collapse collapse">
 			<ul class="list-group">
-				<li class="list-group-item">One</li>
-				<li class="list-group-item">Two</li>
-				<li class="list-group-item">Three</li>
+				<li class="list-group-item"><input type="checkbox" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
+				<li class="list-group-item"><input type="checkbox" onclick=""><font style="padding-left: 25px;">อากาศแจ่มใส</font></li>
+				<li class="list-group-item"><input type="checkbox" onclick=""><font style="padding-left: 25px;">พื้นที่ฝนตก</font></li>
 			</ul>
 		</div>
 
 
 		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
+		<button id="linkSearch" class="btn w3-button btn-block" onclick="pop"><h5><font color="White">แผนภูมิ</font></h5></button>
 
 
 </div>
 <!--End menu option-->
+
+
+
+
+<div id="pop" class="w3-modal">
+	<div class="w3-modal-content">
+		<div class="w3-container">
+      <span onclick="document.getElementById('id01').style.display='none'"
+      class="w3-button w3-display-topright">&times;</span>
+      <p>Some text in the Modal..</p>
+      <p>Some text in the Modal..</p>
+    </div>
+	</div>
+</div>
+
+
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 
@@ -94,6 +111,7 @@ var my_Marker;
 var producMarker = [];
 var heatmap;
 var isCheck = false;
+var isCheckCane = false;
 var neighborhoods = [
   {lat: 16.324, lng: 102.757},
   {lat: 15.350, lng: 102.520},
@@ -216,6 +234,300 @@ function go_to_select_place(placeVal){
 //	map.panTo(my_Latlng);  // ให้แผนที่แสดงไปที่ตัว marker
 }
 
+
+
+
+
+
+
+
+
+
+
+function Allweather(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+
+
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													animation: google.maps.Animation.DROP
+											});
+											//my_Marker.push(TheMarker);
+										}
+						},
+						type: 'GET'
+					});
+}
+
+
+
+
+function cane(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+								num = num/2;
+								if(!isCheckCane){
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon: 'img_plant/sugarcane_icon.png',
+													animation: google.maps.Animation.DROP
+											});
+											//my_Marker.push(TheMarker);
+										}
+										console.log(TheMarker);
+										isCheckCane = true;
+									}
+									else{
+										/*
+										for(var j=0;j<num;j++){
+
+										}*/
+										TheMarker = null;
+										console.log(TheMarker);
+											isCheckCane = false;
+
+									}
+						},
+						type: 'GET'
+					});
+}
+
+function rice(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+								if(!isCheckCane){
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon: 'img_plant/rice_icon.png',
+													animation: google.maps.Animation.DROP
+											});
+											//my_Marker.push(TheMarker);
+										}
+										console.log(TheMarker);
+										isCheckCane = true;
+									}
+									else{
+										/*
+										for(var j=0;j<num;j++){
+
+										}*/
+										TheMarker = null;
+										console.log(TheMarker);
+											isCheckCane = false;
+
+									}
+						},
+						type: 'GET'
+					});
+}
+
+
+function palm(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+								if(!isCheckCane){
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon: 'img_plant/palm_icon.png',
+													animation: google.maps.Animation.DROP
+											});
+											//my_Marker.push(TheMarker);
+										}
+										console.log(TheMarker);
+										isCheckCane = true;
+									}
+									else{
+										/*
+										for(var j=0;j<num;j++){
+
+										}*/
+										TheMarker = null;
+										console.log(TheMarker);
+											isCheckCane = false;
+
+									}
+						},
+						type: 'GET'
+					});
+}
+
+function rubber(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+								if(!isCheckCane){
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon: 'img_plant/rubberTree_icon.png',
+													animation: google.maps.Animation.DROP
+											});
+											//my_Marker.push(TheMarker);
+										}
+										console.log(TheMarker);
+										isCheckCane = true;
+									}
+									else{
+										/*
+										for(var j=0;j<num;j++){
+
+										}*/
+										TheMarker = null;
+										console.log(TheMarker);
+											isCheckCane = false;
+
+									}
+						},
+						type: 'GET'
+					});
+}
+
+
+function cassava(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+								if(!isCheckCane){
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon: 'img_plant/cassava_icon.png',
+													animation: google.maps.Animation.DROP
+											});
+											//my_Marker.push(TheMarker);
+										}
+										console.log(TheMarker);
+										isCheckCane = true;
+									}
+									else{
+										/*
+										for(var j=0;j<num;j++){
+
+										}*/
+										TheMarker = null;
+										console.log(TheMarker);
+											isCheckCane = false;
+
+									}
+						},
+						type: 'GET'
+					});
+}
+
+
+
+
+
+
+
+
+
+
 function toggleHeatmap() {
 	for (var i = 0; i < producMarker.length; i++) {
     producMarker[i].setMap(null);
@@ -231,7 +543,7 @@ function toggleHeatmap() {
 		isCheck = false;
 	}
 }
-var riceImage = 'https://www.haleandhearty.com/static/olo/35/img/icons/icon-tag-vegetarian_36x36.png';
+var riceImage = 'img_plant/rice_icon.png';
 function addMarkerWithTimeout(position, timeout) {
   window.setTimeout(function() {
     producMarker.push(new google.maps.Marker({
