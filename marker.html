@@ -30,8 +30,42 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
 
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
 
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+          ['ข้าว', 3],
+          ['อ้อย', 1],
+          ['ปาล์มน้ำมัน', 1],
+          ['ยางพารา', 1],
+          ['มันสัมปะหลัง', 1]
+        ]);
+
+        // Set chart options
+        var options = {'title':'How Much Pizza I Ate Last Night',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
 
 
 </head>
@@ -46,9 +80,15 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+	<a data-toggle="modal" data-target="#pop"><h5><font color="White">แผนภูมิ</font></h5></a>
 	</nav>
   <nav class="navbar navbar-dark bg-primary"></nav>
 <!--End navbar-->
+
+
+
+
+
 
 <div class="row">
 	<!--start google maps-->
@@ -62,7 +102,7 @@
 					<li class="list-group-item"><input type="checkbox" onclick="toggleHeatmap()"><font style="padding-left: 25px;">ข้าว</font></li>
 					<li class="list-group-item"><input type="checkbox" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font></li>
 					<li class="list-group-item"><input type="checkbox" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
-					<li class="list-group-item"><input type="checkbox" onclick="rubber()"/><font style="padding-left: 25px;">ยาง</font></li>
+					<li class="list-group-item"><input type="checkbox" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font></li>
 					<li class="list-group-item"><input type="checkbox" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
 				</ul>
 			</div>
@@ -79,7 +119,7 @@
 
 
 		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
-		<button id="linkSearch" class="btn w3-button btn-block" onclick="pop"><h5><font color="White">แผนภูมิ</font></h5></button>
+
 
 
 </div>
@@ -88,15 +128,22 @@
 
 
 
-<div id="pop" class="w3-modal">
-	<div class="w3-modal-content">
-		<div class="w3-container">
-      <span onclick="document.getElementById('id01').style.display='none'"
-      class="w3-button w3-display-topright">&times;</span>
-      <p>Some text in the Modal..</p>
-      <p>Some text in the Modal..</p>
-    </div>
-	</div>
+<div id="pop" class="modal fade">
+  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1>แผนภูมิ</h1>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+			<div class="modal-body">
+
+				<div id="chart_div"></div>
+
+			</div>
+		</div>
+  </div>
 </div>
 
 
@@ -128,9 +175,13 @@ function initialize() { // ฟังก์ชันแสดงแผนที�
             '<div id="siteNotice">'+
             '</div>'+
             '<div id="bodyContent">'+
+
             '<p><b>พันธุ์ข้าวที่แนะนำในการเพาะปลูก กข15</b>'+'</br>'+
 						'รูปแบบในการเพาะปลูกที่แนะนำคือ นาขั้นบันใด'+'</br>'+
-						'ช่วงเวลาที่เหมาะสม ตั้งแต่เดือน มกราคม - เมษายน'+
+						'ช่วงเวลาที่เหมาะสม ตั้งแต่เดือน มกราคม - เมษายน  '+
+
+						'<button class="btn" data-toggle="modal" data-target="#pop">แผนภูมิ</button>'+
+
             '</div>'+
             '</div>';
 
