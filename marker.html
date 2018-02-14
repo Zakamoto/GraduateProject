@@ -57,9 +57,9 @@
         ]);
 
         // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
+        var options = {'title':'สัดส่วนความเหมาะสมในการปลูกพืชในพื้นที่',
                        'width':400,
-                       'height':300};
+                       'height':500};
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
@@ -80,7 +80,6 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-	<a data-toggle="modal" data-target="#pop"><h5><font color="White">แผนภูมิ</font></h5></a>
 	</nav>
   <nav class="navbar navbar-dark bg-primary"></nav>
 <!--End navbar-->
@@ -112,8 +111,10 @@
 		<div id="itemWeather" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><input type="checkbox" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
-				<li class="list-group-item"><input type="checkbox" onclick=""><font style="padding-left: 25px;">อากาศแจ่มใส</font></li>
-				<li class="list-group-item"><input type="checkbox" onclick=""><font style="padding-left: 25px;">พื้นที่ฝนตก</font></li>
+				<li class="list-group-item"><input type="checkbox" onclick="warm()"><font style="padding-left: 25px;">อากาศแจ่มใส</font></li>
+				<li class="list-group-item"><input type="checkbox" onclick="Cloud()"><font style="padding-left: 25px;">มีเมฆบางส่วน</font></li>
+				<li class="list-group-item"><input type="checkbox" onclick="much_cloud()"><font style="padding-left: 25px;">มีเมฆมาก</font></li>
+				<li class="list-group-item"><input type="checkbox" onclick="rain()"><font style="padding-left: 25px;">ฝนตก</font></li>
 			</ul>
 		</div>
 
@@ -129,7 +130,7 @@
 
 
 <div id="pop" class="modal fade">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" role="document" >
 		<div class="modal-content">
 			<div class="modal-header">
 				<h1>แผนภูมิ</h1>
@@ -320,13 +321,147 @@ function Allweather(){
 										var TheMarker = new GGM.Marker({ // สร้างตัว marker
 													position:markerLatLng,
 													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon:'img_weather/sun_icon.png',
 													animation: google.maps.Animation.DROP
 											});
-											//my_Marker.push(TheMarker);
 										}
 						},
 						type: 'GET'
 					});
+}
+
+
+
+function warm(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var Cloud = data.Stations[j]['Observe']['TotolCloud'];
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										if(Cloud == "ท้องฟ้าแจ่มใส"){
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon:'img_weather/sun_icon.png',
+													animation: google.maps.Animation.DROP
+												});
+											}
+										}
+						},
+						type: 'GET'
+					});
+}
+
+function Cloud(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var Cloud = data.Stations[j]['Observe']['TotolCloud'];
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										if(Cloud == "มีเมฆบางส่วน"){
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon:'img_weather/Cloud-icon.png',
+													animation: google.maps.Animation.DROP
+												});
+											}
+										}
+						},
+						type: 'GET'
+					});
+}
+
+function much_cloud(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+
+								for(var j=0;j<num;j++){
+										var getlatt = data.Stations[j]['Latitude']['Value'];
+										var latt = parseFloat(getlatt);
+
+										var getlngg = data.Stations[j]['Longitude']['Value'];
+										var lngg = parseFloat(getlngg);
+
+										var Cloud = data.Stations[j]['Observe']['TotolCloud'];
+
+										var markerLatLng = new GGM.LatLng(latt,lngg);
+										if(Cloud == "มีเมฆมาก"){
+										var TheMarker = new GGM.Marker({ // สร้างตัว marker
+													position:markerLatLng,
+													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+													icon:'img_weather/Toocloud_icon.png',
+													animation: google.maps.Animation.DROP
+												});
+											}
+										}
+						},
+						type: 'GET'
+					});
+}
+
+
+
+function rain(){
+			$.ajax({
+				type: 'GET',
+				url: 'loadxml.php',
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				dataType: 'json',
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+					var num = data.StationMonthlyRainfalls.length;
+					var name = data.StationMonthlyRainfalls['Province'];
+					console.log(name);
+				}
+				});
 }
 
 
