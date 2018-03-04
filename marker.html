@@ -3,12 +3,6 @@
 <head>
 <style type="text/css">
 	html { height: 100% }
-	body {
-		height:100%;
-		margin:0;padding:0;
-		font-family:tahoma, "Microsoft Sans Serif", sans-serif, Verdana;
-		font-size:12px;
-	}
 	/* css กำหนดความกว้าง ความสูงของแผนที่ */
 	#map_canvas {
 		width:74%;
@@ -45,25 +39,26 @@
       function drawChart() {
 
         // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-          ['ข้าว', 3],
-          ['อ้อย', 1],
-          ['ปาล์มน้ำมัน', 1],
-          ['ยางพารา', 1],
-          ['มันสัมปะหลัง', 1]
-        ]);
+				var data = google.visualization.arrayToDataTable([
+				['Element', 'เปอร์เซนต์ความเหมาะสม', { role: 'style' }],
+				['ข้าว', 8.94, '#b87333'],            // RGB value
+				['ปาล์มน้ำมัน', 10.49, 'silver'],            // English color name
+				['ยางพารา', 19.30, 'gold'],
+			  ['อ้อย', 30, 'color: #229954' ], // CSS-style declaration
+				['มันสำปะหลัง', 100, 'color: #e5e4e2' ],
+		 ]);
 
-        // Set chart options
-        var options = {'title':'สัดส่วนความเหมาะสมในการปลูกพืชในพื้นที่',
-                       'width':400,
-                       'height':500};
+		 var options = {
+        title: "อัตราความเหมาะสมของพืชแต่ละชนิด",
+        width: 600,
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data,options);
       }
     </script>
 
@@ -88,7 +83,7 @@
 
 
 
-
+<div>
 <div class="row">
 	<!--start google maps-->
 	<div id="map_canvas"></div>
@@ -121,10 +116,35 @@
 
 		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
 
-
-
 </div>
+</div>
+</div>
+
 <!--End menu option-->
+
+<!--start result-->
+
+<div class="collapse" id="Report"><center>
+	<div class="card">
+		<div class="card-body" style="background-color:#5BD958;">
+				<form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
+					</br><center><h3>ระบุตำแหน่งที่สนใจ</h3></center><br />
+					<textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
+				</form>
+				<div class="modal-body">
+
+					<div id="chart_div"></div>
+
+				</div>
+			</div>
+		</div>
+</div></center>
+
+
+
+
+
+<!--End result-->
 
 
 
@@ -138,11 +158,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
 			</div>
-			<div class="modal-body">
 
-				<div id="chart_div"></div>
-
-			</div>
 		</div>
   </div>
 </div>
@@ -150,6 +166,68 @@
 
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<script>
+  function initAutocomplete() {
+    var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+  }
+</script>
 
 <script type="text/javascript">
 var map; // กำหนดตัวแปร map ไว้ด้านนอกฟังก์ชัน เพื่อให้สามารถเรียกใช้งาน จากส่วนอื่นได้
@@ -449,6 +527,8 @@ function much_cloud(){
 										var lngg = parseFloat(getlngg);
 
 										var Cloud = data.Stations[j]['Observe']['TotolCloud'];
+										var Temper = data.Stations[j]['Observe']['Temperature']['Value'];
+										console.log(Temper);
 
 										var markerLatLng = new GGM.LatLng(latt,lngg);
 										if(Cloud == "มีเมฆมาก"){
@@ -791,11 +871,6 @@ $(function(){
 			$('#showDDD').html(res);
 			});
 		});
-
-
-
-
-
 
 	$('#showDDD').delegate('a', 'click', function(e){
 		e.preventDefault();
