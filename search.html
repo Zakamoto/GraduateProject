@@ -1,25 +1,91 @@
 <div id = "showDDD">
-  <form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
-  </br><center><h3>ข้อมูลสถานที่</h3></center><br />
-
-  ค้นหา
-  <input name="search" type="text" id="search" value="" size="6" />
-  <input type="button" name="button" id="button" value="ค้นหาตำแหน่ง" /></br>
-
-  <textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
-  </form>
-
-  <button id="linkArea" class="btn btn-info">ยืนยันตำแหน่งข้อมูล</button>
+    <button id="gps" class="btn btn-success btn-block" data-toggle="collapse" data-target="#Report">ตำแหน่งที่คุณอยู่ ณ ปัจจุบัน(GPS)</button>
+    <button id="drog" class="btn btn-info">ตำแหน่งด้วยการลากจุดบนแผนที่</button>
+    <button id="linkArea" class="btn btn-info">ยืนยันตำแหน่งข้อมูล</button>
 </div>
+
+
+
+<script>
+  function initAutocomplete() {
+    var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+  }
+
+
+
+
+</script>
 
 <script type="text/javascript">
 $(function(){
 $("#linkArea").click(function(e){
-e.preventDefault();
-var link = "Report.php";
-$.get(link, function(res){
-  $('#showDDD').html(res);
+  e.preventDefault();
+  var link = "Report.php";
+  $.get(link, function(res){
+    $('#showDDD').html(res);
+    });
   });
-});
+  var $elem = $('#Report');
+  $('#gps').click(
+    function (e) {
+      $('html, body').animate({scrollTop: $elem.height()}, 800);
+    }
+  );
 });
 </script>
