@@ -371,9 +371,6 @@ function go_to_select_place(placeVal){
 
 
 
-
-
-
 function Allweather(){
 		$.ajax({
 				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -394,6 +391,7 @@ function Allweather(){
 
 										var getlngg = data.Stations[j]['Longitude']['Value'];
 										var lngg = parseFloat(getlngg);
+
 
 										var markerLatLng = new GGM.LatLng(latt,lngg);
 										var TheMarker = new GGM.Marker({ // สร้างตัว marker
