@@ -1,76 +1,18 @@
-<div id = "showDDD">
-    <button id="gps" class="btn btn-success btn-block" data-toggle="collapse" data-target="#Report">ตำแหน่งที่คุณอยู่ ณ ปัจจุบัน(GPS)</button>
-    <button id="drog" class="btn btn-info">ตำแหน่งด้วยการลากจุดบนแผนที่</button>
-    <button id="linkArea" class="btn btn-info">ยืนยันตำแหน่งข้อมูล</button>
+<div>
+
+    <br/>
+
+    <center>
+    <button id="drog" class="btn btn-info" style="width:150px;height:150px;">ค้นหาตำแหน่ง<br/>ณ ปัจจุบัน<br/><img src="img_option/gps_icon.png"></button>
+    <button id="linkArea" class="btn btn-info" style="width:150px;height:150px;"><b>ค้นหาตำแหน่ง<br/>ด้วยการปักหมุด<br/></b><img src="img_option/gps_icon.png"></button>
+    </center>
+
+    <div style="padding-top:10px;"></div>
+
+    <button id="gps" class="btn btn-success btn-block" data-toggle="collapse" data-target="#Report">ยืนยันตำแหน่งข้อมูล</button>
+    <button class="btn btn-info btn-block" onclick='location.replace("marker.html")'><i class="fa fa-arrow-left" aria-hidden="true"></i>กลับไปยังหน้าเมนูหลัก</button>
+
 </div>
-
-
-
-<script>
-  function initAutocomplete() {
-    var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-          searchBox.setBounds(map.getBounds());
-        });
-
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        searchBox.addListener('places_changed', function() {
-          var places = searchBox.getPlaces();
-
-          if (places.length == 0) {
-            return;
-          }
-
-          // Clear out the old markers.
-          markers.forEach(function(marker) {
-            marker.setMap(null);
-          });
-          markers = [];
-
-          // For each place, get the icon, name and location.
-          var bounds = new google.maps.LatLngBounds();
-          places.forEach(function(place) {
-            if (!place.geometry) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
-            var icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-            };
-
-            // Create a marker for each place.
-            markers.push(new google.maps.Marker({
-              map: map,
-              icon: icon,
-              title: place.name,
-              position: place.geometry.location
-            }));
-
-            if (place.geometry.viewport) {
-              // Only geocodes have viewport.
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
-            }
-          });
-          map.fitBounds(bounds);
-        });
-  }
-
-
-
-
-</script>
 
 <script type="text/javascript">
 $(function(){

@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+
 <style type="text/css">
 	html { height: 100% }
 	/* css กำหนดความกว้าง ความสูงของแผนที่ */
 	#map_canvas {
-		width:74%;
-		height:650px;
+		width:75%;
+		height:670px;
 		margin:0;
 		padding-top: 50px;
+		float: left;
 	/*	margin-top:100px;*/
 	}
 	.btn.btn-warning.btn-block {
@@ -16,13 +27,20 @@
     background-color: #f02c54;
     border-color: #f02c54;
 	}
+	#showDDD{
+		height:670px;
+		float: right;
+	}
+	#Report{
+		width: 100%;
+		float: left;
+	}
+	#Report_one{float: left;}
+	#Report_two{float: right;}
+
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -52,7 +70,7 @@
         title: "อัตราความเหมาะสมของพืชแต่ละชนิด",
         width: 600,
         height: 400,
-        bar: {groupWidth: "95%"},
+        bar: {groupWidth: "90%"},
         legend: { position: "none" },
       };
 
@@ -83,13 +101,11 @@
 
 
 
-<div>
-<div class="row">
-	<!--start google maps-->
+	<!--google maps-->
 	<div id="map_canvas"></div>
 
 	<!--start menu option-->
-		<div style="padding-left: 15px; background-color:#a3ccff;" class="col-md-3" id="showDDD"></br>
+  <div style="padding-left: 15px; background-color:#a3ccff;" class="col-md-3" id="showDDD"></br>
 			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant"><h5>พืชทางการเกษตร</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
@@ -117,28 +133,78 @@
 		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
 
 </div>
-</div>
-</div>
+
 
 <!--End menu option-->
 
 <!--start result-->
 
-<div class="collapse" id="Report"><center>
-	<div class="card">
-		<div class="card-body" style="background-color:#5BD958;">
-				<form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
-					</br><center><h3>ระบุตำแหน่งที่สนใจ</h3></center><br />
-					<textarea name="place_value" rows="2" id="place_value" style="width:380px;"></textarea><br />
-				</form>
+<div class="collapse" id="Report" >
+
+	<div class="col-md-6" id="Report_one">
+		<div>
+				<p></p>
+				<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
+				<p></p>
 				<div class="modal-body">
-
-					<div id="chart_div"></div>
-
+					<center><div id="chart_div"></div></center>
 				</div>
 			</div>
 		</div>
-</div></center>
+
+		<div class="col-md-6" id="Report_two">
+						</br><center><h3>ข้อมูลพื้นที่</h3></center><br />
+						<div class="card">
+							<div class="card-block">
+								<form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
+									<table>
+									<td><label>ตำแหน่งสถานที่ : </label><td>
+									<td><div name="place_value"id="place_value"></div><td>
+								</table>
+
+								</form>
+							</div>
+						</div>
+
+			<!--start Display result-->
+
+						<div style="padding-top:20px;" class="container">
+						<table class="table table-hover">
+
+								<tr>
+									<th>ข้าว</th>
+									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td><button class="btn btn-info" id="Display_rice">ดูรายละเอียด</button></td>
+								</tr>
+								<tr>
+									<th>อ้อย</th>
+									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td><button class="btn btn-info" id="Display_cane">ดูรายละเอียด</button></td>
+								</tr>
+								<tr>
+									<th>มันสำปะหลัง</th>
+									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td><button class="btn btn-info" id="Display_cassava">ดูรายละเอียด</button></td>
+								</tr>
+								<tr>
+									<th>ยางพารา</th>
+									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td><button class="btn btn-info" id="Display_rubber">ดูรายละเอียด</button></td>
+								</tr>
+								<tr>
+									<th>ปาล์มน้ำมัน</th>
+									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td><button class="btn btn-info" id="Display_palm">ดูรายละเอียด</button></td>
+								</tr>
+
+						</table>
+						</div>
+
+			<!--End Display result-->
+
+	</div>
+
+</div>
 
 
 
@@ -152,6 +218,7 @@
 <div id="pop" class="modal fade">
   <div class="modal-dialog" role="document" >
 		<div class="modal-content">
+
 			<div class="modal-header">
 				<h1>แผนภูมิ</h1>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -358,10 +425,7 @@ function initialize() { // ฟังก์ชันแสดงแผนที�
 		  if (status == GGM.GeocoderStatus.OK) {
 				if (results[1]) {
 					// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
-					$("#place_value").val(results[1].formatted_address); //
-
-					var elevation = text_decode(results[1].elevation);
-					$("#sea_value").val(elevation);
+					$("#place_value").html(results[1].formatted_address); //
 				}
 		  } else {
 			  // กรณีไม่มีข้อมูล
