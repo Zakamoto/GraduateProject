@@ -1,48 +1,25 @@
-<div id = "showDDD">
-<h1>Report</h1>
-
-<table style="width:800px">
-  <tr>
-    <td>พื้นที่นี้เพาะปลูกข้าวได้</td>
-    <td><button class="btn-success" onclick="toggle_visibility('foo1');">รายละเอียด</button></td>
-  </tr>
-</table>
-<div class="bg-info" id="foo1" style="display:none;">
-
-  เพราะอย่างนู้น อย่างนี้ อย่างนั้น</br>
-  เพราะนั้น นู้น นี้ 11111111
+<div>
+    <br/>
+    <center>โปรดทำการลาก หมุดปัก บนแผนที่ไปยังตำแหน่งที่ต้องการ<br/>
+    <img src="img_option/position.png" width="300px" height="300px"></center>
+    <button id="enter_position" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report">ยืนยันตำแหน่ง</button>
+    <button id="back" class="btn btn-info">ยกเลิก</button>
 
 </div>
 
-  <table style="width:800px">
-  <tr>
-    <td>พื้นที่นี้ เหมาะสำหรับการปลูกข้าวรูปแบบ นาขั้นบันได้</td>
-    <td><button class="btn-success" onclick="toggle_visibility('foo2');">รายละเอียด</button></td>
-  </tr>
-</table>
-  <div class="bg-info" id="foo2" style="display:none;">
-
-    เพราะอย่างนู้น อย่างนี้ อย่างนั้น</br>
-    เพราะนั้น นู้น นี้ 2222222222
-
-  </div>
-
-
-  <table style="width:800px">
-  <tr>
-    <td>พันธุ์ข้าวที่เหมาะสม คือ กข15 </td>
-    <td><button class="btn-success" onclick="toggle_visibility('foo3');">รายละเอียด</button></td>
-  </tr>
-</table>
-
-<div class="bg-info" id="foo3" style="display:none;">
-
-  เพราะอย่างนู้น อย่างนี้ อย่างนั้น</br>
-  เพราะนั้น นู้น นี้ 333333333
-
-</div>
-
-    <a href="search.html">กลับไปหน้าค้นหา</a></br>
-    <button class="btn btn-info" onclick='location.replace("marker.html")'>กลับไปยังหน้าเมนูหลัก</button>
-
-</div>
+<script type="text/javascript">
+$(function(){
+$("#back").click(function(e){
+  e.preventDefault();
+  var link = "search.html";
+  $.get(link, function(res){
+    $('#showDDD').html(res);
+    });
+  });
+  var $elem = $('#Report');
+  $('#enter_position').click(
+    function (e) {
+      $('html, body').animate({scrollTop: $elem.height()}, 800);
+  });
+});
+  </script>

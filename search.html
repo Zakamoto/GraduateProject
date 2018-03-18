@@ -9,7 +9,7 @@
 
     <div style="padding-top:10px;"></div>
 
-    <button id="gps" class="btn btn-success btn-block" data-toggle="collapse" data-target="#Report">ยืนยันตำแหน่งข้อมูล</button>
+
     <button class="btn btn-info btn-block" onclick='location.replace("marker.html")'><i class="fa fa-arrow-left" aria-hidden="true"></i>กลับไปยังหน้าเมนูหลัก</button>
 
 </div>
@@ -23,11 +23,5 @@ $("#linkArea").click(function(e){
     $('#showDDD').html(res);
     });
   });
-  var $elem = $('#Report');
-  $('#gps').click(
-    function (e) {
-      $('html, body').animate({scrollTop: $elem.height()}, 800);
-    }
-  );
 });
 </script>

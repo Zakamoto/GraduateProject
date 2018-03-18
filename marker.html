@@ -37,6 +37,10 @@
 	}
 	#Report_one{float: left;}
 	#Report_two{float: right;}
+	.modal-dialog{
+	max-width: 1200px;
+	}
+	#back{float: right;}
 
 </style>
 
@@ -80,6 +84,736 @@
       }
     </script>
 
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+		<script>
+		  function initAutocomplete() {
+		    var input = document.getElementById('pac-input');
+		        var searchBox = new google.maps.places.SearchBox(input);
+		        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+		        // Bias the SearchBox results towards current map's viewport.
+		        map.addListener('bounds_changed', function() {
+		          searchBox.setBounds(map.getBounds());
+		        });
+
+		        var markers = [];
+		        // Listen for the event fired when the user selects a prediction and retrieve
+		        // more details for that place.
+		        searchBox.addListener('places_changed', function() {
+		          var places = searchBox.getPlaces();
+
+		          if (places.length == 0) {
+		            return;
+		          }
+
+		          // Clear out the old markers.
+		          markers.forEach(function(marker) {
+		            marker.setMap(null);
+		          });
+		          markers = [];
+
+		          // For each place, get the icon, name and location.
+		          var bounds = new google.maps.LatLngBounds();
+		          places.forEach(function(place) {
+		            if (!place.geometry) {
+		              console.log("Returned place contains no geometry");
+		              return;
+		            }
+		            var icon = {
+		              url: place.icon,
+		              size: new google.maps.Size(71, 71),
+		              origin: new google.maps.Point(0, 0),
+		              anchor: new google.maps.Point(17, 34),
+		              scaledSize: new google.maps.Size(25, 25)
+		            };
+
+		            // Create a marker for each place.
+		            markers.push(new google.maps.Marker({
+		              map: map,
+		              icon: icon,
+		              title: place.name,
+		              position: place.geometry.location
+		            }));
+
+		            if (place.geometry.viewport) {
+		              // Only geocodes have viewport.
+		              bounds.union(place.geometry.viewport);
+		            } else {
+		              bounds.extend(place.geometry.location);
+		            }
+		          });
+		          map.fitBounds(bounds);
+		        });
+		  }
+		</script>
+
+		<script type="text/javascript">
+		var map; // กำหนดตัวแปร map ไว้ด้านนอกฟังก์ชัน เพื่อให้สามารถเรียกใช้งาน จากส่วนอื่นได้
+		var GGM; // กำหนดตัวแปร GGM ไว้เก็บ google.maps Object จะได้เรียกใช้งานได้ง่ายขึ้น
+		var geocoder; // กำหนดตัวแปร สำหรับใช้งานข้อมูลสถานที่จาก Google Map
+		var my_Marker;
+		var producMarker = [];
+		var heatmap;
+		var isCheck = false;
+		var isCheckCane = false;
+		var neighborhoods = [
+		  {lat: 16.324, lng: 102.757},
+		  {lat: 15.350, lng: 102.520},
+		  {lat: 15.190, lng: 103.657},
+		  {lat: 18.6716, lng: 98.9564}
+		];
+
+		function initialize() { // ฟังก์ชันแสดงแผนที่
+			GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
+			// กำหนดจุดเริ่มต้นของแผนที่
+			// 15.521832670176973
+			// 100.94521484999996
+			var contentString = '<div id="content">'+
+		            '<div id="siteNotice">'+
+		            '</div>'+
+		            '<div id="bodyContent">'+
+
+		            '<p><b>พันธุ์ข้าวที่แนะนำในการเพาะปลูก กข15</b>'+'</br>'+
+								'รูปแบบในการเพาะปลูกที่แนะนำคือ นาขั้นบันใด'+'</br>'+
+								'ช่วงเวลาที่เหมาะสม ตั้งแต่เดือน มกราคม - เมษายน  '+
+
+								'<button class="btn" data-toggle="modal" data-target="#pop">แผนภูมิ</button>'+
+
+		            '</div>'+
+		            '</div>';
+
+		        var infowindow = new google.maps.InfoWindow({
+		          content: contentString
+		        });
+			var my_Latlng  = new GGM.LatLng(13.693353828847119,100.47280274062496);
+			// Try HTML5 geolocation.
+			if (navigator.geolocation) {
+		          navigator.geolocation.getCurrentPosition(function(position) {
+		            var pos = {
+		              lat: position.coords.latitude,
+		              lng: position.coords.longitude
+		            };
+		            infowindow.setPosition(pos);
+		            infowindow.setContent('<div name="place_value"id="place_value"></div>'+'<br/>');
+		            infowindow.open(map);
+		            map.setCenter(pos);
+		          }, function() {
+		            handleLocationError(true, infowindow, map.getCenter());
+		          });
+		        } else {
+		          // Browser doesn't support Geolocation
+		          handleLocationError(false, infowindow, map.getCenter());
+				  alert("เบาวน์เซอร์ไม่รองรับ การเข้าถึงตำแหน่งปัจจุบันของคุณ");
+		        }
+
+		      function handleLocationError(browserHasGeolocation, infowindow, pos) {
+		        infowindow.setPosition(pos);
+		        infowindow.setContent(browserHasGeolocation ?
+		                              'มีข้อผิดพลาดเกิดขึ้นในการเข้าถึงตำแหน่งปัจจุบันของคุณ' :
+		                              'Error: Your browser doesn\'t support geolocation.');
+				infowindow.open(map);
+				alert("มีข้อผิดพลาดเกิดขึ้นในการเข้าถึงตำแหน่งปัจจุบันของคุณ");
+		      }
+			// เรียกใช้งานข้อมูล Geocoder ของ Google Map
+			geocoder = new GGM.Geocoder();
+			var my_mapTypeId=GGM.MapTypeId.ROADMAP; // กำหนดรูปแบบแผนที่ที่แสดง
+			// กำหนด DOM object ที่จะเอาแผนที่ไปแสดง ที่นี้คือ div id=map_canvas
+			var my_DivObj=$("#map_canvas")[0];
+			// กำหนด Option ของแผนที่
+			var myOptions = {
+				zoom: 6, // กำหนดขนาดการ zoom
+				center: my_Latlng , // กำหนดจุดกึ่งกลาง
+				mapTypeId:my_mapTypeId // กำหนดรูปแบบแผนที่
+			};
+			map = new GGM.Map(my_DivObj,myOptions);// สร้างแผนที่และเก็บตัวแปรไว้ในชื่อ map
+
+			my_Marker = new GGM.Marker({ // สร้างตัว marker
+				position: my_Latlng,  // กำหนดไว้ที่เดียวกับจุดกึ่งกลาง
+				map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+				draggable:true, // กำหนดให้สามารถลากตัว marker นี้ได้
+				title:"กดค้างและลากเพื่อหาตำแหน่งที่ต้องการ" // แสดง title เมื่อเอาเมาส์มาอยู่เหนือ
+			});
+			my_Marker.addListener('click', function() {
+		    infowindow.open(map, my_Marker);
+		  });
+			// heatmap
+			heatmap = new google.maps.visualization.HeatmapLayer({
+		    data: getPoints()
+		  	});
+			function getPoints() {
+			return [
+				new google.maps.LatLng(18.6711, 98.9564),
+				new google.maps.LatLng(18.6712, 98.9565),
+				new google.maps.LatLng(18.6713, 98.9566),
+				new google.maps.LatLng(18.6714, 98.9567),
+				new google.maps.LatLng(18.6715, 98.9568),
+				new google.maps.LatLng(18.6716, 98.9569),
+				{location: new google.maps.LatLng(18.7817, 98.9570), weight: 1.5},
+				{location: new google.maps.LatLng(18.8817, 98.9470), weight: 1.5},
+				{location: new google.maps.LatLng(18.9817, 98.9370), weight: 1.5},
+				{location: new google.maps.LatLng(18.9917, 98.9270), weight: 1.5},
+				new google.maps.LatLng(16.356, 102.877),
+				new google.maps.LatLng(16.366, 102.887),
+				new google.maps.LatLng(16.376, 102.897),
+				new google.maps.LatLng(16.386, 102.907),
+				new google.maps.LatLng(16.396, 102.917),
+				new google.maps.LatLng(16.406, 102.927),
+				new google.maps.LatLng(16.416, 102.937),
+				new google.maps.LatLng(16.426, 102.947),
+				new google.maps.LatLng(16.436, 102.957),
+				new google.maps.LatLng(16.446, 102.967)
+				]
+			};
+			// กำหนด event ให้กับตัว marker เมื่อสิ้นสุดการลากตัว marker ให้ทำงานอะไร
+			GGM.event.addListener(my_Marker, "dragend", function() {
+				var my_Point = my_Marker.getPosition();  // หาตำแหน่งของตัว marker เมื่อกดลากแล้วปล่อย
+				console.log(my_Point.lat());
+				console.log(my_Point.lng());
+		        map.panTo(my_Point);  // ให้แผนที่แสดงไปที่ตัว marker
+
+				// เรียกขอข้อมูลสถานที่จาก Google Map
+				geocoder.geocode({"latLng": my_Point}, function(results, status) {
+				  if (status == GGM.GeocoderStatus.OK) {
+						if (results[1]) {
+							// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
+							$("#place_value").html(results[1].formatted_address); //
+						}
+				  } else {
+					  // กรณีไม่มีข้อมูล
+					alert("Geocoder failed due to: " + status);
+				  }
+				});
+		        $("#lat_value").val(my_Point.lat());  // เอาค่า latitude ตัว marker แสดงใน textbox id=lat_value
+		        $("#lon_value").val(my_Point.lng()); // เอาค่า longitude ตัว marker แสดงใน textbox id=lon_value
+		        $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value
+			});
+
+		}
+		// ฟังก์ชั่น สำหรับให้แผนทีไปที่จุดตามค่าตำแหน่งที่ส่งมา
+		function go_to_select_place(placeVal){
+		//	GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
+		//	console.log(placeVal);
+			var positionVal=placeVal.split(","); // แยกค่าที่ส่งมาออกเป็นสองค่า คือ lat กับ lon
+		//	console.log(positionVal);
+			var my_Latlng  = new GGM.LatLng(positionVal[0],positionVal[1]);
+			map.setCenter(my_Latlng); // กำหนดตำแแน่งตรงกลางแผนที่
+			my_Marker.setPosition(my_Latlng); // กำนหดตัวแปน่ง marker
+		//	map.panTo(my_Latlng);  // ให้แผนที่แสดงไปที่ตัว marker
+		}
+
+
+
+
+
+
+
+
+		function Allweather(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+
+
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon:'img_weather/sun_icon.png',
+															animation: google.maps.Animation.DROP
+													});
+												}
+								},
+								type: 'GET'
+							});
+		}
+
+
+
+		function warm(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												if(Cloud == "ท้องฟ้าแจ่มใส"){
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon:'img_weather/sun_icon.png',
+															animation: google.maps.Animation.DROP
+														});
+													}
+												}
+								},
+								type: 'GET'
+							});
+		}
+
+		function Cloud(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												if(Cloud == "มีเมฆบางส่วน"){
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon:'img_weather/Cloud-icon.png',
+															animation: google.maps.Animation.DROP
+														});
+													}
+												}
+								},
+								type: 'GET'
+							});
+		}
+
+		function much_cloud(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
+												var Temper = data.Stations[j]['Observe']['Temperature']['Value'];
+												console.log(Temper);
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												if(Cloud == "มีเมฆมาก"){
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon:'img_weather/Toocloud_icon.png',
+															animation: google.maps.Animation.DROP
+														});
+													}
+												}
+								},
+								type: 'GET'
+							});
+		}
+
+
+
+		function rain(){
+					$.ajax({
+						type: 'GET',
+						url: 'loadxml.php',
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						dataType: 'json',
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+							var num = data.StationMonthlyRainfalls.length;
+							var name = data.StationMonthlyRainfalls['Province'];
+							console.log(name);
+						}
+						});
+		}
+
+
+
+
+		function cane(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+										num = num/2;
+										if(!isCheckCane){
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon: 'img_plant/sugarcane_icon.png',
+															animation: google.maps.Animation.DROP
+													});
+													//my_Marker.push(TheMarker);
+												}
+												console.log(TheMarker);
+												isCheckCane = true;
+											}
+											else{
+												/*
+												for(var j=0;j<num;j++){
+
+												}*/
+												TheMarker = null;
+												console.log(TheMarker);
+													isCheckCane = false;
+
+											}
+								},
+								type: 'GET'
+							});
+		}
+
+		function rice(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+										if(!isCheckCane){
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon: 'img_plant/rice_icon.png',
+															animation: google.maps.Animation.DROP
+													});
+													//my_Marker.push(TheMarker);
+												}
+												console.log(TheMarker);
+												isCheckCane = true;
+											}
+											else{
+												/*
+												for(var j=0;j<num;j++){
+
+												}*/
+												TheMarker = null;
+												console.log(TheMarker);
+													isCheckCane = false;
+
+											}
+								},
+								type: 'GET'
+							});
+		}
+
+
+		function palm(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+										if(!isCheckCane){
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon: 'img_plant/palm_icon.png',
+															animation: google.maps.Animation.DROP
+													});
+													//my_Marker.push(TheMarker);
+												}
+												console.log(TheMarker);
+												isCheckCane = true;
+											}
+											else{
+												/*
+												for(var j=0;j<num;j++){
+
+												}*/
+												TheMarker = null;
+												console.log(TheMarker);
+													isCheckCane = false;
+
+											}
+								},
+								type: 'GET'
+							});
+		}
+
+		function rubber(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+										if(!isCheckCane){
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon: 'img_plant/rubberTree_icon.png',
+															animation: google.maps.Animation.DROP
+													});
+													//my_Marker.push(TheMarker);
+												}
+												console.log(TheMarker);
+												isCheckCane = true;
+											}
+											else{
+												/*
+												for(var j=0;j<num;j++){
+
+												}*/
+												TheMarker = null;
+												console.log(TheMarker);
+													isCheckCane = false;
+
+											}
+								},
+								type: 'GET'
+							});
+		}
+
+
+		function cassava(){
+				$.ajax({
+						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+						data: {
+							format: 'json'    // รูปแบบข้อมูล เป็น json
+						},
+						error: function() {
+							alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+						},
+						dataType: 'json',    // ชนิดข้อมูล json
+							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+										var num = data.Stations.length;
+										if(!isCheckCane){
+										for(var j=0;j<num;j++){
+												var getlatt = data.Stations[j]['Latitude']['Value'];
+												var latt = parseFloat(getlatt);
+
+												var getlngg = data.Stations[j]['Longitude']['Value'];
+												var lngg = parseFloat(getlngg);
+
+												var markerLatLng = new GGM.LatLng(latt,lngg);
+												var TheMarker = new GGM.Marker({ // สร้างตัว marker
+															position:markerLatLng,
+															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
+															icon: 'img_plant/cassava_icon.png',
+															animation: google.maps.Animation.DROP
+													});
+													//my_Marker.push(TheMarker);
+												}
+												console.log(TheMarker);
+												isCheckCane = true;
+											}
+											else{
+												/*
+												for(var j=0;j<num;j++){
+
+												}*/
+												TheMarker = null;
+												console.log(TheMarker);
+													isCheckCane = false;
+
+											}
+								},
+								type: 'GET'
+							});
+		}
+
+
+
+
+
+
+
+
+
+
+		function toggleHeatmap() {
+			for (var i = 0; i < producMarker.length; i++) {
+		    producMarker[i].setMap(null);
+		  }
+		  producMarker = [];
+		  heatmap.setMap(heatmap.getMap() ? null : map);
+			if (!isCheck) {
+				for (var i = 0; i < neighborhoods.length; i++) {
+					addMarkerWithTimeout(neighborhoods[i], i * 200);
+				}
+				isCheck = true;
+			} else {
+				isCheck = false;
+			}
+		}
+		var riceImage = 'img_plant/rice_icon.png';
+		function addMarkerWithTimeout(position, timeout) {
+		  window.setTimeout(function() {
+		    producMarker.push(new google.maps.Marker({
+		      position: position,
+		      map: map,
+			  icon: riceImage,
+		      animation: google.maps.Animation.DROP
+		    }));
+		  }, timeout);
+		}
+		function codeAddress() {
+		    var address = document.getElementById("search").value;
+		    geocoder.geocode( { 'address': address}, function(results, status) {
+		      if (status == google.maps.GeocoderStatus.OK) {
+		        var latitudeAndLongtitude = results[0].geometry.location;
+				var toShow = new GGM.LatLng(latitudeAndLongtitude.lat(),latitudeAndLongtitude.lng());
+				map.setCenter(toShow);
+				my_Marker.setPosition(toShow);
+		      } else {
+		        alert("ผิดพลาด : " + status);
+		      }
+		    });
+		  }
+		$(function(){
+			// คำสั่งให้ทำเงิน เมื่อกดที่ปุ่ม นk ที่มี id เท่ากับ button2
+			$("#button2").click(function(){
+				// เอาคาจาก สist menu เข้าฟังก์ชัน go_to_select_place
+				go_to_select_place($("select#name_place_list_menu").val());
+			});
+			$("#button").click(function(){
+				codeAddress();
+			});
+
+			$("#linkSearch").click(function(e){
+				e.preventDefault();
+				var link = "search.html";
+				$.get(link, function(res){
+					$('#showDDD').html(res);
+					});
+				});
+
+
+			$('#showDDD').delegate('a', 'click', function(e){
+				e.preventDefault();
+				var link = this.href;
+
+				/* ดึงเนื้อหาจากลิงค์ด้วย Ajax เมื่อผู้ใช้กดลิงค์ */
+				$.get(link, function(res){
+					/* อัพเดทเนื้อหาที่ได้จาก Ajax ไปที่ div ที่มี id="content" */
+					$('#showDDD').html(res);
+					/* หลังจากอัพเดทเนื้อหาเสร็จ เปลี่ยน URL ของเบราว์เซอร์ */
+					//window.history.replaceState(null, null, link);
+				});
+			});
+			// โหลด สคริป google map api เมื่อเว็บโหลดเรียบร้อยแล้ว
+			// ค่าตัวแปร ที่ส่งไปในไฟล์ google map api
+			// v=3.2&sensor=false&language=th&callback=initialize
+			//	v เวอร์ชัน่ 3.2
+			//	sensor กำหนดให้สามารถแสดงตำแหน่งทำเปิดแผนที่อยู่ได้ เหมาะสำหรับมือถือ ปกติใช้ false
+			//	language ภาษา th ,en เป็นต้น
+			//	callback ให้เรียกใช้ฟังก์ชันแสดง แผนที่ initialize
+			$("<script/>", {
+			  "type": "text/javascript",
+			  src: "http://maps.google.com/maps/api/js?v=3.2&key=AIzaSyArl5scX8oLXsBZzkHNBn2sFAnarlYLMNs&sensor=false&language=th&libraries=places&callback=initialize&libraries=visualization"
+			}).appendTo("body");
+		});
+		</script>
+
 
 </head>
 
@@ -89,7 +823,7 @@
 <!--navbar-->
 	<nav class="navbar navbar-dark bg-primary"></nav>
 	<nav class="navbar navbar-dark bg-primary">
-  <a class="navbar-brand" href="#">แผนที่การเกษตร</a>
+  <a class="navbar-brand" href="marker.html">แผนที่การเกษตร</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -156,10 +890,10 @@
 						</br><center><h3>ข้อมูลพื้นที่</h3></center><br />
 						<div class="card">
 							<div class="card-block">
-								<form id="form_get_detailMap" name="form_get_detailMap" method="post" action="">
+								<form >
 									<table>
 									<td><label>ตำแหน่งสถานที่ : </label><td>
-									<td><div name="place_value"id="place_value"></div><td>
+									<td><div></div><td>
 								</table>
 
 								</form>
@@ -174,27 +908,27 @@
 								<tr>
 									<th>ข้าว</th>
 									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
-									<td><button class="btn btn-info" id="Display_rice">ดูรายละเอียด</button></td>
+									<td><button class="btn btn-info" id="Display_rice" data-toggle="modal" data-target="#pop_rice">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>อ้อย</th>
 									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
-									<td><button class="btn btn-info" id="Display_cane">ดูรายละเอียด</button></td>
+									<td><button class="btn btn-info" id="Display_cane" data-toggle="modal" data-target="#pop_cane">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>มันสำปะหลัง</th>
 									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
-									<td><button class="btn btn-info" id="Display_cassava">ดูรายละเอียด</button></td>
+									<td><button class="btn btn-info" id="Display_cassava" data-toggle="modal" data-target="#pop_cassava">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>ยางพารา</th>
 									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
-									<td><button class="btn btn-info" id="Display_rubber">ดูรายละเอียด</button></td>
+									<td><button class="btn btn-info" id="Display_rubber" data-toggle="modal" data-target="#pop_rubber">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>ปาล์มน้ำมัน</th>
 									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
-									<td><button class="btn btn-info" id="Display_palm">ดูรายละเอียด</button></td>
+									<td><button class="btn btn-info" id="Display_palm" data-toggle="modal" data-target="#pop_palm">ดูรายละเอียด</button></td>
 								</tr>
 
 						</table>
@@ -214,751 +948,257 @@
 
 
 
-
-<div id="pop" class="modal fade">
-  <div class="modal-dialog" role="document" >
+<!--Start pop up results-->
+<div id="pop_rice" class="modal fade">
+  <div class="modal-dialog">
 		<div class="modal-content">
 
 			<div class="modal-header">
-				<h1>แผนภูมิ</h1>
+				<a>รายละเอียดการวิเคราะห์ ข้าว</a>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>อุณหภูมิ(c)</th>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<th>ความลาดชัน</th>
+
+					</tr>
+					<tr>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<td>15 -25</td>
+						<td>150 - 400</td>
+						<td>700</td>
+						<td>5 - 60</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
 
 		</div>
   </div>
 </div>
 
 
+<div id="pop_cane" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ อ้อย</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>อุณหภูมิ(c)</th>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<th>ความลาดชัน</th>
+
+					</tr>
+					<tr>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<td>20</td>
+						<td>300</td>
+						<td>800</td>
+						<td>30</td>
+					</tr>
+					<tr>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<td>15 -25</td>
+						<td>150 - 400</td>
+						<td>700</td>
+						<td>5 - 60</td>
+					</tr>
+				</table>
+
+
+
+
+
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+<div id="pop_palm" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ ข้าว</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>อุณหภูมิ(c)</th>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<th>ความลาดชัน</th>
+
+					</tr>
+					<tr>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<td>15 -25</td>
+						<td>150 - 400</td>
+						<td>700</td>
+						<td>5 - 60</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+<div id="pop_rubber" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ ข้าว</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>อุณหภูมิ(c)</th>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<th>ความลาดชัน</th>
+
+					</tr>
+					<tr>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<td>15 -25</td>
+						<td>150 - 400</td>
+						<td>700</td>
+						<td>5 - 60</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+<div id="pop_cassava" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ ข้าว</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>อุณหภูมิ(c)</th>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<th>ความลาดชัน</th>
+
+					</tr>
+					<tr>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<td>15 -25</td>
+						<td>150 - 400</td>
+						<td>700</td>
+						<td>5 - 60</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+
+<!--END pop up results-->
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-
-<script>
-  function initAutocomplete() {
-    var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-          searchBox.setBounds(map.getBounds());
-        });
-
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        searchBox.addListener('places_changed', function() {
-          var places = searchBox.getPlaces();
-
-          if (places.length == 0) {
-            return;
-          }
-
-          // Clear out the old markers.
-          markers.forEach(function(marker) {
-            marker.setMap(null);
-          });
-          markers = [];
-
-          // For each place, get the icon, name and location.
-          var bounds = new google.maps.LatLngBounds();
-          places.forEach(function(place) {
-            if (!place.geometry) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
-            var icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-            };
-
-            // Create a marker for each place.
-            markers.push(new google.maps.Marker({
-              map: map,
-              icon: icon,
-              title: place.name,
-              position: place.geometry.location
-            }));
-
-            if (place.geometry.viewport) {
-              // Only geocodes have viewport.
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
-            }
-          });
-          map.fitBounds(bounds);
-        });
-  }
-</script>
-
-<script type="text/javascript">
-var map; // กำหนดตัวแปร map ไว้ด้านนอกฟังก์ชัน เพื่อให้สามารถเรียกใช้งาน จากส่วนอื่นได้
-var GGM; // กำหนดตัวแปร GGM ไว้เก็บ google.maps Object จะได้เรียกใช้งานได้ง่ายขึ้น
-var geocoder; // กำหนดตัวแปร สำหรับใช้งานข้อมูลสถานที่จาก Google Map
-var my_Marker;
-var producMarker = [];
-var heatmap;
-var isCheck = false;
-var isCheckCane = false;
-var neighborhoods = [
-  {lat: 16.324, lng: 102.757},
-  {lat: 15.350, lng: 102.520},
-  {lat: 15.190, lng: 103.657},
-  {lat: 18.6716, lng: 98.9564}
-];
-
-function initialize() { // ฟังก์ชันแสดงแผนที่
-	GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
-	// กำหนดจุดเริ่มต้นของแผนที่
-	// 15.521832670176973
-	// 100.94521484999996
-	var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<div id="bodyContent">'+
-
-            '<p><b>พันธุ์ข้าวที่แนะนำในการเพาะปลูก กข15</b>'+'</br>'+
-						'รูปแบบในการเพาะปลูกที่แนะนำคือ นาขั้นบันใด'+'</br>'+
-						'ช่วงเวลาที่เหมาะสม ตั้งแต่เดือน มกราคม - เมษายน  '+
-
-						'<button class="btn" data-toggle="modal" data-target="#pop">แผนภูมิ</button>'+
-
-            '</div>'+
-            '</div>';
-
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-	var my_Latlng  = new GGM.LatLng(13.693353828847119,100.47280274062496);
-	// Try HTML5 geolocation.
-	if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            infowindow.setPosition(pos);
-            infowindow.setContent('ตำแหน่งปัจจุบันของคุณ');
-            infowindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infowindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infowindow, map.getCenter());
-		  alert("เบาวน์เซอร์ไม่รองรับ การเข้าถึงตำแหน่งปัจจุบันของคุณ");
-        }
-
-      function handleLocationError(browserHasGeolocation, infowindow, pos) {
-        infowindow.setPosition(pos);
-        infowindow.setContent(browserHasGeolocation ?
-                              'มีข้อผิดพลาดเกิดขึ้นในการเข้าถึงตำแหน่งปัจจุบันของคุณ' :
-                              'Error: Your browser doesn\'t support geolocation.');
-		infowindow.open(map);
-		alert("มีข้อผิดพลาดเกิดขึ้นในการเข้าถึงตำแหน่งปัจจุบันของคุณ");
-      }
-	// เรียกใช้งานข้อมูล Geocoder ของ Google Map
-	geocoder = new GGM.Geocoder();
-	var my_mapTypeId=GGM.MapTypeId.ROADMAP; // กำหนดรูปแบบแผนที่ที่แสดง
-	// กำหนด DOM object ที่จะเอาแผนที่ไปแสดง ที่นี้คือ div id=map_canvas
-	var my_DivObj=$("#map_canvas")[0];
-	// กำหนด Option ของแผนที่
-	var myOptions = {
-		zoom: 6, // กำหนดขนาดการ zoom
-		center: my_Latlng , // กำหนดจุดกึ่งกลาง
-		mapTypeId:my_mapTypeId // กำหนดรูปแบบแผนที่
-	};
-	map = new GGM.Map(my_DivObj,myOptions);// สร้างแผนที่และเก็บตัวแปรไว้ในชื่อ map
-
-	my_Marker = new GGM.Marker({ // สร้างตัว marker
-		position: my_Latlng,  // กำหนดไว้ที่เดียวกับจุดกึ่งกลาง
-		map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-		draggable:true, // กำหนดให้สามารถลากตัว marker นี้ได้
-		title:"กดค้างและลากเพื่อหาตำแหน่งที่ต้องการ" // แสดง title เมื่อเอาเมาส์มาอยู่เหนือ
-	});
-	my_Marker.addListener('click', function() {
-    infowindow.open(map, my_Marker);
-  });
-	// heatmap
-	heatmap = new google.maps.visualization.HeatmapLayer({
-    data: getPoints()
-  	});
-	function getPoints() {
-	return [
-		new google.maps.LatLng(18.6711, 98.9564),
-		new google.maps.LatLng(18.6712, 98.9565),
-		new google.maps.LatLng(18.6713, 98.9566),
-		new google.maps.LatLng(18.6714, 98.9567),
-		new google.maps.LatLng(18.6715, 98.9568),
-		new google.maps.LatLng(18.6716, 98.9569),
-		{location: new google.maps.LatLng(18.7817, 98.9570), weight: 1.5},
-		{location: new google.maps.LatLng(18.8817, 98.9470), weight: 1.5},
-		{location: new google.maps.LatLng(18.9817, 98.9370), weight: 1.5},
-		{location: new google.maps.LatLng(18.9917, 98.9270), weight: 1.5},
-		new google.maps.LatLng(16.356, 102.877),
-		new google.maps.LatLng(16.366, 102.887),
-		new google.maps.LatLng(16.376, 102.897),
-		new google.maps.LatLng(16.386, 102.907),
-		new google.maps.LatLng(16.396, 102.917),
-		new google.maps.LatLng(16.406, 102.927),
-		new google.maps.LatLng(16.416, 102.937),
-		new google.maps.LatLng(16.426, 102.947),
-		new google.maps.LatLng(16.436, 102.957),
-		new google.maps.LatLng(16.446, 102.967)
-		]
-	};
-	// กำหนด event ให้กับตัว marker เมื่อสิ้นสุดการลากตัว marker ให้ทำงานอะไร
-	GGM.event.addListener(my_Marker, "dragend", function() {
-		var my_Point = my_Marker.getPosition();  // หาตำแหน่งของตัว marker เมื่อกดลากแล้วปล่อย
-		console.log(my_Point.lat());
-		console.log(my_Point.lng());
-        map.panTo(my_Point);  // ให้แผนที่แสดงไปที่ตัว marker
-
-		// เรียกขอข้อมูลสถานที่จาก Google Map
-		geocoder.geocode({"latLng": my_Point}, function(results, status) {
-		  if (status == GGM.GeocoderStatus.OK) {
-				if (results[1]) {
-					// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
-					$("#place_value").html(results[1].formatted_address); //
-				}
-		  } else {
-			  // กรณีไม่มีข้อมูล
-			alert("Geocoder failed due to: " + status);
-		  }
-		});
-        $("#lat_value").val(my_Point.lat());  // เอาค่า latitude ตัว marker แสดงใน textbox id=lat_value
-        $("#lon_value").val(my_Point.lng()); // เอาค่า longitude ตัว marker แสดงใน textbox id=lon_value
-        $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value
-	});
-
-}
-// ฟังก์ชั่น สำหรับให้แผนทีไปที่จุดตามค่าตำแหน่งที่ส่งมา
-function go_to_select_place(placeVal){
-//	GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
-//	console.log(placeVal);
-	var positionVal=placeVal.split(","); // แยกค่าที่ส่งมาออกเป็นสองค่า คือ lat กับ lon
-//	console.log(positionVal);
-	var my_Latlng  = new GGM.LatLng(positionVal[0],positionVal[1]);
-	map.setCenter(my_Latlng); // กำหนดตำแแน่งตรงกลางแผนที่
-	my_Marker.setPosition(my_Latlng); // กำนหดตัวแปน่ง marker
-//	map.panTo(my_Latlng);  // ให้แผนที่แสดงไปที่ตัว marker
-}
-
-
-
-
-
-
-
-
-function Allweather(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-
-
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon:'img_weather/sun_icon.png',
-													animation: google.maps.Animation.DROP
-											});
-										}
-						},
-						type: 'GET'
-					});
-}
-
-
-
-function warm(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var Cloud = data.Stations[j]['Observe']['TotolCloud'];
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										if(Cloud == "ท้องฟ้าแจ่มใส"){
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon:'img_weather/sun_icon.png',
-													animation: google.maps.Animation.DROP
-												});
-											}
-										}
-						},
-						type: 'GET'
-					});
-}
-
-function Cloud(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var Cloud = data.Stations[j]['Observe']['TotolCloud'];
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										if(Cloud == "มีเมฆบางส่วน"){
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon:'img_weather/Cloud-icon.png',
-													animation: google.maps.Animation.DROP
-												});
-											}
-										}
-						},
-						type: 'GET'
-					});
-}
-
-function much_cloud(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var Cloud = data.Stations[j]['Observe']['TotolCloud'];
-										var Temper = data.Stations[j]['Observe']['Temperature']['Value'];
-										console.log(Temper);
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										if(Cloud == "มีเมฆมาก"){
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon:'img_weather/Toocloud_icon.png',
-													animation: google.maps.Animation.DROP
-												});
-											}
-										}
-						},
-						type: 'GET'
-					});
-}
-
-
-
-function rain(){
-			$.ajax({
-				type: 'GET',
-				url: 'loadxml.php',
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				dataType: 'json',
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-					var num = data.StationMonthlyRainfalls.length;
-					var name = data.StationMonthlyRainfalls['Province'];
-					console.log(name);
-				}
-				});
-}
-
-
-
-
-function cane(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-								num = num/2;
-								if(!isCheckCane){
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon: 'img_plant/sugarcane_icon.png',
-													animation: google.maps.Animation.DROP
-											});
-											//my_Marker.push(TheMarker);
-										}
-										console.log(TheMarker);
-										isCheckCane = true;
-									}
-									else{
-										/*
-										for(var j=0;j<num;j++){
-
-										}*/
-										TheMarker = null;
-										console.log(TheMarker);
-											isCheckCane = false;
-
-									}
-						},
-						type: 'GET'
-					});
-}
-
-function rice(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-								if(!isCheckCane){
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon: 'img_plant/rice_icon.png',
-													animation: google.maps.Animation.DROP
-											});
-											//my_Marker.push(TheMarker);
-										}
-										console.log(TheMarker);
-										isCheckCane = true;
-									}
-									else{
-										/*
-										for(var j=0;j<num;j++){
-
-										}*/
-										TheMarker = null;
-										console.log(TheMarker);
-											isCheckCane = false;
-
-									}
-						},
-						type: 'GET'
-					});
-}
-
-
-function palm(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-								if(!isCheckCane){
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon: 'img_plant/palm_icon.png',
-													animation: google.maps.Animation.DROP
-											});
-											//my_Marker.push(TheMarker);
-										}
-										console.log(TheMarker);
-										isCheckCane = true;
-									}
-									else{
-										/*
-										for(var j=0;j<num;j++){
-
-										}*/
-										TheMarker = null;
-										console.log(TheMarker);
-											isCheckCane = false;
-
-									}
-						},
-						type: 'GET'
-					});
-}
-
-function rubber(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-								if(!isCheckCane){
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon: 'img_plant/rubberTree_icon.png',
-													animation: google.maps.Animation.DROP
-											});
-											//my_Marker.push(TheMarker);
-										}
-										console.log(TheMarker);
-										isCheckCane = true;
-									}
-									else{
-										/*
-										for(var j=0;j<num;j++){
-
-										}*/
-										TheMarker = null;
-										console.log(TheMarker);
-											isCheckCane = false;
-
-									}
-						},
-						type: 'GET'
-					});
-}
-
-
-function cassava(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-								var num = data.Stations.length;
-								if(!isCheckCane){
-								for(var j=0;j<num;j++){
-										var getlatt = data.Stations[j]['Latitude']['Value'];
-										var latt = parseFloat(getlatt);
-
-										var getlngg = data.Stations[j]['Longitude']['Value'];
-										var lngg = parseFloat(getlngg);
-
-										var markerLatLng = new GGM.LatLng(latt,lngg);
-										var TheMarker = new GGM.Marker({ // สร้างตัว marker
-													position:markerLatLng,
-													map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
-													icon: 'img_plant/cassava_icon.png',
-													animation: google.maps.Animation.DROP
-											});
-											//my_Marker.push(TheMarker);
-										}
-										console.log(TheMarker);
-										isCheckCane = true;
-									}
-									else{
-										/*
-										for(var j=0;j<num;j++){
-
-										}*/
-										TheMarker = null;
-										console.log(TheMarker);
-											isCheckCane = false;
-
-									}
-						},
-						type: 'GET'
-					});
-}
-
-
-
-
-
-
-
-
-
-
-function toggleHeatmap() {
-	for (var i = 0; i < producMarker.length; i++) {
-    producMarker[i].setMap(null);
-  }
-  producMarker = [];
-  heatmap.setMap(heatmap.getMap() ? null : map);
-	if (!isCheck) {
-		for (var i = 0; i < neighborhoods.length; i++) {
-			addMarkerWithTimeout(neighborhoods[i], i * 200);
-		}
-		isCheck = true;
-	} else {
-		isCheck = false;
-	}
-}
-var riceImage = 'img_plant/rice_icon.png';
-function addMarkerWithTimeout(position, timeout) {
-  window.setTimeout(function() {
-    producMarker.push(new google.maps.Marker({
-      position: position,
-      map: map,
-	  icon: riceImage,
-      animation: google.maps.Animation.DROP
-    }));
-  }, timeout);
-}
-function codeAddress() {
-    var address = document.getElementById("search").value;
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        var latitudeAndLongtitude = results[0].geometry.location;
-		var toShow = new GGM.LatLng(latitudeAndLongtitude.lat(),latitudeAndLongtitude.lng());
-		map.setCenter(toShow);
-		my_Marker.setPosition(toShow);
-      } else {
-        alert("ผิดพลาด : " + status);
-      }
-    });
-  }
-$(function(){
-	// คำสั่งให้ทำเงิน เมื่อกดที่ปุ่ม นk ที่มี id เท่ากับ button2
-	$("#button2").click(function(){
-		// เอาคาจาก สist menu เข้าฟังก์ชัน go_to_select_place
-		go_to_select_place($("select#name_place_list_menu").val());
-	});
-	$("#button").click(function(){
-		codeAddress();
-	});
-	$("#linkSearch").click(function(e){
-		e.preventDefault();
-		var link = "search.html";
-		$.get(link, function(res){
-			$('#showDDD').html(res);
-			});
-		});
-
-	$('#showDDD').delegate('a', 'click', function(e){
-		e.preventDefault();
-		var link = this.href;
-
-		/* ดึงเนื้อหาจากลิงค์ด้วย Ajax เมื่อผู้ใช้กดลิงค์ */
-		$.get(link, function(res){
-			/* อัพเดทเนื้อหาที่ได้จาก Ajax ไปที่ div ที่มี id="content" */
-			$('#showDDD').html(res);
-			/* หลังจากอัพเดทเนื้อหาเสร็จ เปลี่ยน URL ของเบราว์เซอร์ */
-			//window.history.replaceState(null, null, link);
-		});
-	});
-	// โหลด สคริป google map api เมื่อเว็บโหลดเรียบร้อยแล้ว
-	// ค่าตัวแปร ที่ส่งไปในไฟล์ google map api
-	// v=3.2&sensor=false&language=th&callback=initialize
-	//	v เวอร์ชัน่ 3.2
-	//	sensor กำหนดให้สามารถแสดงตำแหน่งทำเปิดแผนที่อยู่ได้ เหมาะสำหรับมือถือ ปกติใช้ false
-	//	language ภาษา th ,en เป็นต้น
-	//	callback ให้เรียกใช้ฟังก์ชันแสดง แผนที่ initialize
-	$("<script/>", {
-	  "type": "text/javascript",
-	  src: "http://maps.google.com/maps/api/js?v=3.2&key=AIzaSyArl5scX8oLXsBZzkHNBn2sFAnarlYLMNs&sensor=false&language=th&libraries=places&callback=initialize&libraries=visualization"
-	}).appendTo("body");
-});
-</script>
+
 
 </body>
 </html>
