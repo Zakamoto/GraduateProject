@@ -1,27 +1,58 @@
 <div>
 
-    <br/>
+  <br/>
 
-    <center>
-    <button id="drog" class="btn btn-info" style="width:150px;height:150px;">ค้นหาตำแหน่ง<br/>ณ ปัจจุบัน<br/><img src="img_option/gps_icon.png"></button>
-    <button id="linkArea" class="btn btn-info" style="width:150px;height:150px;"><b>ค้นหาตำแหน่ง<br/>ด้วยการปักหมุด<br/></b><img src="img_option/gps_icon.png"></button>
-    </center>
+  <center>
+  <button id="currentLocation" class="btn btn-info" style="width:150px;height:150px;">ค้นหาตำแหน่ง<br/>ณ ปัจจุบัน<br/><img src="img_option/gps_icon.png"></button>
+  <button id="linkArea" class="btn btn-info" style="width:150px;height:150px;"><b>ค้นหาตำแหน่ง<br/>ด้วยการปักหมุด<br/></b><img src="img_option/gps_icon.png"></button>
+  </center>
 
-    <div style="padding-top:10px;"></div>
+  <div style="padding-top:10px;"></div>
 
 
-    <button class="btn btn-info btn-block" onclick='location.replace("marker.html")'><i class="fa fa-arrow-left" aria-hidden="true"></i>กลับไปยังหน้าเมนูหลัก</button>
+  <button class="btn btn-info btn-block" onclick='location.replace("marker.html")'><i class="fa fa-arrow-left" aria-hidden="true"></i>กลับไปยังหน้าเมนูหลัก</button>
 
 </div>
 
 <script type="text/javascript">
+var infowindow = new google.maps.InfoWindow;
 $(function(){
-$("#linkArea").click(function(e){
-  e.preventDefault();
-  var link = "Report.php";
-  $.get(link, function(res){
-    $('#showDDD').html(res);
-    });
+$("#linkArea").click(function(e)
+{
+console.log("Hello");
+my_Marker.setVisible(true);
+e.preventDefault();
+var link = "Report.php";
+$.get(link, function(res){
+  $('#showDDD').html(res);
   });
+});
+$("#currentLocation").click(function(e){
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        infowindow.setPosition(pos);
+        infowindow.setContent('ตำแหน่งปัจจุบันของคุณ');
+        infowindow.open(map);
+        map.setCenter(pos);
+        $('html, body').animate({scrollTop: $elem.height()}, 800);
+      }, function() {
+        handleLocationError(true, infowindow, map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infowindow, map.getCenter());
+  alert("เบาวน์เซอร์ไม่รองรับ การทำงานของฟังก์ชันนี้");
+  }
+  function handleLocationError(browserHasGeolocation, infowindow, pos) {
+    console.log("can't access");
+    console.log(browserHasGeolocation);
+    console.log(pos);
+    alert("มีข้อผิดพลาดเกิดขึ้นในการเข้าถึงตำแหน่งปัจจุบันของคุณ");
+  }   
+});
 });
 </script>
