@@ -173,6 +173,7 @@
 		var arrayCloud = [];
 		var arrayMuchCloud = [];
 		var arrayRain = [];
+		var elevatorValue;
 		function initialize() { // ฟังก์ชันแสดงแผนที่
 			GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
 			// กำหนดจุดเริ่มต้นของแผนที่
@@ -183,22 +184,10 @@
 			'<div name="place_value"id="place_value">ทำการลากไปยังตำแหน่งที่ต้องการ</div>'+
 			'<br/>'+
 			'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess">ยืนยันตำแหน่ง</button>'
-
-
-
 		        var infowindow = new google.maps.InfoWindow({
 		          content: contentString
 		        });
 			var my_Latlng  = new GGM.LatLng(13.693353828847119,100.47280274062496);
-
-
-
-
-
-
-
-
-
 			//var my_Latlng  = new GGM.LatLng(13.693353828847119,100.47280274062496);
 			// เรียกใช้งานข้อมูล Geocoder ของ Google Map
 			geocoder = new GGM.Geocoder();
@@ -212,7 +201,7 @@
 				mapTypeId:my_mapTypeId // กำหนดรูปแบบแผนที่
 			};
 			map = new GGM.Map(my_DivObj,myOptions);// สร้างแผนที่และเก็บตัวแปรไว้ในชื่อ map
-
+			
 
 			my_Marker = new GGM.Marker({ // สร้างตัว marker
 				position: my_Latlng,  // กำหนดไว้ที่เดียวกับจุดกึ่งกลาง
@@ -231,7 +220,6 @@
 				var my_Point = my_Marker.getPosition();  // หาตำแหน่งของตัว marker เมื่อกดลากแล้วปล่อย
 				get_lat_info = my_Point.lat();
 				get_lng_info = my_Point.lng();
-
 				$('#post_lat').html(get_lat_info);
 				$('#post_lng').html(get_lng_info);
 		        map.panTo(my_Point);  // ให้แผนที่แสดงไปที่ตัว marker
@@ -240,11 +228,11 @@
 				geocoder.geocode({"latLng": my_Point}, function(results, status) {
 				  if (status == GGM.GeocoderStatus.OK) {
 						if (results[1]) {
-
 							// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
 							$("#place_value").html(results[1].formatted_address); //
 							infowindow.setPosition(my_Point);
 							address_info = results[1].formatted_address;
+							//$("#place_value").html(results[1].formatted_address + "ระดับความสูงจากน้ำทะเล " + results[0].elevation + " เมตร" );
 						}
 				  } else {
 					  // กรณีไม่มีข้อมูล
@@ -270,8 +258,34 @@
 		//	map.panTo(my_Latlng);  // ให้แผนที่แสดงไปที่ตัว marker
 		}
 
-
-
+		function elevation() {
+			infowindow = new google.maps.InfoWindow({map: map});
+			var elevator = new google.maps.ElevationService;
+			map.addListener('click', function(event) {
+				displayLocationElevation(event.latLng, elevator, infowindow);
+			});
+			function displayLocationElevation(location, elevator, infowindow) {
+			// Initiate the location request
+			elevator.getElevationForLocations({
+				'locations': [location]
+			}, function(results, status) {
+				infowindow.setPosition(location);
+				if (status === 'OK') {
+				// Retrieve the first result
+				if (results[0]) {
+					// Open the infowindow indicating the elevation at the clicked position.
+					infowindow.setContent('The elevation at this point <br>is ' +
+						results[0].elevation + ' meters.');
+					elevatorValue = results[0].elevation;
+				} else {
+					infowindow.setContent('No results found');
+				}
+				} else {
+				infowindow.setContent('Elevation service failed due to: ' + status);
+				}
+			});
+			}
+		}
 
 		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase) {
 			if (!statusCase)
@@ -1111,7 +1125,7 @@
 			<br/>
 		</div>
 
-		<button class="btn btn-warning btn-block"><h5><font color="White">ภูมิประเทศ</font></h5></button>
+		<button class="btn btn-warning btn-block" onclick="elevation()"><h5><font color="White">ภูมิประเทศ</font></h5></button>
 		<div id="itemArea" class="panel-collapse collapse">
 			<ul class="list-group">
 
