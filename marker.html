@@ -27,6 +27,11 @@
 	    background-color: #f02c54;
 	    border-color: #f02c54;
 		}
+		.btn.btn-yellow.btn-block	{
+			color: #212529 ;
+			background-color: #8E44AD;
+			border-color: #8E44AD;
+		}
 		#showDDD{
 			height:670px;
 			float: right;
@@ -201,7 +206,7 @@
 				mapTypeId:my_mapTypeId // กำหนดรูปแบบแผนที่
 			};
 			map = new GGM.Map(my_DivObj,myOptions);// สร้างแผนที่และเก็บตัวแปรไว้ในชื่อ map
-			
+
 
 			my_Marker = new GGM.Marker({ // สร้างตัว marker
 				position: my_Latlng,  // กำหนดไว้ที่เดียวกับจุดกึ่งกลาง
@@ -1107,30 +1112,32 @@
 			</div>
 
 
-		<button class="btn btn-success btn-block" data-toggle="collapse" data-target="#itemWeather"><h5>สภาพอากาศ</h5></button>
+		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather"><h5>สภาพอากาศ</h5></button>
 		<div id="itemWeather" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><input type="checkbox" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
-				<li class="list-group-item"><input type="checkbox" onclick="warm()"><font style="padding-left: 25px;">อากาศแจ่มใส</font></li>
-				<li class="list-group-item"><input type="checkbox" onclick="Cloud()"><font style="padding-left: 25px;">มีเมฆบางส่วน</font></li>
-				<li class="list-group-item"><input type="checkbox" onclick="much_cloud()"><font style="padding-left: 25px;">มีเมฆมาก</font></li>
-				<li class="list-group-item"><input type="checkbox" onclick="rain()"><font style="padding-left: 25px;">ฝนตก</font></li>
+				<li class="list-group-item"><input type="checkbox" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
+					<div id="itemTemp" class="panel-collapse collapse">
+						<br/>
+						<center><img src="img_option/tempChart.jpg" width="250px" height="50px"/></center>
+						<br/>
+					</div>
+				</li>
 			</ul>
 		</div>
 
-		<button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#itemTemp"><h5><font color="White">อุณหภูมิ</font></h5></button>
-		<div id="itemTemp" class="panel-collapse collapse">
-			<br/>
-			<center><img src="img_temp/tempChart.jpg" width="250px" height="50px"/></center>
-			<br/>
-		</div>
-
-		<button class="btn btn-warning btn-block" onclick="elevation()"><h5><font color="White">ภูมิประเทศ</font></h5></button>
+		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea"><h5><font color="White">ภูมิประเทศ</font></h5></button>
 		<div id="itemArea" class="panel-collapse collapse">
 			<ul class="list-group">
+				<li class="list-group-item"><input type="checkbox" onclick="elevation()" data-toggle="collapse" data-target="#high_level"><font style="padding-left: 25px;">ความสูงจากระดับน้ำทะเล</font>
+					<div id="high_level" class="panel-collapse collapse">
 
+							<center><img src="img_option/high_level.png" width="200px" height="150px"/></center>
+
+					</div>
 			</ul>
 		</div>
+
 		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
 
 </div>
@@ -1188,27 +1195,27 @@
 
 								<tr>
 									<th>ข้าว</th>
-									<td>พื้นที่เหมาะสมต่อการปลูกข้าว</td>
+									<td>พื้นที่เหมาะสมต่อการปลูก</td>
 									<td><button class="btn btn-info" id="Display_rice" data-toggle="modal" data-target="#pop_rice">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>อ้อย</th>
-									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td>พื้นที่ยังไม่เหมาะกับการปลูก</td>
 									<td><button class="btn btn-info" id="Display_cane" data-toggle="modal" data-target="#pop_cane">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>มันสำปะหลัง</th>
-									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td>พื้นที่ยังไม่เหมาะกับการปลูก</td>
 									<td><button class="btn btn-info" id="Display_cassava" data-toggle="modal" data-target="#pop_cassava">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>ยางพารา</th>
-									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td>พื้นที่ยังไม่เหมาะกับการปลูก</td>
 									<td><button class="btn btn-info" id="Display_rubber" data-toggle="modal" data-target="#pop_rubber">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
 									<th>ปาล์มน้ำมัน</th>
-									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td>พื้นที่ยังไม่เหมาะกับการปลูก</td>
 									<td><button class="btn btn-info" id="Display_palm" data-toggle="modal" data-target="#pop_palm">ดูรายละเอียด</button></td>
 								</tr>
 
@@ -1253,19 +1260,17 @@
 						<td><div id="show_temp_rice"></div></td>
 						<td>15 -25</td>
 					</tr>
+					<tr>
 						<th>ปริมาณน้ำฝน(mm/month)</th>
 						<td><div id="show_rain_rice"></div></td>
 						<td>150 - 400</td>
+					</tr>
 					<tr>
 						<th>ความสูงจากระดับน้ำทะเล(m)</th>
 						<td><div id="show_levelsea_rice"></div></td>
-						<td>700</td>
+						<td>ไม่เกิน 700</td>
 					</tr>
-					<tr>
-						<th>ความลาดชัน</th>
-						<td><div id="show_slope_rice"></div></td>
-						<td>5 - 60</td>
-					</tr>
+
 				</table>
 			</div>
 
@@ -1303,19 +1308,17 @@
 						<td><div id="show_temp_cane"></div></td>
 						<td>15 -25</td>
 					</tr>
+					<tr  bgcolor="#C0392B">
 						<th>ปริมาณน้ำฝน(mm/month)</th>
 						<td><div id="show_rain_cane"></div></td>
 						<td>150 - 400</td>
+					</tr>
 					<tr>
 						<th>ความสูงจากระดับน้ำทะเล(m)</th>
 						<td><div id="show_levelsea_cane"></div></td>
 						<td>700</td>
 					</tr>
-					<tr>
-						<th>ความลาดชัน</th>
-						<td><div id="show_slope_cane"></div></td>
-						<td>5 - 60</td>
-					</tr>
+
 				</table>
 
 
@@ -1357,19 +1360,17 @@
 						<td><div id="show_temp_palm"></div></td>
 						<td>25 - 28</td>
 					</tr>
+					<tr  bgcolor="#C0392B">
 						<th>ปริมาณน้ำฝน(mm/month)</th>
 						<td><div id="show_rain_palm"></div></td>
 						<td>1250 mm/year</td>
+					</tr>
 					<tr>
 						<th>ความสูงจากระดับน้ำทะเล(m)</th>
 						<td><div id="show_levelsea_palm"></div></td>
 						<td> < 500</td>
 					</tr>
-					<tr bgcolor="#C0392B">
-						<th>ความลาดชัน</th>
-						<td><div id="show_slope_palm"></div></td>
-						<td> < 12% </td>
-					</tr>
+
 				</table>
 			</div>
 
@@ -1406,19 +1407,17 @@
 						<td><div id="show_temp_rubber"></div></td>
 						<td>15 -25</td>
 					</tr>
+					<tr  bgcolor="#C0392B">
 						<th>ปริมาณน้ำฝน(mm/month)</th>
 						<td><div id="show_rain_rubber"></div></td>
 						<td>150 - 400</td>
+					</tr>
 					<tr>
 						<th>ความสูงจากระดับน้ำทะเล(m)</th>
 						<td><div id="show_levelsea_rubber"></div></td>
 						<td>700</td>
 					</tr>
-					<tr>
-						<th>ความลาดชัน</th>
-						<td><div id="show_slope_rubber"></div></td>
-						<td>5 - 60</td>
-					</tr>
+
 				</table>
 			</div>
 
@@ -1455,20 +1454,16 @@
 						<td><div id="show_temp_cassava"></div></td>
 						<td>15 -25</td>
 					</tr>
+					<tr  bgcolor="#C0392B">
 						<th>ปริมาณน้ำฝน(mm/month)</th>
 						<td><div id="show_rain_cassava"></div></td>
 						<td>150 - 400</td>
+					</tr>
 					<tr>
 						<th>ความสูงจากระดับน้ำทะเล(m)</th>
 						<td><div id="show_levelsea_cassava"></div></td>
 						<td>700</td>
 					</tr>
-					<tr>
-						<th>ความลาดชัน</th>
-						<td><div id="show_slope_cassava"></div></td>
-						<td>5 - 60</td>
-					</tr>
-
 				</table>
 			</div>
 
