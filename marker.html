@@ -11,39 +11,40 @@
 
 
 
-<style type="text/css">
-	html { height: 100% }
-	/* css กำหนดความกว้าง ความสูงของแผนที่ */
-	#map_canvas {
-		width:75%;
-		height:670px;
-		margin:0;
-		padding-top: 50px;
-		float: left;
-	/*	margin-top:100px;*/
-	}
-	.btn.btn-warning.btn-block {
-    color: #212529;
-    background-color: #f02c54;
-    border-color: #f02c54;
-	}
-	#showDDD{
-		height:670px;
-		float: right;
-	}
-	#Report{
-		width: 100%;
-		float: left;
-	}
-	#Report_one{float: left;}
-	#Report_two{float: right;}
-	.modal-dialog{
-	max-width: 1200px;
-	}
-	#back{float: right;}
+	<style type="text/css">
+		html { height: 100% }
+		/* css กำหนดความกว้าง ความสูงของแผนที่ */
+		#map_canvas {
+			width:75%;
+			height:670px;
+			margin:0;
+			padding-top: 50px;
+			float: left;
+		/*	margin-top:100px;*/
+		}
+		.btn.btn-warning.btn-block {
+	    color: #212529;
+	    background-color: #f02c54;
+	    border-color: #f02c54;
+		}
+		#showDDD{
+			height:670px;
+			float: right;
+		}
+		#Report{
+			width: 100%;
+			float: left;
+		}
+		#Report_one{float: left;}
+		#Report_two{float: right;}
+		.modal-dialog{
+		max-width: 1000px;
+		}
+		#back{float: right;}
+		#data_seccess{background-color: green;}
+		#pop_seccess{max-width: 400px;}
 
-</style>
-
+	</style>
 
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -159,6 +160,7 @@
 		var palmLayer;
 		var rubberLayer;
 		var cassavaLayer;
+		var address_info;
 		var isCheck = false;
 		var isCheckRice = false;
 		var isCheckCane = false;
@@ -176,24 +178,27 @@
 			// กำหนดจุดเริ่มต้นของแผนที่
 			// 15.521832670176973
 			// 100.94521484999996
-			var contentString = '<div id="content">'+
-		            '<div id="siteNotice">'+
-		            '</div>'+
-		            '<div id="bodyContent">'+
+			var contentString = '<h4>ข้อมูลตำแหน่ง</h4>'+
+			'<br/>'+
+			'<div name="place_value"id="place_value">ทำการลากไปยังตำแหน่งที่ต้องการ</div>'+
+			'<br/>'+
+			'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess">ยืนยันตำแหน่ง</button>'
 
-		            '<p><b>พันธุ์ข้าวที่แนะนำในการเพาะปลูก กข15</b>'+'</br>'+
-								'รูปแบบในการเพาะปลูกที่แนะนำคือ นาขั้นบันใด'+'</br>'+
-								'ช่วงเวลาที่เหมาะสม ตั้งแต่เดือน มกราคม - เมษายน  '+
 
-								'<button class="btn" data-toggle="modal" data-target="#pop">แผนภูมิ</button>'+
-
-		            '</div>'+
-		            '</div>';
 
 		        var infowindow = new google.maps.InfoWindow({
 		          content: contentString
 		        });
 			var my_Latlng  = new GGM.LatLng(13.693353828847119,100.47280274062496);
+
+
+
+
+
+
+
+
+
 			//var my_Latlng  = new GGM.LatLng(13.693353828847119,100.47280274062496);
 			// เรียกใช้งานข้อมูล Geocoder ของ Google Map
 			geocoder = new GGM.Geocoder();
@@ -208,7 +213,7 @@
 			};
 			map = new GGM.Map(my_DivObj,myOptions);// สร้างแผนที่และเก็บตัวแปรไว้ในชื่อ map
 
-			
+
 			my_Marker = new GGM.Marker({ // สร้างตัว marker
 				position: my_Latlng,  // กำหนดไว้ที่เดียวกับจุดกึ่งกลาง
 				map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
@@ -216,24 +221,30 @@
 				title:"กดค้างและลากเพื่อหาตำแหน่งที่ต้องการ" // แสดง title เมื่อเอาเมาส์มาอยู่เหนือ
 			});
 			my_Marker.setVisible(false);
-			/*
+
 			my_Marker.addListener('click', function() {
 		    infowindow.open(map, my_Marker);
 		  });
-		 	
+
 			// กำหนด event ให้กับตัว marker เมื่อสิ้นสุดการลากตัว marker ให้ทำงานอะไร
 			GGM.event.addListener(my_Marker, "dragend", function() {
 				var my_Point = my_Marker.getPosition();  // หาตำแหน่งของตัว marker เมื่อกดลากแล้วปล่อย
-				console.log(my_Point.lat());
-				console.log(my_Point.lng());
+				get_lat_info = my_Point.lat();
+				get_lng_info = my_Point.lng();
+
+				$('#post_lat').html(get_lat_info);
+				$('#post_lng').html(get_lng_info);
 		        map.panTo(my_Point);  // ให้แผนที่แสดงไปที่ตัว marker
 
 				// เรียกขอข้อมูลสถานที่จาก Google Map
 				geocoder.geocode({"latLng": my_Point}, function(results, status) {
 				  if (status == GGM.GeocoderStatus.OK) {
 						if (results[1]) {
+
 							// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
 							$("#place_value").html(results[1].formatted_address); //
+							infowindow.setPosition(my_Point);
+							address_info = results[1].formatted_address;
 						}
 				  } else {
 					  // กรณีไม่มีข้อมูล
@@ -244,7 +255,7 @@
 		        $("#lon_value").val(my_Point.lng()); // เอาค่า longitude ตัว marker แสดงใน textbox id=lon_value
 		        $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value
 			});
-			*/
+
 
 		}
 		// ฟังก์ชั่น สำหรับให้แผนทีไปที่จุดตามค่าตำแหน่งที่ส่งมา
@@ -265,7 +276,7 @@
 		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase) {
 			if (!statusCase)
 			{
-				switch (cases) 
+				switch (cases)
 				{
 				case "warm":
 					window.setTimeout(function() {
@@ -352,12 +363,12 @@
 						break;
 					*/
 				}
-				
+
 			}
 		}
 
 		function Allweather(){
-			if (arrayAllWeather.length == 0) 
+			if (arrayAllWeather.length == 0)
 			{
 				$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -388,12 +399,12 @@
 															map: map, // กำหนดว่า marker นี้ใช้กับแผนที่ชื่อ instance ว่า map
 															icon:'img_weather/sun_icon.png',
 															animation: google.maps.Animation.DROP
-													}); */		
+													}); */
 										}
 										for (var i = 0; i < stackLatLng.length; i++) {
 											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayAllWeather, "allWeather", arrayAllWeatherCase[i]);
 										}
-										
+
 								},
 								type: 'GET'
 							});
@@ -426,11 +437,11 @@
 
 												var getlngg = data.Stations[j]['Longitude']['Value'];
 												var lng = parseFloat(getlngg);
-												
+
 												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
-							
+
 												//var markerLatLng = new GGM.LatLng(latt,lngg);
-												if (Cloud == "ท้องฟ้าแจ่มใส") 
+												if (Cloud == "ท้องฟ้าแจ่มใส")
 												{
 													stackLatLng.push({lat: lat, lng: lng});
 													/*
@@ -444,7 +455,7 @@
 													*/
 												}
 										}
-										for (var i = 0; i < stackLatLng.length; i++) 
+										for (var i = 0; i < stackLatLng.length; i++)
 										{
 										   addMarkerWithTimeout(stackLatLng[i], i * 30, arrayWarm, "warm", false);
 										}
@@ -459,7 +470,7 @@
 			}
 		}
 		function Cloud(){
-			if (arrayCloud.length == 0) 
+			if (arrayCloud.length == 0)
 			{
 				$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -482,12 +493,12 @@
 
 												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
 
-												if (Cloud == "มีเมฆบางส่วน") 
+												if (Cloud == "มีเมฆบางส่วน")
 													{
 														stackLatLng.push({lat: lat, lng: lng});
 													}
 										}
-										for (var i = 0; i < stackLatLng.length; i++) 
+										for (var i = 0; i < stackLatLng.length; i++)
 										{
 										   addMarkerWithTimeout(stackLatLng[i], i * 30, arrayCloud, "cloud", false);
 										}
@@ -502,7 +513,7 @@
 			}
 		}
 		function much_cloud(){
-			if (arrayMuchCloud.length == 0) 
+			if (arrayMuchCloud.length == 0)
 			{
 				$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -533,7 +544,7 @@
 														stackLatLng.push({lat: lat, lng: lng});
 													}
 										}
-										for (var i = 0; i < stackLatLng.length; i++) 
+										for (var i = 0; i < stackLatLng.length; i++)
 										{
 											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayMuchCloud, "much_cloud", false);
 										}
@@ -566,7 +577,7 @@
 			} else {
 				arrayRain[0].setMap(null);
 				arrayRain = [];
-			} 
+			}
 			/*
 					$.ajax({
 						type: 'GET',
@@ -889,6 +900,103 @@
 							}); */
 		}
 
+//function สำหรับดึงข้อมูลเพื่อนำไปคำนวนและแสดงผล
+		function get_info(){
+
+
+			var info_lat = get_lat_info;
+			var info_lng = get_lng_info;
+
+			$.ajax({
+					url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+					data: {
+						format: 'json'    // รูปแบบข้อมูล เป็น json
+					},
+					error: function() {
+						alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+					},
+					dataType: 'json',    // ชนิดข้อมูล json
+						success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+							var select_near=50;
+
+							var select_lat;
+							var select_lng;
+							var index;
+
+
+							for(var i=0 ; i < data.Stations.length ; i++){
+
+								var getlatt = data.Stations[i]['Latitude']['Value'];
+								var latt = parseFloat(getlatt);
+
+								var getlngg = data.Stations[i]['Longitude']['Value'];
+								var lngg = parseFloat(getlngg);
+
+								var near = Math.sqrt(Math.pow((info_lat-latt),2)+(info_lng-lngg),2);
+
+								if(select_near > near){
+									select_near = near;
+									select_lat = latt;
+									select_lng = lngg;
+									index = i;
+								}
+							}
+
+							//ส่วนแสดงผลที่ผ่านการคำนวณต่าง ๆ
+							var info_nearStation = data.Stations[index]['StationNameTh'];
+							var info_time =	data.Stations[index]['Observe']['Time'];
+							var info_temp	= data.Stations[index]['Observe']['Temperature']['Value'];
+							var info_rain = data.Stations[index]['Observe']['Rainfall']['Value'];
+							var info_sealevel = 100;
+							var info_slope = 100;
+
+							$('#show_temp_rice').html(info_temp);
+							$('#show_rain_rice').html(info_rain);
+							$('#show_levelsea_rice').html(info_sealevel);
+							$('#show_slope_rice').html(info_slope);
+
+
+							$('#show_temp_cane').html(info_temp);
+							$('#show_rain_cane').html(info_rain);
+							$('#show_levelsea_cane').html(info_sealevel);
+							$('#show_slope_cane').html(info_slope);
+
+							$('#show_temp_rubber').html(info_temp);
+							$('#show_rain_rubber').html(info_rain);
+							$('#show_levelsea_rubber').html(info_sealevel);
+							$('#show_slope_rubber').html(info_slope);
+
+							$('#show_temp_cassava').html(info_temp);
+							$('#show_rain_cassava').html(info_rain);
+							$('#show_levelsea_cassava').html(info_sealevel);
+							$('#show_slope_cassava').html(info_slope);
+
+							$('#show_temp_palm').html(info_temp);
+							$('#show_rain_palm').html(info_rain);
+							$('#show_levelsea_palm').html(info_sealevel);
+							$('#show_slope_palm').html(info_slope);
+
+							$('#address').html(address_info);
+							console.log(address_info);
+
+
+							console.log(select_near);
+							console.log(select_lat);
+							console.log(select_lng);
+							console.log(info_temp);
+							console.log(info_rain);
+							console.log(index);
+
+
+						},
+						type: 'GET'
+					});
+		}
+
+
+
+
+
 		function codeAddress() {
 		    var address = document.getElementById("search").value;
 		    geocoder.geocode( { 'address': address}, function(results, status) {
@@ -996,13 +1104,43 @@
 			</ul>
 		</div>
 
+		<button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#itemTemp"><h5><font color="White">อุณหภูมิ</font></h5></button>
+		<div id="itemTemp" class="panel-collapse collapse">
+			<br/>
+			<center><img src="img_temp/tempChart.jpg" width="250px" height="50px"/></center>
+			<br/>
+		</div>
 
+		<button class="btn btn-warning btn-block"><h5><font color="White">ภูมิประเทศ</font></h5></button>
+		<div id="itemArea" class="panel-collapse collapse">
+			<ul class="list-group">
+
+			</ul>
+		</div>
 		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
 
 </div>
 
 
 <!--End menu option-->
+
+<!--start alert-->
+	<div id="pop_data_seccess" class="modal fade">
+	  <div id="pop_seccess" class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					ทำการคำนวณข้อมูลสำเร็จแล้ว
+				</div>
+				<div class="modal-footer">
+					<button id="enter_position" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--end alert-->
+
+
+
 
 <!--start result-->
 
@@ -1020,16 +1158,12 @@
 		</div>
 
 		<div class="col-md-6" id="Report_two">
-						</br><center><h3>ข้อมูลพื้นที่</h3></center><br />
+						</br><center><h3>ข้อมูลพื้นที่</h3></center><br />ตำแหน่งสถานที่ :
 						<div class="card">
 							<div class="card-block">
-								<form >
-									<table>
-									<td><label>ตำแหน่งสถานที่ : </label><td>
-									<td><div></div><td>
-								</table>
 
-								</form>
+								 <div id="address"></div>
+
 							</div>
 						</div>
 
@@ -1040,7 +1174,7 @@
 
 								<tr>
 									<th>ข้าว</th>
-									<td>พื้นที่เหมาะสมอย่างยิ่ง</td>
+									<td>พื้นที่เหมาะสมต่อการปลูกข้าว</td>
 									<td><button class="btn btn-info" id="Display_rice" data-toggle="modal" data-target="#pop_rice">ดูรายละเอียด</button></td>
 								</tr>
 								<tr>
@@ -1097,24 +1231,25 @@
 				<table class="table table-hover">
 					<tr>
 						<td></td>
-						<th>อุณหภูมิ(c)</th>
-						<th>ปริมาณน้ำฝน(mm/month)</th>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<th>ความลาดชัน</th>
-
-					</tr>
-					<tr>
 						<th>ข้อมูลสภาพพื้นที่</th>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
 					</tr>
 					<tr>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_rice"></div></td>
 						<td>15 -25</td>
+					</tr>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<td><div id="show_rain_rice"></div></td>
 						<td>150 - 400</td>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_rice"></div></td>
 						<td>700</td>
+					</tr>
+					<tr>
+						<th>ความลาดชัน</th>
+						<td><div id="show_slope_rice"></div></td>
 						<td>5 - 60</td>
 					</tr>
 				</table>
@@ -1146,24 +1281,25 @@
 				<table class="table table-hover">
 					<tr>
 						<td></td>
-						<th>อุณหภูมิ(c)</th>
-						<th>ปริมาณน้ำฝน(mm/month)</th>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<th>ความลาดชัน</th>
-
-					</tr>
-					<tr>
 						<th>ข้อมูลสภาพพื้นที่</th>
-						<td>20</td>
-						<td>300</td>
-						<td>800</td>
-						<td>30</td>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
 					</tr>
 					<tr>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_cane"></div></td>
 						<td>15 -25</td>
+					</tr>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<td><div id="show_rain_cane"></div></td>
 						<td>150 - 400</td>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_cane"></div></td>
 						<td>700</td>
+					</tr>
+					<tr>
+						<th>ความลาดชัน</th>
+						<td><div id="show_slope_cane"></div></td>
 						<td>5 - 60</td>
 					</tr>
 				</table>
@@ -1199,25 +1335,26 @@
 				<table class="table table-hover">
 					<tr>
 						<td></td>
-						<th>อุณหภูมิ(c)</th>
-						<th>ปริมาณน้ำฝน(mm/month)</th>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<th>ความลาดชัน</th>
-
-					</tr>
-					<tr>
 						<th>ข้อมูลสภาพพื้นที่</th>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
 					</tr>
 					<tr>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
-						<td>15 -25</td>
-						<td>150 - 400</td>
-						<td>700</td>
-						<td>5 - 60</td>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_palm"></div></td>
+						<td>25 - 28</td>
+					</tr>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<td><div id="show_rain_palm"></div></td>
+						<td>1250 mm/year</td>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_palm"></div></td>
+						<td> < 500</td>
+					</tr>
+					<tr bgcolor="#C0392B">
+						<th>ความลาดชัน</th>
+						<td><div id="show_slope_palm"></div></td>
+						<td> < 12% </td>
 					</tr>
 				</table>
 			</div>
@@ -1247,24 +1384,25 @@
 				<table class="table table-hover">
 					<tr>
 						<td></td>
-						<th>อุณหภูมิ(c)</th>
-						<th>ปริมาณน้ำฝน(mm/month)</th>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<th>ความลาดชัน</th>
-
-					</tr>
-					<tr>
 						<th>ข้อมูลสภาพพื้นที่</th>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
 					</tr>
 					<tr>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_rubber"></div></td>
 						<td>15 -25</td>
+					</tr>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<td><div id="show_rain_rubber"></div></td>
 						<td>150 - 400</td>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_rubber"></div></td>
 						<td>700</td>
+					</tr>
+					<tr>
+						<th>ความลาดชัน</th>
+						<td><div id="show_slope_rubber"></div></td>
 						<td>5 - 60</td>
 					</tr>
 				</table>
@@ -1295,26 +1433,28 @@
 				<table class="table table-hover">
 					<tr>
 						<td></td>
-						<th>อุณหภูมิ(c)</th>
-						<th>ปริมาณน้ำฝน(mm/month)</th>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<th>ความลาดชัน</th>
-
-					</tr>
-					<tr>
 						<th>ข้อมูลสภาพพื้นที่</th>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
 					</tr>
 					<tr>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_cassava"></div></td>
 						<td>15 -25</td>
+					</tr>
+						<th>ปริมาณน้ำฝน(mm/month)</th>
+						<td><div id="show_rain_cassava"></div></td>
 						<td>150 - 400</td>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_cassava"></div></td>
 						<td>700</td>
+					</tr>
+					<tr>
+						<th>ความลาดชัน</th>
+						<td><div id="show_slope_cassava"></div></td>
 						<td>5 - 60</td>
 					</tr>
+
 				</table>
 			</div>
 
