@@ -227,13 +227,13 @@
 		var geocoder; // กำหนดตัวแปร สำหรับใช้งานข้อมูลสถานที่จาก Google Map
 		var my_Marker;
 		var producMarker = [];
-		var riceLayer;
-		var caneLayer;
-		var palmLayer;
-		var rubberLayer;
-		var cassavaLayer;
+		var layer;
 		var address_info;
+		var checkRadioPlant = false;
+		var checkRadioWeather = false;
+		var checkRadioGeo = false;
 		var isCheck = false;
+		var isCheckEleAvg = false;
 		var isCheckRice = false;
 		var isCheckCane = false;
 		var isCheckPalm = false;
@@ -329,6 +329,12 @@
 		//	map.panTo(my_Latlng);  // ให้แผนที่แสดงไปที่ตัว marker
 		}
 		function elevation() {
+			$("#high_level_2").hide();
+			$("#high_level_1").show();
+			if (isCheckEleAvg) {
+				layer.setMap(null);
+				isCheckEleAvg = false;
+			}
 			infowindow = new google.maps.InfoWindow({map: map});
 			var elevator = new google.maps.ElevationService;
 			map.addListener('click', function(event) {
@@ -344,8 +350,8 @@
 				// Retrieve the first result
 				if (results[0]) {
 					// Open the infowindow indicating the elevation at the clicked position.
-					infowindow.setContent('The elevation at this point <br>is ' +
-						results[0].elevation + ' meters.');
+					infowindow.setContent('ความสูงจากระดับน้ำทะเล ' +
+						results[0].elevation + ' เมตร');
 					elevatorValue = results[0].elevation;
 				} else {
 					infowindow.setContent('No results found');
@@ -355,6 +361,58 @@
 				}
 			});
 			}
+		}
+		function elevationAverage() {
+			$("#high_level_1").hide();
+			$("#high_level_2").show();
+			if (checkRadioPlant || checkRadioWeather) {
+				layer.setMap(null);
+			}
+			if (arrayAllWeather.length != 0) {
+				for (var i = 0; i < arrayAllWeather.length; i++) {
+					arrayAllWeather[i].setMap(null);
+				}
+				arrayAllWeather = [];
+				arrayAllWeatherCase = [];
+			}
+			layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '19JVnr3XlupL7YKqZXtBckf6zN53VHdvuKWE-Wn3d',
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
+						},
+						styles: [{
+							where: 'high_value <= 1500',
+							polygonOptions: {
+							fillColor: '#CC0000'
+							}
+						},{
+							where: 'high_value <= 1500 AND high_value > 1000',
+							polygonOptions: {
+							fillColor: '#E65100'
+							}
+						},{
+							where: 'high_value <= 1000 AND high_value > 500',
+							polygonOptions: {
+							fillColor: '#FFEB3B'
+							}
+						},{
+							where: 'high_value <= 500 AND high_value > 100',
+							polygonOptions: {
+							fillColor: '#00FF00'
+							}
+						},{
+							where: 'high_value <= 100',
+							polygonOptions: {
+							fillColor: '#388E3C'
+							}
+						}]
+					});
+				layer.setMap(map);
+			isCheckEleAvg = true;
 		}
 		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase) {
 			if (!statusCase)
@@ -450,6 +508,11 @@
 			}
 		}
 		function Allweather(){
+			$("#itemmoisture").hide();
+			$("#itemTemp").hide();
+			if (checkRadioPlant || checkRadioWeather || isCheckEleAvg) {
+				layer.setMap(null);
+			}
 			if (arrayAllWeather.length == 0)
 			{
 				$.ajax({
@@ -498,6 +561,7 @@
 				arrayAllWeather = [];
 				arrayAllWeatherCase = [];
 			}
+			checkRadioWeather = false;
 		}
 		function warm(){
 			if (arrayWarm.length == 0)
@@ -680,8 +744,8 @@
 			*/
 		}
 		function rice(){
-				if (!isCheckRice) {
-				console.log("rice");
+				if (!checkRadioPlant) {
+				/*
 				for (var i = 1; i <= 3; i++) {
 					updateColume = new google.maps.FusionTablesLayer({
 						query: {
@@ -692,7 +756,8 @@
 					});
 					console.log(i)
 				}
-				ricelayer = new google.maps.FusionTablesLayer({
+				*/
+				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
 						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
@@ -705,17 +770,29 @@
 						}
 						}]
 				});
-					ricelayer.setMap(map);
-					isCheckRice = true;
+					layer.setMap(map);
+					checkRadioPlant = true;
 				} else {
-					ricelayer.setMap(null);
-					isCheckRice = false;
+					layer.setMap(null);
+					layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						where: 'ID_1 <= 20'
+						},
+						styles: [{
+						polygonOptions: {
+							fillColor: '#00FF00',
+							fillOpacity: 0.3
+						}
+						}]
+					});
+					layer.setMap(map);
 				}
 		}
 		function cane(){
-			if (!isCheckCane) {
-				console.log("cane");
-				canelayer = new google.maps.FusionTablesLayer({
+			if (!checkRadioPlant) {
+				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
 						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
@@ -728,11 +805,24 @@
 						}
 						}]
 				});
-					canelayer.setMap(map);
-					isCheckCane = true;
+					layer.setMap(map);
+					checkRadioPlant = true;
 				} else {
-					canelayer.setMap(null);
-					isCheckCane = false;
+					layer.setMap(null);
+					layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						where: 'ID_1 >= 21 AND ID_1 <= 30'
+						},
+						styles: [{
+						polygonOptions: {
+							fillColor: '#ffc107',
+							fillOpacity: 0.3
+						}
+						}]
+					});
+					layer.setMap(map);
 				}
 			/*	$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -782,7 +872,7 @@
 							});  */
 		}
 		function palm(){
-			if (!isCheckPalm) {
+			if (!checkRadioPlant) {
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
@@ -797,10 +887,23 @@
 						}]
 				});
 					layer.setMap(map);
-					isCheckPalm = true;
+					checkRadioPlant = true;
 				} else {
 					layer.setMap(null);
-					isCheckPalm = false;
+					layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						where: 'ID_1 >= 41 AND ID_1 <= 50'
+						},
+						styles: [{
+						polygonOptions: {
+							fillColor: '#dc3545',
+							fillOpacity: 0.3
+						}
+						}]
+					});
+					layer.setMap(map);
 			}
 			/*
 				$.ajax({
@@ -850,7 +953,7 @@
 							}); */
 		}
 		function rubber(){
-			if (!isCheckRubber) {
+			if (!checkRadioPlant) {
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
@@ -865,10 +968,23 @@
 						}]
 				});
 					layer.setMap(map);
-					isCheckRubber = true;
+					checkRadioPlant = true;
 				} else {
 					layer.setMap(null);
-					isCheckRubber = false;
+					layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						where: 'ID_1 >= 51 AND ID_1 <= 60'
+						},
+						styles: [{
+						polygonOptions: {
+							fillColor: '#343a40',
+							fillOpacity: 0.3
+						}
+						}]
+					});
+					layer.setMap(map);
 			}
 			/*
 				$.ajax({
@@ -918,7 +1034,7 @@
 							}); */
 		}
 		function cassava(){
-			if (!isCheckCassava) {
+			if (!checkRadioPlant) {
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
@@ -933,10 +1049,23 @@
 						}]
 				});
 					layer.setMap(map);
-					isCheckCassava = true;
+					checkRadioPlant = true;
 				} else {
 					layer.setMap(null);
-					isCheckCassava = false;
+					layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						where: 'ID_1 >= 61 AND ID_1 <= 77'
+						},
+						styles: [{
+						polygonOptions: {
+							fillColor: '#fd7e14',
+							fillOpacity: 0.3
+						}
+						}]
+					});
+					layer.setMap(map);
 			}
 			/*
 				$.ajax({
@@ -986,6 +1115,56 @@
 							}); */
 		}
 		function temperature(){
+				$("#itemmoisture").hide();
+				$("#itemTemp").show();
+				if (checkRadioPlant || checkRadioWeather || isCheckEleAvg) {
+					layer.setMap(null);
+				}
+				if (arrayAllWeather.length != 0) {
+					for (var i = 0; i < arrayAllWeather.length; i++) {
+						arrayAllWeather[i].setMap(null);
+					}
+					arrayAllWeather = [];
+					arrayAllWeatherCase = [];
+				}
+					layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '15D9_nXcWHIA6NUpUjRVBzj4g76QKCcw82EIkbFPa',
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
+						},
+						styles: [{
+							where: 'temperature_value <= 10',
+							polygonOptions: {
+							fillColor: '#0077e6'
+							}
+						},{
+							where: 'temperature_value <= 20 AND temperature_value > 10',
+							polygonOptions: {
+							fillColor: '#3bf8ff'
+							}
+						},{
+							where: 'temperature_value <= 30 AND temperature_value > 20',
+							polygonOptions: {
+							fillColor: '#ffc41d'
+							}
+						},{
+							where: 'temperature_value <= 40 AND temperature_value > 30',
+							polygonOptions: {
+							fillColor: '#dc151e'
+							}
+						},{
+							where: 'temperature_value > 40',
+							polygonOptions: {
+							fillColor: '#ff0a21' //#ff0000 1 //#ff410b 2 //#ff7e00 3 // #c7ff00 4 //#00ff1b 5
+							}
+						}]
+					});
+					layer.setMap(map);
+					checkRadioWeather = true;
 			/*
 			$.ajax({
 				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -1268,7 +1447,92 @@
 					});
 				*/
 		}
-
+		function moisture() {
+			$("#itemmoisture").show();
+			$("#itemTemp").hide();
+			if (checkRadioPlant || checkRadioWeather || isCheckEleAvg) {
+				layer.setMap(null);
+			}
+			if (arrayAllWeather.length != 0) {
+				for (var i = 0; i < arrayAllWeather.length; i++) {
+					arrayAllWeather[i].setMap(null);
+				}
+				arrayAllWeather = [];
+				arrayAllWeatherCase = [];
+			}
+			layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '19tS6TQwXwUUkb8513PAvo2I17LwKK3NslB0HbGE3',
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
+						},
+						styles: [{
+							where: 'relative_value <= 20',
+							polygonOptions: {
+							fillColor: '#CC0000'
+							}
+						},{
+							where: 'relative_value <= 40 AND relative_value > 20',
+							polygonOptions: {
+							fillColor: '#E65100'
+							}
+						},{
+							where: 'relative_value <= 60 AND relative_value > 40',
+							polygonOptions: {
+							fillColor: '#FFEB3B'
+							}
+						},{
+							where: 'relative_value <= 80 AND relative_value > 60',
+							polygonOptions: {
+							fillColor: '#00FF00'
+							}
+						},{
+							where: 'relative_value > 80',
+							polygonOptions: {
+							fillColor: '#388E3C' //#ff0000 1 //#ff410b 2 //#ff7e00 3 // #c7ff00 4 //#00ff1b 5
+							}
+						}]
+					});
+				layer.setMap(map);
+			checkRadioWeather = true;
+		}
+		function radioPlant() {
+			if (checkRadioPlant) {
+				layer.setMap(null);
+			}
+			checkRadioPlant = false;
+			var ele = document.getElementsByName("plant");
+			for(var i=0;i<ele.length;i++)
+				ele[i].checked = false;
+		}
+		function radioWeather() {
+			if (checkRadioWeather) {
+				layer.setMap(null);
+			}
+			if (arrayAllWeather.length > 0) {
+				for (var i = 0; i < arrayAllWeather.length; i++) {
+					arrayAllWeather[i].setMap(null);
+				}
+				arrayAllWeather = [];
+				arrayAllWeatherCase = [];
+			}
+			checkRadioWeather = false;
+			var ele = document.getElementsByName("warether");
+			for(var i=0;i<ele.length;i++)
+				ele[i].checked = false;
+		}
+		function radioGeo() {
+			if (isCheckEleAvg) {
+				layer.setMap(null);
+			}
+			isCheckEleAvg = false;
+			var ele = document.getElementsByName("high");
+			for(var i=0;i<ele.length;i++)
+				ele[i].checked = false;
+		}
 //function สำหรับดึงข้อมูลเพื่อนำไปคำนวนและแสดงผล
 		function get_info(){
 
@@ -1551,9 +1815,11 @@
 	<nav class="navbar navbar-dark bg-primary"></nav>
 	<nav class="navbar navbar-dark bg-primary">
   <a class="navbar-brand" href="marker.html">แผนที่การเกษตร</a>
+  <!--
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+    <span class="navbar-toggler-icon"></span><span class="navbar-toggler-icon"></span>
   </button>
+-->
 	</nav>
   <nav class="navbar navbar-dark bg-primary"></nav>
 <!--End navbar-->
@@ -1567,7 +1833,7 @@
 
 	<!--start menu option-->
   <div class="col-md-3" id="showDDD"></br>
-			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant"><h5>พืชทางการเกษตร</h5></button>
+			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant" onclick="radioPlant()"><h5>พืชทางการเกษตร</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
 					<li class="list-group-item"><input type="radio" name="plant" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
@@ -1579,39 +1845,38 @@
 			</div>
 
 
-		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather"><h5>สภาพอากาศ</h5></button>
+		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>สภาพอากาศ</h5></button>
 		<div id="itemWeather" class="panel-collapse collapse">
 			<ul class="list-group">
-<<<<<<< HEAD
-				<li class="list-group-item"><input type="checkbox" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
-				<li class="list-group-item"><input type="checkbox" data-toggle="collapse" data-target="#itemTemp" onclick="temperature()"><font style="padding-left: 25px;">อุณหภูมิ</font>
-=======
 				<li class="list-group-item"><input type="radio" name="warether" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
-				<li class="list-group-item"><input type="radio" name="warether" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
->>>>>>> 7b8f1732ab03281914ac8a7671b9329cd4524d90
+				<li class="list-group-item"><input type="radio" name="warether" onclick="temperature()" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
 					<div id="itemTemp" class="panel-collapse collapse">
-						<br/>
-						<center><img src="img_option/tempChart.jpg" width="250px" height="50px"/></center>
-						<br/>
+						<button class="btn" style="background-color:#0077e6"></button><font style="padding-left:25px;">อุณหภูมิ น้อยกว่า 11 องศา</font><br/>
+							<button class="btn" style="background-color:#3bf8ff"></button><font style="padding-left:25px;">อุณหภูมิ อยู่ในระหว่าง 11 - 20 องศา</font><br/>
+							<button class="btn" style="background-color:#ffc41d"></button><font style="padding-left:25px;">อุณหภูมิ อยู่ในระหว่าง 21 - 30 องศา</font><br/>
+							<button class="btn" style="background-color:#dc151e"></button><font style="padding-left:25px;">อุณหภูมิ อยู่ในระหว่าง 31 - 40 องศา</font><br/>
+							<button class="btn" style="background-color:#ff0a21"></button><font style="padding-left:25px;">อุณหภูมิ มากกว่า 40 องศา</font><br/>
 					</div>
 				</li>
-				<li class="list-group-item"><input type="radio" name="warether" data-toggle="collapse" data-target="#itemmoisture"><font style="padding-left: 25px;">ความชื้น</font>
+				<li class="list-group-item"><input type="radio" name="warether" onclick="moisture()" data-toggle="collapse" data-target="#itemmoisture"><font style="padding-left: 25px;">ความชื้น</font>
 					<div id="itemmoisture" class="panel-collapse collapse">
-						<br/>
-						<center><img src="img_option/temp_level.png" width="250px" height="50px"/></center>
-						<br/>
+							<button class="btn" style="background-color:#CC0000"></button><font style="padding-left:25px;">ความชื้น น้อยกว่า 21%</font><br/>
+							<button class="btn" style="background-color:#E65100"></button><font style="padding-left:25px;">ความชื้น อยู่ในระหว่าง 21% - 40%</font><br/>
+							<button class="btn" style="background-color:#FFEB3B"></button><font style="padding-left:25px;">ความชื้น อยู่ในระหว่าง 41% - 60%</font><br/>
+							<button class="btn" style="background-color:#00FF00"></button><font style="padding-left:25px;">ความชื้น อยู่ในระหว่าง 61% - 80%</font><br/>
+							<button class="btn" style="background-color:#388E3C"></button><font style="padding-left:25px;">ความชื้น มากกว่า 80%</font><br/>
 					</div>
 				</li>
 			</ul>
 		</div>
 
-		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea"><h5><font color="White">ภูมิประเทศ</font></h5></button>
+		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">ภูมิประเทศ</font></h5></button>
 		<div id="itemArea" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><center><b>ความสูงจากระดับน้ำทะเล</b></center>
 					<div class="card-block" style="padding-top:5px;">
 						<input type="radio" name="high" value="point" onclick="elevation()" data-toggle="collapse" data-target="#high_level_1"/><font style="padding-left:15px;">แสดงข้อมูลในจุดที่ต้องการ</font><br/>
-						<input type="radio" name="high" value="area" data-toggle="collapse" data-target="#high_level_2"/><font style="padding-left:15px;">แสดงข้อมูลเฉลี่ยทั่วประเทศ</font>
+						<input type="radio" name="high" value="area" data-toggle="collapse" onclick="elevationAverage()" data-target="#high_level_2"/><font style="padding-left:15px;">แสดงข้อมูลเฉลี่ยทั่วประเทศ</font>
 						<div id="high_level_1" class="panel-collapse collapse">ทำการนำ "คลิก" บนแผนที่เพื่อทราบความสูง</div>
 						<div id="high_level_2" class="panel-collapse collapse">
 							<button class="btn" style="background-color:#CC0000"></button><font style="padding-left:25px;">ความสูง > 1500</font><br/>
@@ -1734,49 +1999,6 @@
 
 					</div>
 
-					<div class="row" id="Report_rain">
-
-
-					<div class="col" >
-						<div>
-								<p></p>
-								<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
-								<p></p>
-								<div class="modal-body">
-									<center><div id="curve_chart"></div></center>
-								</div>
-							</div>
-						</div>
-						<div class="col">
-							<div>
-								winhuman
-								</div>
-							</div>
-
-					</div>
-
-					<div class="row" id="Report_high">
-						<div class="col">
-								<p></p>
-								<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
-								<p></p>
-								<div class="modal-body">
-									<center><div id="piechart"></div></center>
-								</div>
-							</div>
-							<div class="col">
-							</div>
-						</div>
-
-
-						<div class="row" id="Report_temp">
-								<div class="col">
-									<img src="img_option/position.png" width="300px" height="300px">
-								</div>
-								<div class="col">
-									....<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-								</div>
-						</div>
 
 </div>
 
@@ -2038,7 +2260,7 @@
 					<tr>
 						<th>ความสูงจากระดับน้ำทะเล(m)</th>
 						<td><div id="show_levelsea_cassava"></div></td>
-						<td>-</td>
+						<td>ไม่เกิน 200</td>
 					</tr>
 				</table>
 			</div>
