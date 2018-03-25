@@ -4,7 +4,7 @@
 
   <center>
   <button id="currentLocation" class="btn btn-info" style="width:150px;height:150px;">ค้นหาตำแหน่ง<br/>ณ ปัจจุบัน<br/><img src="img_option/gps_icon.png"></button>
-  <button id="linkArea" class="btn btn-info" style="width:150px;height:150px;"><b>ค้นหาตำแหน่ง<br/>ด้วยการปักหมุด<br/></b><img src="img_option/gps_icon.png"></button>
+  <button id="linkArea" class="btn btn-info" style="width:150px;height:150px;"><b>ค้นหาตำแหน่ง<br/>ด้วยการปักหมุด<br/></b><img src="img_option/map.png" width="80px" height="80px"></button>
   </center>
 
   <div style="padding-top:10px;"></div>
@@ -15,7 +15,15 @@
 </div>
 
 <script type="text/javascript">
-var infowindow = new google.maps.InfoWindow;
+var contentString2 = '<h4>ข้อมูลตำแหน่ง</h4>'+
+'<br/>'+
+'<div id="area_value"></div>'+
+'<br/>'+
+'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess2">ยืนยันตำแหน่ง</button>'
+var infowindow2 = new google.maps.InfoWindow({
+  content: contentString2
+});
+var address_info_gps;
 $(function(){
 $("#linkArea").click(function(e)
 {
@@ -29,30 +37,52 @@ $.get(link, function(res){
 });
 $("#currentLocation").click(function(e){
   if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function(position) {
         var pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        infowindow.setPosition(pos);
-        infowindow.setContent('ตำแหน่งปัจจุบันของคุณ');
-        infowindow.open(map);
+        getCurrentPosition = pos;
+        console.log(getCurrentPosition);
+        infowindow2.setPosition(pos);
+        //infowindow.setContent(contentString2);
+        infowindow2.open(map);
         map.setCenter(pos);
-        $('html, body').animate({scrollTop: $elem.height()}, 800);
+
+          var geocoder_gps = new GGM.Geocoder();
+        // เรียกขอข้อมูลสถานที่จาก Google Map
+        geocoder_gps.geocode({"latLng": pos}, function(results, status) {
+          if (status == GGM.GeocoderStatus.OK) {
+            if (results[1]) {
+              // แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
+              $("#area_value").html(results[1].formatted_address); //
+              infowindow2.setPosition(pos);
+              address_info = results[1].formatted_address;
+              //$("#place_value").html(results[1].formatted_address + "ระดับความสูงจากน้ำทะเล " + results[0].elevation + " เมตร" );
+            }
+          } else {
+            // กรณีไม่มีข้อมูล
+          alert("Geocoder failed due to: " + status);
+          }
+        });
+
+
+
+        $('html, body').animate({scrollTop: 760}, 800);
       }, function() {
-        handleLocationError(true, infowindow, map.getCenter());
+        handleLocationError(true, infowindow2, map.getCenter());
       });
     } else {
       // Browser doesn't support Geolocation
-      handleLocationError(false, infowindow, map.getCenter());
+      handleLocationError(false, infowindow2, map.getCenter());
   alert("เบาวน์เซอร์ไม่รองรับ การทำงานของฟังก์ชันนี้");
   }
-  function handleLocationError(browserHasGeolocation, infowindow, pos) {
+  function handleLocationError(browserHasGeolocation, infowindow2, pos) {
     console.log("can't access");
     console.log(browserHasGeolocation);
     console.log(pos);
     alert("มีข้อผิดพลาดเกิดขึ้นในการเข้าถึงตำแหน่งปัจจุบันของคุณ");
-  }   
+  }
 });
 });
 </script>

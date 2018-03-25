@@ -33,21 +33,41 @@
 			border-color: #8E44AD;
 		}
 		#showDDD{
+			padding-left: 15px;
+			background-color:#a3ccff;
 			height:670px;
 			float: right;
 		}
-		#Report{
-			width: 100%;
-			float: left;
-		}
-		#Report_one{float: left;}
-		#Report_two{float: right;}
+		#Report_area{padding-top: 100px;}
+		#Report_chart_plant{height: 800;}
+		#Report_detail_plant{height: 800;}
+		#Report_rain{background-color: #a3ccff;height: 800;}
+		#Report_temp{background-color: #a3ccff;height: 800;}
 		.modal-dialog{
 		max-width: 1000px;
 		}
 		#back{float: right;}
 		#data_seccess{background-color: green;}
 		#pop_seccess{max-width: 400px;}
+		#pop_seccess2{max-width: 400px;}
+		#myBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: red; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+		}
+		#myBtn:hover {
+		    background-color: #555; /* Add a dark-grey background on hover */
+		}
 
 	</style>
 
@@ -66,8 +86,8 @@
       // draws it.
       function drawChart() {
 
-        // Create the data table.
-				var data = google.visualization.arrayToDataTable([
+        //แผนภูมิแสดงข้อมูลวิเคราะห์พืช
+				var data_plant = google.visualization.arrayToDataTable([
 				['Element', 'เปอร์เซนต์ความเหมาะสม', { role: 'style' }],
 				['ข้าว', 8.94, '#b87333'],            // RGB value
 				['ปาล์มน้ำมัน', 10.49, 'silver'],            // English color name
@@ -76,17 +96,64 @@
 				['มันสำปะหลัง', 100, 'color: #e5e4e2' ],
 		 ]);
 
-		 var options = {
-        title: "อัตราความเหมาะสมของพืชแต่ละชนิด",
-        width: 600,
-        height: 400,
-        bar: {groupWidth: "90%"},
-        legend: { position: "none" },
-      };
+		 var options_plant = {
+				title: "อัตราความเหมาะสมของพืชแต่ละชนิด",
+				width: 600,
+				height: 400,
+				bar: {groupWidth: "90%"},
+				legend: { position: "none" },
+			};
 
         // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data,options);
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_plant'));
+        chart.draw(data_plant,options_plant);
+
+
+
+				var data_rain = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var options_rain = {
+          title: 'Company Performance',
+					width: 600,
+					height: 400,
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data_rain, options_rain);
+
+
+				var data_high = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var options_high = {
+					width: 600,
+					height: 400,
+          title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data_high, options_high);
+
+
+
+
+
       }
     </script>
 
@@ -246,9 +313,6 @@
 					alert("Geocoder failed due to: " + status);
 				  }
 				});
-		        $("#lat_value").val(my_Point.lat());  // เอาค่า latitude ตัว marker แสดงใน textbox id=lat_value
-		        $("#lon_value").val(my_Point.lng()); // เอาค่า longitude ตัว marker แสดงใน textbox id=lon_value
-		        $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value
 			});
 
 
@@ -1297,9 +1361,15 @@
 						type: 'GET'
 					});
 		}
+
+
+
+
+
+
 		function get_info2(){
 
-
+			console.log(address_info);
 			var info_lat = getCurrentPosition.lat;
 			var info_lng = getCurrentPosition.lng;
 
@@ -1406,6 +1476,21 @@
 		      }
 		    });
 		  }
+
+
+			// When the user scrolls down 20px from the top of the document, show the button
+			window.onscroll = function() {scrollFunction()};
+
+			function scrollFunction() {
+			    if (document.documentElement.scrollTop > 300) {
+			        document.getElementById("myBtn").style.display = "block";
+			    } else {
+			        document.getElementById("myBtn").style.display = "none";
+			    }
+			}
+
+			// When the user clicks on the button, scroll to the top of the document
+
 		$(function(){
 
 			$("#linkSearch").click(function(e){
@@ -1414,6 +1499,19 @@
 				$.get(link, function(res){
 					$('#showDDD').html(res);
 					});
+				});
+
+				$('#enter_position_1').click(
+					function (e) {
+						$('html, body').animate({scrollTop: 760}, 800);
+				});
+				$('#enter_position_2').click(
+					function (e) {
+						$('html, body').animate({scrollTop: 760}, 800);
+				});
+				$('#myBtn').click(
+					function (e) {
+						$('html, body').animate({scrollTop: 0}, 800);
 				});
 
 
@@ -1468,15 +1566,15 @@
 	<div id="map_canvas"></div>
 
 	<!--start menu option-->
-  <div style="padding-left: 15px; background-color:#a3ccff;" class="col-md-3" id="showDDD"></br>
+  <div class="col-md-3" id="showDDD"></br>
 			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant"><h5>พืชทางการเกษตร</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
-					<li class="list-group-item"><input type="checkbox" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
-					<li class="list-group-item"><input type="checkbox" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font></li>
-					<li class="list-group-item"><input type="checkbox" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
-					<li class="list-group-item"><input type="checkbox" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font></li>
-					<li class="list-group-item"><input type="checkbox" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
 				</ul>
 			</div>
 
@@ -1484,18 +1582,23 @@
 		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather"><h5>สภาพอากาศ</h5></button>
 		<div id="itemWeather" class="panel-collapse collapse">
 			<ul class="list-group">
+<<<<<<< HEAD
 				<li class="list-group-item"><input type="checkbox" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
 				<li class="list-group-item"><input type="checkbox" data-toggle="collapse" data-target="#itemTemp" onclick="temperature()"><font style="padding-left: 25px;">อุณหภูมิ</font>
+=======
+				<li class="list-group-item"><input type="radio" name="warether" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
+				<li class="list-group-item"><input type="radio" name="warether" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
+>>>>>>> 7b8f1732ab03281914ac8a7671b9329cd4524d90
 					<div id="itemTemp" class="panel-collapse collapse">
 						<br/>
 						<center><img src="img_option/tempChart.jpg" width="250px" height="50px"/></center>
 						<br/>
 					</div>
 				</li>
-				<li class="list-group-item"><input type="checkbox" data-toggle="collapse" data-target="#itemmoisture"><font style="padding-left: 25px;">ความชื้น</font>
+				<li class="list-group-item"><input type="radio" name="warether" data-toggle="collapse" data-target="#itemmoisture"><font style="padding-left: 25px;">ความชื้น</font>
 					<div id="itemmoisture" class="panel-collapse collapse">
 						<br/>
-						<center><img src="img_option/tempChart.jpg" width="250px" height="50px"/></center>
+						<center><img src="img_option/temp_level.png" width="250px" height="50px"/></center>
 						<br/>
 					</div>
 				</li>
@@ -1505,10 +1608,18 @@
 		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea"><h5><font color="White">ภูมิประเทศ</font></h5></button>
 		<div id="itemArea" class="panel-collapse collapse">
 			<ul class="list-group">
-				<li class="list-group-item"><input type="checkbox" onclick="elevation()" data-toggle="collapse" data-target="#high_level"><font style="padding-left: 25px;">ความสูงจากระดับน้ำทะเล</font>
-					<div id="high_level" class="panel-collapse collapse">
-
-							<center><img src="img_option/high_level.png" width="200px" height="150px"/></center>
+				<li class="list-group-item"><center><b>ความสูงจากระดับน้ำทะเล</b></center>
+					<div class="card-block" style="padding-top:5px;">
+						<input type="radio" name="high" value="point" onclick="elevation()" data-toggle="collapse" data-target="#high_level_1"/><font style="padding-left:15px;">แสดงข้อมูลในจุดที่ต้องการ</font><br/>
+						<input type="radio" name="high" value="area" data-toggle="collapse" data-target="#high_level_2"/><font style="padding-left:15px;">แสดงข้อมูลเฉลี่ยทั่วประเทศ</font>
+						<div id="high_level_1" class="panel-collapse collapse">ทำการนำ "คลิก" บนแผนที่เพื่อทราบความสูง</div>
+						<div id="high_level_2" class="panel-collapse collapse">
+							<button class="btn" style="background-color:#CC0000"></button><font style="padding-left:25px;">ความสูง > 1500</font><br/>
+							<button class="btn" style="background-color:#E65100"></button><font style="padding-left:25px;">ความสูง > 1000 - 1500</font><br/>
+							<button class="btn" style="background-color:#FFEB3B"></button><font style="padding-left:25px;">ความสูง > 500 - 1000</font><br/>
+							<button class="btn" style="background-color:#00FF00"></button><font style="padding-left:25px;">ความสูง > 100 - 500</font><br/>
+							<button class="btn" style="background-color:#388E3C"></button><font style="padding-left:25px;">ความสูง 0 - 100</font><br/>
+						</div>
 
 					</div>
 			</ul>
@@ -1529,7 +1640,7 @@
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
 				<div class="modal-footer">
-					<button id="enter_position" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
 				</div>
 			</div>
 		</div>
@@ -1543,77 +1654,129 @@
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
 				<div class="modal-footer">
-					<button id="enter_position" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info2()">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info2()">ยืนยันตำแหน่ง</button>
 				</div>
 			</div>
 		</div>
 	</div>
 <!--end alert-->
 
-
+<button id="myBtn" title="Go to top">Top</button>
 
 <!--start result-->
-
 <div class="collapse" id="Report" >
 
-	<div class="col-md-6" id="Report_one">
-		<div>
-				<p></p>
-				<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
-				<p></p>
-				<div class="modal-body">
-					<center><div id="chart_div"></div></center>
-				</div>
+		<div id="Report_area" class="container">
+		<center><h3>ข้อมูลพื้นที่</h3></center><br />
+		<h5>ตำแหน่งสถานที่ :
+		<div class="card">
+			<div class="card-block">
+				 <div id="address"><br/></div>
 			</div>
 		</div>
+	</h5>
+		</div>
 
-		<div class="col-md-6" id="Report_two">
-						</br><center><h3>ข้อมูลพื้นที่</h3></center><br />ตำแหน่งสถานที่ :
-						<div class="card">
-							<div class="card-block">
+		<div class="row" id="Report_plant">
 
-								 <div id="address"></div>
+									<div class="col" id="Report_chart_plant">
+										<div>
+												<p></p>
+												<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
+												<p></p>
+												<div class="modal-body">
+													<center><div id="chart_div_plant"></div></center>
+												</div>
+											</div>
+										</div>
 
+						<div class="col" id="Report_detail_plant">
+							<!--start Display result-->
+
+										<div style="padding-top:20px;" class="col">
+
+											<center><h2>รายละเอียด</h2></center>
+											<br/>
+										<table class="table table-hover">
+
+												<tr>
+													<th>ข้าว</th>
+													<td>พื้นที่เหมาะสมมากต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_rice" data-toggle="modal" data-target="#pop_rice">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>อ้อย</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_cane" data-toggle="modal" data-target="#pop_cane">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>มันสำปะหลัง</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_cassava" data-toggle="modal" data-target="#pop_cassava">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>ยางพารา</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_rubber" data-toggle="modal" data-target="#pop_rubber">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>ปาล์มน้ำมัน</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_palm" data-toggle="modal" data-target="#pop_palm">ดูรายละเอียด</button></td>
+												</tr>
+
+										</table>
+										</div>
+
+							<!--End Display result-->
+
+						</div>
+
+					</div>
+
+					<div class="row" id="Report_rain">
+
+
+					<div class="col" >
+						<div>
+								<p></p>
+								<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
+								<p></p>
+								<div class="modal-body">
+									<center><div id="curve_chart"></div></center>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div>
+								winhuman
+								</div>
+							</div>
+
+					</div>
+
+					<div class="row" id="Report_high">
+						<div class="col">
+								<p></p>
+								<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
+								<p></p>
+								<div class="modal-body">
+									<center><div id="piechart"></div></center>
+								</div>
+							</div>
+							<div class="col">
 							</div>
 						</div>
 
-			<!--start Display result-->
 
-						<div style="padding-top:20px;" class="container">
-						<table class="table table-hover">
-
-								<tr>
-									<th>ข้าว</th>
-									<td>พื้นที่เหมาะสมมากต่อการปลูก</td>
-									<td><button class="btn btn-info" id="Display_rice" data-toggle="modal" data-target="#pop_rice">ดูรายละเอียด</button></td>
-								</tr>
-								<tr>
-									<th>อ้อย</th>
-									<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-									<td><button class="btn btn-info" id="Display_cane" data-toggle="modal" data-target="#pop_cane">ดูรายละเอียด</button></td>
-								</tr>
-								<tr>
-									<th>มันสำปะหลัง</th>
-									<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-									<td><button class="btn btn-info" id="Display_cassava" data-toggle="modal" data-target="#pop_cassava">ดูรายละเอียด</button></td>
-								</tr>
-								<tr>
-									<th>ยางพารา</th>
-									<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-									<td><button class="btn btn-info" id="Display_rubber" data-toggle="modal" data-target="#pop_rubber">ดูรายละเอียด</button></td>
-								</tr>
-								<tr>
-									<th>ปาล์มน้ำมัน</th>
-									<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-									<td><button class="btn btn-info" id="Display_palm" data-toggle="modal" data-target="#pop_palm">ดูรายละเอียด</button></td>
-								</tr>
-
-						</table>
+						<div class="row" id="Report_temp">
+								<div class="col">
+									<img src="img_option/position.png" width="300px" height="300px">
+								</div>
+								<div class="col">
+									....<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+								</div>
 						</div>
-
-			<!--End Display result-->
-
-	</div>
 
 </div>
 
@@ -1621,7 +1784,31 @@
 
 
 
+
 <!--End result-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

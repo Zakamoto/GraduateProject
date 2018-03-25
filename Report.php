@@ -17,10 +17,5 @@ $("#back").click(function(e){
     $('#showDDD').html(res);
     });
   });
-  var $elem = $('#Report');
-  $('#enter_position').click(
-    function (e) {
-      $('html, body').animate({scrollTop: $elem.height()}, 800);
-  });
 });
   </script>
