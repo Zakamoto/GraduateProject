@@ -180,6 +180,7 @@
 		var arrayRain = [];
 		var elevatorValue;
 		var getCurrentPosition;
+		var arrayTemperature = new Array(77);
 		function initialize() { // ฟังก์ชันแสดงแผนที่
 			GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
 			// กำหนดจุดเริ่มต้นของแผนที่
@@ -263,7 +264,6 @@
 			my_Marker.setPosition(my_Latlng); // กำนหดตัวแปน่ง marker
 		//	map.panTo(my_Latlng);  // ให้แผนที่แสดงไปที่ตัว marker
 		}
-
 		function elevation() {
 			infowindow = new google.maps.InfoWindow({map: map});
 			var elevator = new google.maps.ElevationService;
@@ -292,7 +292,6 @@
 			});
 			}
 		}
-
 		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase) {
 			if (!statusCase)
 			{
@@ -386,7 +385,6 @@
 
 			}
 		}
-
 		function Allweather(){
 			if (arrayAllWeather.length == 0)
 			{
@@ -411,6 +409,7 @@
 
 												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
 												arrayAllWeatherCase.push(Cloud);
+												var Temper = data.Stations[j]['Observe']['Temperature']['Value'];
 												stackLatLng.push({lat: lat, lng: lng});
 												/*
 												var markerLatLng = new GGM.LatLng(latt,lngg);
@@ -578,7 +577,6 @@
 				arrayMuchCloud = [];
 			}
 		}
-
 		function rain(){
 			if (arrayRain.length == 0)
 			{
@@ -617,11 +615,19 @@
 						});
 			*/
 		}
-
-
 		function rice(){
 				if (!isCheckRice) {
 				console.log("rice");
+				for (var i = 1; i <= 3; i++) {
+					updateColume = new google.maps.FusionTablesLayer({
+						query: {
+							update: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+							set: 'import_notes = 1',
+							where: 'ID_1 <= 20'
+						}
+					});
+					console.log(i)
+				}
 				ricelayer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
@@ -642,7 +648,6 @@
 					isCheckRice = false;
 				}
 		}
-
 		function cane(){
 			if (!isCheckCane) {
 				console.log("cane");
@@ -712,7 +717,6 @@
 								type: 'GET'
 							});  */
 		}
-
 		function palm(){
 			if (!isCheckPalm) {
 				layer = new google.maps.FusionTablesLayer({
@@ -781,7 +785,6 @@
 								type: 'GET'
 							}); */
 		}
-
 		function rubber(){
 			if (!isCheckRubber) {
 				layer = new google.maps.FusionTablesLayer({
@@ -850,7 +853,6 @@
 								type: 'GET'
 							}); */
 		}
-
 		function cassava(){
 			if (!isCheckCassava) {
 				layer = new google.maps.FusionTablesLayer({
@@ -918,6 +920,289 @@
 								},
 								type: 'GET'
 							}); */
+		}
+		function temperature(){
+			/*
+			$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+								var num = data.Stations.length;
+								var temp = "STARTO";
+								var Count = 0;
+								var Value = 0;
+								for(var j=0;j<num;j++){
+										var province = data.Stations[j]['Province'];
+										var Temper = data.Stations[j]['Observe']['Temperature']['Value'];
+										temp = province;
+										console.log(province);
+									if (province == temp) {
+										Count++
+										Value += Temper;
+									} else {
+										temp = province;
+										var sum = Count / Value ;
+										switch (province) {
+											case province == "กรุงเทพมหานคร": {
+												arrayTemperature[2] = sum;
+												break;
+											}
+											case province == "บุรีรัมย์": {
+												arrayTemperature[4] = sum;
+												break;
+											}
+											case province == "ฉะเชิงเทรา": {
+												arrayTemperature[5] = sum;
+												break;
+											}
+											case province == "ชัยนาท": {
+												arrayTemperature[6] = sum;
+												break;
+											}
+											case province == "ชัยภูมิ": {
+												arrayTemperature[7] = sum;
+												break;
+											}
+											case province == "จันทบุรี": {
+												arrayTemperature[8] = sum;
+												break;
+											}
+											case province == "เชียงใหม่": {
+												arrayTemperature[9] = sum;
+												break;
+											}
+											case province == "เชียงราย": {
+												arrayTemperature[10] = sum;
+												break;
+											}
+											case province == "เชียงราย": {
+												arrayTemperature[10] = sum;
+												break;
+											}
+											case province == "ชลบุรี": {
+												arrayTemperature[11] = sum;
+												break;
+											}
+											case province == "ชุมพร": {
+												arrayTemperature[12] = sum;
+												break;
+											}
+											case province == "กาฬสินธุ์": {
+												arrayTemperature[13] = sum;
+												break;
+											}
+											case province == "กำแพงเพชร": {
+												arrayTemperature[14] = sum;
+												break;
+											}
+											case province == "กาญจนบุรี": {
+												arrayTemperature[15] = sum;
+												break;
+											}
+											case province == "ขอนแก่น": {
+												arrayTemperature[16] = sum;
+												break;
+											}
+											case province == "กระบี่": {
+												arrayTemperature[17] = sum;
+												break;
+											}
+											case province == "ลำปาง": {
+												arrayTemperature[18] = sum;
+												break;
+											}
+											case province == "ลำพูน": {
+												arrayTemperature[19] = sum;
+												break;
+											}
+											case province == "เลย": {
+												arrayTemperature[20] = sum;
+												break;
+											}
+											case province == "ลพบุรี": {
+												arrayTemperature[21] = sum;
+												break;
+											}
+											case province == "แม่ฮ่องสอน": {
+												arrayTemperature[22] = sum;
+												break;
+											}
+											case province == "มุกดาหาร": {
+												arrayTemperature[24] = sum;
+												break;
+											}
+											case province == "นครปฐม": {
+												arrayTemperature[26] = sum;
+												break;
+											}
+											case province == "นครพนม": {
+												arrayTemperature[27] = sum;
+												break;
+											}
+											case province == "นครราชสีมา": {
+												arrayTemperature[28] = sum;
+												break;
+											}
+											case province == "นครสวรรค์": {
+												arrayTemperature[29] = sum;
+												break;
+											}
+											case province == "นครศรีธรรมราช": {
+												arrayTemperature[30] = sum;
+												break;
+											}
+											case province == "น่าน": {
+												arrayTemperature[31] = sum;
+												break;
+											}
+											case province == "หนองบัวลำภู": {
+												arrayTemperature[33] = sum;
+												break;
+											}
+											case province == "หนองคาย": {
+												arrayTemperature[34] = sum;
+												break;
+											}
+											case province == "ปทุมธานี": {
+												arrayTemperature[36] = sum;
+												break;
+											}
+											case province == "พังงา": {
+												arrayTemperature[38] = sum;
+												break;
+											}
+											case province == "พัทลุง": {
+												arrayTemperature[39] = sum;
+												break;
+											}
+											case province == "พะเยา": {
+												arrayTemperature[40] = sum;
+												break;
+											}
+											case province == "เพชรบุรี": {
+												arrayTemperature[42] = sum;
+												break;
+											}
+											case province == "พิษณุโลก": {
+												arrayTemperature[44] = sum;
+												break;
+											}
+											case province == "พระนครศรีอยุธยา": {
+												arrayTemperature[45] = sum;
+												break;
+											}
+											case province == "แพร่": {
+												arrayTemperature[46] = sum;
+												break;
+											}
+											case province == "ภูเก็ต": {
+												arrayTemperature[47] = sum;
+												break;
+											}
+											case province == "ปราจีนบุรี": {
+												arrayTemperature[48] = sum;
+												break;
+											}
+											case province == "ประจวบคีรีขันธ์": {
+												arrayTemperature[49] = sum;
+												break;
+											}
+											case province == "ระนอง": {
+												arrayTemperature[50] = sum;
+												break;
+											}
+											case province == "ราชบุรี": {
+												arrayTemperature[51] = sum;
+												break;
+											}
+											case province == "ระยอง": {
+												arrayTemperature[52] = sum;
+												break;
+											}
+											case province == "ร้อยเอ็ด": {
+												arrayTemperature[53] = sum;
+												break;
+											}
+											case province == "สระแก้ว": {
+												arrayTemperature[54] = sum;
+												break;
+											}
+											case province == "สกลนคร": {
+												arrayTemperature[55] = sum;
+												break;
+											}
+											case province == "สมุทรปราการ": {
+												arrayTemperature[56] = sum;
+												break;
+											}
+											case province == "สตูล": {
+												arrayTemperature[60] = sum;
+												break;
+											}
+											case province == "ศรีสะเกษ": {
+												arrayTemperature[61] = sum;
+												break;
+											}
+											case province == "สงขลา": {
+												arrayTemperature[63] = sum;
+												break;
+											}
+											case province == "สุโขทัย": {
+												arrayTemperature[64] = sum;
+												break;
+											}
+											case province == "สุพรรณบุรี": {
+												arrayTemperature[65] = sum;
+												break;
+											}
+											case province == "สุราษฎร์ธานี": {
+												arrayTemperature[66] = sum;
+												break;
+											}
+											case province == "สุรินทร์": {
+												arrayTemperature[67] = sum;
+												break;
+											}
+											case province == "ตาก": {
+												arrayTemperature[68] = sum;
+												break;
+											}
+											case province == "ตรัง": {
+												arrayTemperature[69] = sum;
+												break;
+											}
+											case province == "ตราด": {
+												arrayTemperature[70] = sum;
+												break;
+											}
+											case province == "อุบลราชธานี": {
+												arrayTemperature[71] = sum;
+												break;
+											}
+											case province == "อุดรธานี": {
+												arrayTemperature[72] = sum;
+												break;
+											}
+											case province == "อุดตรดิตถ์": {
+												arrayTemperature[74] = sum;
+												break;
+											}
+										}
+										Count = 0;
+										Value = 0;
+									}
+								}
+								console.log(arrayTemperature);
+						},
+						type: 'GET'
+					});
+				*/
 		}
 
 //function สำหรับดึงข้อมูลเพื่อนำไปคำนวนและแสดงผล
@@ -1200,7 +1485,7 @@
 		<div id="itemWeather" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><input type="checkbox" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
-				<li class="list-group-item"><input type="checkbox" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
+				<li class="list-group-item"><input type="checkbox" data-toggle="collapse" data-target="#itemTemp" onclick="temperature()"><font style="padding-left: 25px;">อุณหภูมิ</font>
 					<div id="itemTemp" class="panel-collapse collapse">
 						<br/>
 						<center><img src="img_option/tempChart.jpg" width="250px" height="50px"/></center>
