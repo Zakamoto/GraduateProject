@@ -89,11 +89,13 @@
         //แผนภูมิแสดงข้อมูลวิเคราะห์พืช
 				var data_plant = google.visualization.arrayToDataTable([
 				['Element', 'เปอร์เซนต์ความเหมาะสม', { role: 'style' }],
-				['ข้าว', 8.94, '#b87333'],            // RGB value
-				['ปาล์มน้ำมัน', 10.49, 'silver'],            // English color name
-				['ยางพารา', 19.30, 'gold'],
-			  ['อ้อย', 30, 'color: #229954' ], // CSS-style declaration
-				['มันสำปะหลัง', 100, 'color: #e5e4e2' ],
+				['', 0 ,'color: #e5e4e2'],
+				['ข้าว', 1, '#b87333'],            // RGB value
+				['อ้อย', 0.66, 'color: #229954' ], // CSS-style declaration
+				['มันสำปะหลัง', 1, 'color: #e5e4e2' ],
+				['ยางพารา', 0.66, 'gold'],
+				['ปาล์มน้ำมัน', 0.66, 'silver'],            // English color name
+				['', 0 ,'color: #e5e4e2'],
 		 ]);
 
 		 var options_plant = {
@@ -107,52 +109,6 @@
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_plant'));
         chart.draw(data_plant,options_plant);
-
-
-
-				var data_rain = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
-
-        var options_rain = {
-          title: 'Company Performance',
-					width: 600,
-					height: 400,
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data_rain, options_rain);
-
-
-				var data_high = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
-
-        var options_high = {
-					width: 600,
-					height: 400,
-          title: 'My Daily Activities'
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data_high, options_high);
-
-
-
-
 
       }
     </script>
@@ -257,7 +213,7 @@
 			'<br/>'+
 			'<div name="place_value"id="place_value">ทำการลากไปยังตำแหน่งที่ต้องการ</div>'+
 			'<br/>'+
-			'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess">ยืนยันตำแหน่ง</button>'
+			'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess"  onclick="get_info()">ยืนยันตำแหน่ง</button>'
 		        var infowindow = new google.maps.InfoWindow({
 		          content: contentString
 		        });
@@ -1773,12 +1729,13 @@
 					function (e) {
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
+/*
 				$('#myBtn').click(
 					function (e) {
-						$('html, body').animate({scrollTop: 0}, 800);
+						$('html, body').animate({scrollTop: 0}, 2000);
 				});
 
-
+*/
 			$('#showDDD').delegate('a', 'click', function(e){
 				e.preventDefault();
 				var link = this.href;
@@ -1905,7 +1862,7 @@
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
 				<div class="modal-footer">
-					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal">ยืนยันตำแหน่ง</button>
 				</div>
 			</div>
 		</div>
@@ -1919,17 +1876,17 @@
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
 				<div class="modal-footer">
-					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info2()">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal">ยืนยันตำแหน่ง</button>
 				</div>
 			</div>
 		</div>
 	</div>
 <!--end alert-->
 
-<button id="myBtn" title="Go to top">Top</button>
+<button id="myBtn" title="Go to top" data-toggle="collapse" data-target="#Report">Top</button>
 
 <!--start result-->
-<div class="collapse" id="Report" >
+<div class="collapse" id="Report">
 
 		<div id="Report_area" class="container">
 		<center><h3>ข้อมูลพื้นที่</h3></center><br />
