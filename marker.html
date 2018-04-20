@@ -89,13 +89,11 @@
         //แผนภูมิแสดงข้อมูลวิเคราะห์พืช
 				var data_plant = google.visualization.arrayToDataTable([
 				['Element', 'เปอร์เซนต์ความเหมาะสม', { role: 'style' }],
-				['', 0 ,'color: #e5e4e2'],
-				['ข้าว', 1, '#b87333'],            // RGB value
-				['อ้อย', 0.66, 'color: #229954' ], // CSS-style declaration
-				['มันสำปะหลัง', 1, 'color: #e5e4e2' ],
-				['ยางพารา', 0.66, 'gold'],
-				['ปาล์มน้ำมัน', 0.66, 'silver'],            // English color name
-				['', 0 ,'color: #e5e4e2'],
+				['ข้าว', 8.94, '#b87333'],            // RGB value
+				['ปาล์มน้ำมัน', 10.49, 'silver'],            // English color name
+				['ยางพารา', 19.30, 'gold'],
+			  ['อ้อย', 30, 'color: #229954' ], // CSS-style declaration
+				['มันสำปะหลัง', 100, 'color: #e5e4e2' ],
 		 ]);
 
 		 var options_plant = {
@@ -109,6 +107,52 @@
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_plant'));
         chart.draw(data_plant,options_plant);
+
+
+
+				var data_rain = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var options_rain = {
+          title: 'Company Performance',
+					width: 600,
+					height: 400,
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data_rain, options_rain);
+
+
+				var data_high = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var options_high = {
+					width: 600,
+					height: 400,
+          title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data_high, options_high);
+
+
+
+
 
       }
     </script>
@@ -213,7 +257,7 @@
 			'<br/>'+
 			'<div name="place_value"id="place_value">ทำการลากไปยังตำแหน่งที่ต้องการ</div>'+
 			'<br/>'+
-			'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess"  onclick="get_info()">ยืนยันตำแหน่ง</button>'
+			'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess">ยืนยันตำแหน่ง</button>'
 		        var infowindow = new google.maps.InfoWindow({
 		          content: contentString
 		        });
@@ -1465,6 +1509,18 @@
 				ele[i].checked = false;
 		}
 		function radioWeather() {
+			layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
+						}
+					});
+				layer.setMap(map);
+			/*
 			if (checkRadioWeather) {
 				layer.setMap(null);
 			}
@@ -1479,15 +1535,26 @@
 			var ele = document.getElementsByName("warether");
 			for(var i=0;i<ele.length;i++)
 				ele[i].checked = false;
+				*/
 		}
 		function radioGeo() {
+			layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						where: 'ID_1 <= 10'
+						//where: 'ID_1 == 29 OR ID_1 == 8 OR ID_1 == 5 OR ID_1 == 68 OR ID_1 == 17 OR ID_1 == 24 OR ID_1 == 14 OR ID_1 == 73 OR ID_1 == 35 OR ID_1 == 56 OR ID_1 == 72 OR ID_1 == 62 OR ID_1 == 77 OR ID_1 == 54 OR ID_1 == 1 OR ID_1 == 28'
+						}
+					});
+				layer.setMap(map);
+			/*
 			if (isCheckEleAvg) {
 				layer.setMap(null);
 			}
 			isCheckEleAvg = false;
 			var ele = document.getElementsByName("high");
 			for(var i=0;i<ele.length;i++)
-				ele[i].checked = false;
+				ele[i].checked = false; */
 		}
 //function สำหรับดึงข้อมูลเพื่อนำไปคำนวนและแสดงผล
 		function get_info(){
@@ -1729,13 +1796,12 @@
 					function (e) {
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
-/*
 				$('#myBtn').click(
 					function (e) {
-						$('html, body').animate({scrollTop: 0}, 2000);
+						$('html, body').animate({scrollTop: 0}, 800);
 				});
 
-*/
+
 			$('#showDDD').delegate('a', 'click', function(e){
 				e.preventDefault();
 				var link = this.href;
@@ -1790,7 +1856,7 @@
 
 	<!--start menu option-->
   <div class="col-md-3" id="showDDD"></br>
-			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant" onclick="radioPlant()"><h5>พืชทางการเกษตร</h5></button>
+			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant" onclick="radioPlant()"><h5>ผลผลิตต่อไรของพืช</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
 					<li class="list-group-item"><input type="radio" name="plant" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
@@ -1802,9 +1868,9 @@
 			</div>
 
 
-		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>สภาพอากาศ</h5></button>
-		<div id="itemWeather" class="panel-collapse collapse">
-			<ul class="list-group">
+		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>ความยาวนานของแสงแดด</h5></button>
+	<!--	<div id="itemWeather" class="panel-collapse collapse"> -->
+		<!--	<ul class="list-group">
 				<li class="list-group-item"><input type="radio" name="warether" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
 				<li class="list-group-item"><input type="radio" name="warether" onclick="temperature()" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
 					<div id="itemTemp" class="panel-collapse collapse">
@@ -1825,10 +1891,11 @@
 					</div>
 				</li>
 			</ul>
-		</div>
+		
+		</div>  -->
 
-		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">ภูมิประเทศ</font></h5></button>
-		<div id="itemArea" class="panel-collapse collapse">
+		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">พื้นที่ดินเค็ม</font></h5></button>
+	<!--	<div id="itemArea" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><center><b>ความสูงจากระดับน้ำทะเล</b></center>
 					<div class="card-block" style="padding-top:5px;">
@@ -1847,7 +1914,7 @@
 			</ul>
 		</div>
 
-		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
+	 	<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button> -->
 
 </div>
 
@@ -1862,7 +1929,7 @@
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
 				<div class="modal-footer">
-					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
 				</div>
 			</div>
 		</div>
@@ -1876,17 +1943,17 @@
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
 				<div class="modal-footer">
-					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info2()">ยืนยันตำแหน่ง</button>
 				</div>
 			</div>
 		</div>
 	</div>
 <!--end alert-->
 
-<button id="myBtn" title="Go to top" data-toggle="collapse" data-target="#Report">Top</button>
+<button id="myBtn" title="Go to top">Top</button>
 
 <!--start result-->
-<div class="collapse" id="Report">
+<div class="collapse" id="Report" >
 
 		<div id="Report_area" class="container">
 		<center><h3>ข้อมูลพื้นที่</h3></center><br />
