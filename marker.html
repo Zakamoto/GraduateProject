@@ -744,24 +744,21 @@
 			*/
 		}
 		function rice(){
-				if (!checkRadioPlant) {
-				/*
-				for (var i = 1; i <= 3; i++) {
-					updateColume = new google.maps.FusionTablesLayer({
-						query: {
-							update: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-							set: 'import_notes = 1',
-							where: 'ID_1 <= 20'
-						}
-					});
-					console.log(i)
+				if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
+					layer.setMap(null);
+					checkRadioGeo = false;
+					checkRadioWeather = false;
+				} else if (!checkRadioPlant) {
+				checkRadioPlant = true;
 				}
-				*/
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 <= 20'
+						from: '10ZNDaq7OmWqvnIGSu-SYVAJrUdfHDEKLv1zKevkZ', // นาปี
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
 						},
 						styles: [{
 						polygonOptions: {
@@ -771,32 +768,24 @@
 						}]
 				});
 					layer.setMap(map);
-					checkRadioPlant = true;
-				} else {
-					layer.setMap(null);
-					layer = new google.maps.FusionTablesLayer({
-						query: {
-						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 <= 20'
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#00FF00',
-							fillOpacity: 0.3
-						}
-						}]
-					});
-					layer.setMap(map);
-				}
 		}
-		function cane(){
-			if (!checkRadioPlant) {
-				layer = new google.maps.FusionTablesLayer({
+		function cane() {
+			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
+					layer.setMap(null);	
+					checkRadioGeo = false;
+					checkRadioWeather = false;
+			} else if (!checkRadioPlant) {
+				checkRadioPlant = true;
+			}
+			layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 21 AND ID_1 <= 30'
+						from: '1WpV6biab4H5WG5gprPPZN_MOFi6LUBZTLCst6P-2',
+						where: 'checker = 6'
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
 						},
 						styles: [{
 						polygonOptions: {
@@ -806,24 +795,6 @@
 						}]
 				});
 					layer.setMap(map);
-					checkRadioPlant = true;
-				} else {
-					layer.setMap(null);
-					layer = new google.maps.FusionTablesLayer({
-						query: {
-						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 21 AND ID_1 <= 30'
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#ffc107',
-							fillOpacity: 0.3
-						}
-						}]
-					});
-					layer.setMap(map);
-				}
 			/*	$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
 						data: {
@@ -872,12 +843,22 @@
 							});  */
 		}
 		function palm(){
-			if (!checkRadioPlant) {
+			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
+					layer.setMap(null);	
+					checkRadioGeo = false;
+					checkRadioWeather = false;
+			} else if (!checkRadioPlant) {
+				checkRadioPlant = true;
+			}
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 41 AND ID_1 <= 50'
+						from: '1yaOyavvMN8yPcpGhh7dApgaAso69nKtf1P1UTV_n',
+						where: 'checker = 3'
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
 						},
 						styles: [{
 						polygonOptions: {
@@ -887,24 +868,6 @@
 						}]
 				});
 					layer.setMap(map);
-					checkRadioPlant = true;
-				} else {
-					layer.setMap(null);
-					layer = new google.maps.FusionTablesLayer({
-						query: {
-						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 41 AND ID_1 <= 50'
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#dc3545',
-							fillOpacity: 0.3
-						}
-						}]
-					});
-					layer.setMap(map);
-			}
 			/*
 				$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -953,12 +916,22 @@
 							}); */
 		}
 		function rubber(){
-			if (!checkRadioPlant) {
+			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
+					layer.setMap(null);	
+					checkRadioGeo = false;
+					checkRadioWeather = false;
+			} else if (!checkRadioPlant) {
+				checkRadioPlant = true;
+			}
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 51 AND ID_1 <= 60'
+						from: '16mtRuzBSPqXmMGmfDIrLGg1kSboSj8TCzNbkmt9a',
+						where: 'checker = 2'
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
 						},
 						styles: [{
 						polygonOptions: {
@@ -969,23 +942,6 @@
 				});
 					layer.setMap(map);
 					checkRadioPlant = true;
-				} else {
-					layer.setMap(null);
-					layer = new google.maps.FusionTablesLayer({
-						query: {
-						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 51 AND ID_1 <= 60'
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#343a40',
-							fillOpacity: 0.3
-						}
-						}]
-					});
-					layer.setMap(map);
-			}
 			/*
 				$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -1034,12 +990,22 @@
 							}); */
 		}
 		function cassava(){
-			if (!checkRadioPlant) {
+			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
+					layer.setMap(null);	
+					checkRadioGeo = false;
+					checkRadioWeather = false;
+			} else if (!checkRadioPlant) {
+				checkRadioPlant = true;
+			}
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 61 AND ID_1 <= 77'
+						from: '1BMJVIFJ5mmIzvmOtMZ3-haAzud0L0uMLtOhVs4Pl',
+						where: 'checker = 1'
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
 						},
 						styles: [{
 						polygonOptions: {
@@ -1049,24 +1015,6 @@
 						}]
 				});
 					layer.setMap(map);
-					checkRadioPlant = true;
-				} else {
-					layer.setMap(null);
-					layer = new google.maps.FusionTablesLayer({
-						query: {
-						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 >= 61 AND ID_1 <= 77'
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#fd7e14',
-							fillOpacity: 0.3
-						}
-						}]
-					});
-					layer.setMap(map);
-			}
 			/*
 				$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -1500,15 +1448,17 @@
 			checkRadioWeather = true;
 		}
 		function radioPlant() {
-			if (checkRadioPlant) {
-				layer.setMap(null);
-			}
-			checkRadioPlant = false;
 			var ele = document.getElementsByName("plant");
 			for(var i=0;i<ele.length;i++)
 				ele[i].checked = false;
 		}
 		function radioWeather() {
+			checkRadioWeather = true;
+			if (checkRadioPlant || checkRadioGeo) {
+				layer.setMap(null);
+				checkRadioGeo = false;
+				checkRadioPlant = false;
+			}
 			layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
@@ -1538,13 +1488,29 @@
 				*/
 		}
 		function radioGeo() {
+			checkRadioGeo = true;
+			if (checkRadioWeather || checkRadioPlant) {
+				layer.setMap(null);
+				checkRadioPlant = false;
+				checkRadioWeather = false;
+			}
 			layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						where: 'ID_1 <= 10'
-						//where: 'ID_1 == 29 OR ID_1 == 8 OR ID_1 == 5 OR ID_1 == 68 OR ID_1 == 17 OR ID_1 == 24 OR ID_1 == 14 OR ID_1 == 73 OR ID_1 == 35 OR ID_1 == 56 OR ID_1 == 72 OR ID_1 == 62 OR ID_1 == 77 OR ID_1 == 54 OR ID_1 == 1 OR ID_1 == 28'
+						from: '1zrPPv9NR2TtUFj-T6taaraJwG0-Y8BaSrDCzzSWs',
+						where: 'checker = 1'
+						//where: 'ID_1 = 29 OR ID_1 = 8 OR ID_1 = 5 OR ID_1 = 68 OR ID_1 = 17 OR ID_1 = 24 OR ID_1 = 14 OR ID_1 = 73 OR ID_1 = 35 OR ID_1 = 56 OR ID_1 = 72 OR ID_1 = 62 OR ID_1 = 77 OR ID_1 = 54 OR ID_1 = 1 OR ID_1 = 28'
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
+						},
+						styles: [{
+						polygonOptions: {
+							fillColor: '#17defd',
+							fillOpacity: 0.3
 						}
+						}]
 					});
 				layer.setMap(map);
 			/*
@@ -1894,7 +1860,7 @@
 		
 		</div>  -->
 
-		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">พื้นที่ดินเค็ม</font></h5></button>
+		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">แสดงพื้นที่ข้าวหอมมะลิมีกลิ่นหอมมาก</font></h5></button>
 	<!--	<div id="itemArea" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><center><b>ความสูงจากระดับน้ำทะเล</b></center>
