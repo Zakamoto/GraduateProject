@@ -1453,24 +1453,6 @@
 				ele[i].checked = false;
 		}
 		function radioWeather() {
-			checkRadioWeather = true;
-			if (checkRadioPlant || checkRadioGeo) {
-				layer.setMap(null);
-				checkRadioGeo = false;
-				checkRadioPlant = false;
-			}
-			layer = new google.maps.FusionTablesLayer({
-						query: {
-						select: 'geometry',
-						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
-						},
-						options: {
-							styleId: 2,
-							templateId: 2
-						}
-					});
-				layer.setMap(map);
-			/*
 			if (checkRadioWeather) {
 				layer.setMap(null);
 			}
@@ -1485,9 +1467,17 @@
 			var ele = document.getElementsByName("warether");
 			for(var i=0;i<ele.length;i++)
 				ele[i].checked = false;
-				*/
 		}
 		function radioGeo() {
+			if (isCheckEleAvg) {
+				layer.setMap(null);
+			}
+			isCheckEleAvg = false;
+			var ele = document.getElementsByName("high");
+			for(var i=0;i<ele.length;i++)
+				ele[i].checked = false;
+		}
+		function saltySoil() {
 			checkRadioGeo = true;
 			if (checkRadioWeather || checkRadioPlant) {
 				layer.setMap(null);
@@ -1513,14 +1503,25 @@
 						}]
 					});
 				layer.setMap(map);
-			/*
-			if (isCheckEleAvg) {
+		}
+		function sunlight() {
+			checkRadioWeather = true;
+			if (checkRadioPlant || checkRadioGeo) {
 				layer.setMap(null);
+				checkRadioGeo = false;
+				checkRadioPlant = false;
 			}
-			isCheckEleAvg = false;
-			var ele = document.getElementsByName("high");
-			for(var i=0;i<ele.length;i++)
-				ele[i].checked = false; */
+			layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1_wCnIwnh3x1Fbrf16WSQCyY_mKlHfZ4EndaOIOS9',
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
+						}
+					});
+				layer.setMap(map);
 		}
 //function สำหรับดึงข้อมูลเพื่อนำไปคำนวนและแสดงผล
 		function get_info(){
@@ -1834,9 +1835,9 @@
 			</div>
 
 
-		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>ความยาวนานของแสงแดด</h5></button>
-	<!--	<div id="itemWeather" class="panel-collapse collapse"> -->
-		<!--	<ul class="list-group">
+		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>สภาพภูมิอากาศ</h5></button>
+	<div id="itemWeather" class="panel-collapse collapse"> 
+			<ul class="list-group">
 				<li class="list-group-item"><input type="radio" name="warether" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
 				<li class="list-group-item"><input type="radio" name="warether" onclick="temperature()" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
 					<div id="itemTemp" class="panel-collapse collapse">
@@ -1858,10 +1859,10 @@
 				</li>
 			</ul>
 		
-		</div>  -->
+		</div>  
 
-		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">แสดงพื้นที่ข้าวหอมมะลิมีกลิ่นหอมมาก</font></h5></button>
-	<!--	<div id="itemArea" class="panel-collapse collapse">
+		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">สภาพภูมิประเทศ</font></h5></button>
+		<div id="itemArea" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><center><b>ความสูงจากระดับน้ำทะเล</b></center>
 					<div class="card-block" style="padding-top:5px;">
@@ -1875,12 +1876,12 @@
 							<button class="btn" style="background-color:#00FF00"></button><font style="padding-left:25px;">ความสูง > 100 - 500</font><br/>
 							<button class="btn" style="background-color:#388E3C"></button><font style="padding-left:25px;">ความสูง 0 - 100</font><br/>
 						</div>
-
 					</div>
+					<li class="list-group-item"><left><input type="radio" name="warether" onclick="sunlight()" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 15px;">แสงแดด</font>
 			</ul>
 		</div>
 
-	 	<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button> -->
+	 	<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
 
 </div>
 
