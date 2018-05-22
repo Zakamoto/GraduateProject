@@ -10,6 +10,13 @@
 
 
 
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+	<script src="js/highcharts.js"></script>
+	<script src="js/exporting.js"></script>
+	<script src="js/data.js"></script>
+
 
 	<style type="text/css">
 		html { height: 100% }
@@ -38,14 +45,6 @@
 			height:670px;
 			float: right;
 		}
-		#Report_area{padding-top: 100px;}
-		#Report_chart_plant{height: 800;}
-		#Report_detail_plant{height: 800;}
-		#Report_rain{background-color: #a3ccff;height: 800;}
-		#Report_temp{background-color: #a3ccff;height: 800;}
-		.modal-dialog{
-		max-width: 1000px;
-		}
 		#back{float: right;}
 		#data_seccess{background-color: green;}
 		#pop_seccess{max-width: 400px;}
@@ -72,94 +71,74 @@
 	</style>
 
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" name="chart">
+	function makechart(n){
+		if(n == 1)
+			ColumnChart();
+		else if(n == 2)
+			LineChart();
+		else if(n == 3)
+			barChart();
+		else if(n==4)
+			Chart();
+	}
 
-      // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart']});
+	function ColumnChart(){
+		$.ajax({
+				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
+				data: {
+					format: 'json'    // รูปแบบข้อมูล เป็น json
+				},
+				error: function() {
+					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
+				},
+				dataType: 'json',    // ชนิดข้อมูล json
+					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
+						var set_r = [];
+						set_r[0] = [];
+						set_r[0][0] = 'Element';
+						set_r[0][1] = 'เปอร์เซนต์ความเหมาะสม';
 
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawChart);
+						for(var i = 0; i < data.Stations.length ; i++){
+							set_r[i+1] = [];
+							set_r[i+1][0] = data.Stations[i]['Province'];
+							set_r[i+1][1] = data.Stations[i]['Observe']['Temperature']['Value'];
+						}
 
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawChart() {
+						console.log(set_r[10][0]);
+						google.charts.load('current', {'packages':['corechart']});
 
-        //แผนภูมิแสดงข้อมูลวิเคราะห์พืช
-				var data_plant = google.visualization.arrayToDataTable([
-				['Element', 'เปอร์เซนต์ความเหมาะสม', { role: 'style' }],
-				['ข้าว', 8.94, '#b87333'],            // RGB value
-				['ปาล์มน้ำมัน', 10.49, 'silver'],            // English color name
-				['ยางพารา', 19.30, 'gold'],
-			  ['อ้อย', 30, 'color: #229954' ], // CSS-style declaration
-				['มันสำปะหลัง', 100, 'color: #e5e4e2' ],
-		 ]);
+			      // Set a callback to run when the Google Visualization API is loaded.
+			      google.charts.setOnLoadCallback(drawChart);
 
-		 var options_plant = {
-				title: "อัตราความเหมาะสมของพืชแต่ละชนิด",
-				width: 600,
-				height: 400,
-				bar: {groupWidth: "90%"},
-				legend: { position: "none" },
-			};
+			      // Callback that creates and populates a data table,
+			      // instantiates the pie chart, passes in the data and
+			      // draws it.
+			      function drawChart() {
 
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_plant'));
-        chart.draw(data_plant,options_plant);
+			        //แผนภูมิแสดงข้อมูลวิเคราะห์พืช
+							var data_plant = google.visualization.arrayToDataTable(set_r);
 
+					 var options_plant = {
+							title: "อัตราความเหมาะสมของพืชแต่ละชนิด",
+							width: 1600,
+							height: 400,
+							bar: {groupWidth: "90%"},
+							legend: { position: "none" },
+						};
 
+			        // Instantiate and draw our chart, passing in some options.
+			        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_plant'));
+			        chart.draw(data_plant,options_plant);
 
-				var data_rain = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
+			      }
+					},
+					type: 'GET'
+				});
+	}
+</script>
 
-        var options_rain = {
-          title: 'Company Performance',
-					width: 600,
-					height: 400,
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data_rain, options_rain);
-
-
-				var data_high = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
-
-        var options_high = {
-					width: 600,
-					height: 400,
-          title: 'My Daily Activities'
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data_high, options_high);
-
-
-
-
-
-      }
-    </script>
-
-		<script src="http://code.jquery.com/jquery-latest.js"></script>
-
-		<script>
+<script type="text/javascript" name="unknow_1">
 		  function initAutocomplete() {
 		    var input = document.getElementById('pac-input');
 		        var searchBox = new google.maps.places.SearchBox(input);
@@ -219,9 +198,9 @@
 		          map.fitBounds(bounds);
 		        });
 		  }
-		</script>
+</script>
 
-		<script type="text/javascript">
+<script type="text/javascript" name="maps">
 		var map; // กำหนดตัวแปร map ไว้ด้านนอกฟังก์ชัน เพื่อให้สามารถเรียกใช้งาน จากส่วนอื่นได้
 		var GGM; // กำหนดตัวแปร GGM ไว้เก็บ google.maps Object จะได้เรียกใช้งานได้ง่ายขึ้น
 		var geocoder; // กำหนดตัวแปร สำหรับใช้งานข้อมูลสถานที่จาก Google Map
@@ -771,7 +750,7 @@
 		}
 		function cane() {
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
-					layer.setMap(null);	
+					layer.setMap(null);
 					checkRadioGeo = false;
 					checkRadioWeather = false;
 			} else if (!checkRadioPlant) {
@@ -844,7 +823,7 @@
 		}
 		function palm(){
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
-					layer.setMap(null);	
+					layer.setMap(null);
 					checkRadioGeo = false;
 					checkRadioWeather = false;
 			} else if (!checkRadioPlant) {
@@ -917,7 +896,7 @@
 		}
 		function rubber(){
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
-					layer.setMap(null);	
+					layer.setMap(null);
 					checkRadioGeo = false;
 					checkRadioWeather = false;
 			} else if (!checkRadioPlant) {
@@ -991,7 +970,7 @@
 		}
 		function cassava(){
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
-					layer.setMap(null);	
+					layer.setMap(null);
 					checkRadioGeo = false;
 					checkRadioWeather = false;
 			} else if (!checkRadioPlant) {
@@ -1523,7 +1502,8 @@
 					});
 				layer.setMap(map);
 		}
-//function สำหรับดึงข้อมูลเพื่อนำไปคำนวนและแสดงผล
+
+
 		function get_info(){
 
 
@@ -1743,6 +1723,14 @@
 			    }
 			}
 
+			function toggle() {
+		    var x = document.getElementById("Report");
+		    if (x.style.display === "none") {
+		        x.style.display = "block";
+		    } else {
+		        x.style.display = "none";
+		    }
+		}
 			// When the user clicks on the button, scroll to the top of the document
 
 		$(function(){
@@ -1760,6 +1748,10 @@
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
 				$('#enter_position_2').click(
+					function (e) {
+						$('html, body').animate({scrollTop: 760}, 800);
+				});
+				$('#chartBT').click(
 					function (e) {
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
@@ -1832,11 +1824,11 @@
 					<li class="list-group-item"><input type="radio" name="plant" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font></li>
 					<li class="list-group-item"><input type="radio" name="plant" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
 				</ul>
-			</div>
+	</div>
 
 
-		<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>สภาพภูมิอากาศ</h5></button>
-	<div id="itemWeather" class="panel-collapse collapse"> 
+	<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>สภาพภูมิอากาศ</h5></button>
+	<div id="itemWeather" class="panel-collapse collapse">
 			<ul class="list-group">
 				<li class="list-group-item"><input type="radio" name="warether" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
 				<li class="list-group-item"><input type="radio" name="warether" onclick="temperature()" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
@@ -1858,8 +1850,8 @@
 					</div>
 				</li>
 			</ul>
-		
-		</div>  
+
+		</div>
 
 		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">สภาพภูมิประเทศ</font></h5></button>
 		<div id="itemArea" class="panel-collapse collapse">
@@ -1881,12 +1873,51 @@
 			</ul>
 		</div>
 
-	 	<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
+		<button id="chartBT" style="background-color:#E65100" class="btn btn-block" onclick="toggle()"><h5><font color="White">test3</font></h5></button>
+
 
 </div>
 
 
 <!--End menu option-->
+<div id="Report">
+
+
+<!--แผนภูมิแสดงอุณหภูมิเป็นปี-->
+										<select class="form-control" style="max-width: 120px;" id="select_year_all">
+											<option value="0">ทั้งหมด</option>
+											<option value="1">2557</option>
+											<option value="2">2559</option>
+											<option value="3">2559</option>
+										</select>
+										<div id="chart_temp_year"></div>
+
+
+<!--แผนภูมิแสดงอุณหภูมิรายเดือน-->
+										<select class="form-control" style="max-width: 120px;float:left;" id="select_month">
+											<option value="มกราคม">มกราคม</option>
+											<option value="กุมภาพันธ์">กุมภาพันธ์</option>
+											<option value="มีนาคม">มีนาคม</option>
+											<option value="เมษายน">เมษายน</option>
+											<option value="พฤษภาคม">พฤษภาคม</option>
+											<option value="มิถุนายน">มิถุนายน</option>
+											<option value="กรกฎาคม">กรกฎาคม</option>
+											<option value="สิงหาคม">สิงหาคม</option>
+											<option value="กันยายน">กันยายน</option>
+											<option value="ตุลาคม">ตุลาคม</option>
+											<option value="พฤศจิกายน">พฤศจิกายน</option>
+											<option value="ธันวาคม">ธันวาคม</option>
+										</select>
+										<select class="form-control" style="max-width: 120px;" id="select_year">
+					            <option value="0">2557</option>
+					            <option value="1">2558</option>
+					            <option value="2">2559</option>
+					          </select>
+
+										<div id="chart_temp_month"></div>
+
+
+
 
 <!--start alert-->
 	<div id="pop_data_seccess" class="modal fade">
@@ -1919,357 +1950,10 @@
 
 <button id="myBtn" title="Go to top">Top</button>
 
-<!--start result-->
-<div class="collapse" id="Report" >
 
-		<div id="Report_area" class="container">
-		<center><h3>ข้อมูลพื้นที่</h3></center><br />
-		<h5>ตำแหน่งสถานที่ :
-		<div class="card">
-			<div class="card-block">
-				 <div id="address"><br/></div>
-			</div>
-		</div>
-	</h5>
-		</div>
+<script src="js/marker.js"></script>
 
-		<div class="row" id="Report_plant">
-
-									<div class="col" id="Report_chart_plant">
-										<div>
-												<p></p>
-												<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
-												<p></p>
-												<div class="modal-body">
-													<center><div id="chart_div_plant"></div></center>
-												</div>
-											</div>
-										</div>
-
-						<div class="col" id="Report_detail_plant">
-							<!--start Display result-->
-
-										<div style="padding-top:20px;" class="col">
-
-											<center><h2>รายละเอียด</h2></center>
-											<br/>
-										<table class="table table-hover">
-
-												<tr>
-													<th>ข้าว</th>
-													<td>พื้นที่เหมาะสมมากต่อการปลูก</td>
-													<td><button class="btn btn-info" id="Display_rice" data-toggle="modal" data-target="#pop_rice">ดูรายละเอียด</button></td>
-												</tr>
-												<tr>
-													<th>อ้อย</th>
-													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-													<td><button class="btn btn-info" id="Display_cane" data-toggle="modal" data-target="#pop_cane">ดูรายละเอียด</button></td>
-												</tr>
-												<tr>
-													<th>มันสำปะหลัง</th>
-													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-													<td><button class="btn btn-info" id="Display_cassava" data-toggle="modal" data-target="#pop_cassava">ดูรายละเอียด</button></td>
-												</tr>
-												<tr>
-													<th>ยางพารา</th>
-													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-													<td><button class="btn btn-info" id="Display_rubber" data-toggle="modal" data-target="#pop_rubber">ดูรายละเอียด</button></td>
-												</tr>
-												<tr>
-													<th>ปาล์มน้ำมัน</th>
-													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
-													<td><button class="btn btn-info" id="Display_palm" data-toggle="modal" data-target="#pop_palm">ดูรายละเอียด</button></td>
-												</tr>
-
-										</table>
-										</div>
-
-							<!--End Display result-->
-
-						</div>
-
-					</div>
-
-
-</div>
-
-
-
-
-
-
-<!--End result-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--Start pop up results-->
-<div id="pop_rice" class="modal fade">
-  <div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<a>รายละเอียดการวิเคราะห์ ข้าว</a>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-			</div>
-
-			<div class="modal-body">
-				<table class="table table-hover">
-					<tr>
-						<td></td>
-						<th>ข้อมูลสภาพพื้นที่</th>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
-					</tr>
-					<tr>
-						<th>อุณหภูมิ(c)</th>
-						<td><div id="show_temp_rice"></div></td>
-						<td>15 -25</td>
-					</tr>
-					<tr>
-						<th>ปริมาณน้ำฝน(mm)</th>
-						<td><div id="show_rain_rice"></div></td>
-						<td>150 - 400 ต่อเดือน</td>
-					</tr>
-					<tr>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<td><div id="show_levelsea_rice"></div></td>
-						<td>ไม่เกิน 700</td>
-					</tr>
-
-				</table>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-
-
-
-		</div>
-  </div>
-</div>
-
-
-<div id="pop_cane" class="modal fade">
-  <div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<a>รายละเอียดการวิเคราะห์ อ้อย</a>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-			</div>
-
-			<div class="modal-body">
-				<table class="table table-hover">
-					<tr>
-						<td></td>
-						<th>ข้อมูลสภาพพื้นที่</th>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
-					</tr>
-					<tr>
-						<th>อุณหภูมิ(c)</th>
-						<td><div id="show_temp_cane"></div></td>
-						<td>26 - 35</td>
-					</tr>
-					<tr  bgcolor="#C0392B">
-						<th>ปริมาณน้ำฝน(mm)</th>
-						<td><div id="show_rain_cane"></div></td>
-						<td>1200 - 1500 ต่อปี</td>
-					</tr>
-					<tr>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<td><div id="show_levelsea_cane"></div></td>
-						<td>ไม่เกิน 1500</td>
-					</tr>
-
-				</table>
-
-
-
-
-
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-
-
-
-		</div>
-  </div>
-</div>
-
-<div id="pop_palm" class="modal fade">
-  <div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<a>รายละเอียดการวิเคราะห์ ปาล์มน้ำมัน</a>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-			</div>
-
-			<div class="modal-body">
-				<table class="table table-hover">
-					<tr>
-						<td></td>
-						<th>ข้อมูลสภาพพื้นที่</th>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
-					</tr>
-					<tr>
-						<th>อุณหภูมิ(c)</th>
-						<td><div id="show_temp_palm"></div></td>
-						<td>25 - 28</td>
-					</tr>
-					<tr  bgcolor="#C0392B">
-						<th>ปริมาณน้ำฝน(mm)</th>
-						<td><div id="show_rain_palm"></div></td>
-						<td>1800 - 2000 ต่อปี</td>
-					</tr>
-					<tr>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<td><div id="show_levelsea_palm"></div></td>
-						<td>ไม่เกิน 500</td>
-					</tr>
-
-				</table>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-
-
-
-		</div>
-  </div>
-</div>
-
-<div id="pop_rubber" class="modal fade">
-  <div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<a>รายละเอียดการวิเคราะห์ ยางพารา</a>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-			</div>
-
-			<div class="modal-body">
-				<table class="table table-hover">
-					<tr>
-						<td></td>
-						<th>ข้อมูลสภาพพื้นที่</th>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
-					</tr>
-					<tr>
-						<th>อุณหภูมิ(c)</th>
-						<td><div id="show_temp_rubber"></div></td>
-						<td>26 - 30</td>
-					</tr>
-					<tr  bgcolor="#C0392B">
-						<th>ปริมาณน้ำฝน(mm)</th>
-						<td><div id="show_rain_rubber"></div></td>
-						<td>1250 ต่อปี</td>
-					</tr>
-					<tr>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<td><div id="show_levelsea_rubber"></div></td>
-						<td>ไม่เกิน 200</td>
-					</tr>
-
-				</table>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-
-
-
-		</div>
-  </div>
-</div>
-
-<div id="pop_cassava" class="modal fade">
-  <div class="modal-dialog">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<a>รายละเอียดการวิเคราะห์ มันสำปะหลัง</a>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-			</div>
-
-			<div class="modal-body">
-				<table class="table table-hover">
-					<tr>
-						<td></td>
-						<th>ข้อมูลสภาพพื้นที่</th>
-						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
-					</tr>
-					<tr>
-						<th>อุณหภูมิ(c)</th>
-						<td><div id="show_temp_cassava"></div></td>
-						<td>10 - 30</td>
-					</tr>
-					<tr>
-						<th>ปริมาณน้ำฝน(mm)</th>
-						<td><div id="show_rain_cassava"></div></td>
-						<td>500 - 2500 ต่อปี</td>
-					</tr>
-					<tr>
-						<th>ความสูงจากระดับน้ำทะเล(m)</th>
-						<td><div id="show_levelsea_cassava"></div></td>
-						<td>ไม่เกิน 200</td>
-					</tr>
-				</table>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-
-
-
-		</div>
-  </div>
-</div>
-
-
-<!--END pop up results-->
-
-
+<!--javascript-->
 
 </body>
 </html>
