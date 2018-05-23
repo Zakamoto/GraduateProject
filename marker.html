@@ -71,73 +71,6 @@
 	</style>
 
 
-<script type="text/javascript" name="chart">
-	function makechart(n){
-		if(n == 1)
-			ColumnChart();
-		else if(n == 2)
-			LineChart();
-		else if(n == 3)
-			barChart();
-		else if(n==4)
-			Chart();
-	}
-
-	function ColumnChart(){
-		$.ajax({
-				url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
-				data: {
-					format: 'json'    // รูปแบบข้อมูล เป็น json
-				},
-				error: function() {
-					alert("ไม่สามารถดึงข้อมูลได้");  // ถ้า error
-				},
-				dataType: 'json',    // ชนิดข้อมูล json
-					success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
-						var set_r = [];
-						set_r[0] = [];
-						set_r[0][0] = 'Element';
-						set_r[0][1] = 'เปอร์เซนต์ความเหมาะสม';
-
-						for(var i = 0; i < data.Stations.length ; i++){
-							set_r[i+1] = [];
-							set_r[i+1][0] = data.Stations[i]['Province'];
-							set_r[i+1][1] = data.Stations[i]['Observe']['Temperature']['Value'];
-						}
-
-						console.log(set_r[10][0]);
-						google.charts.load('current', {'packages':['corechart']});
-
-			      // Set a callback to run when the Google Visualization API is loaded.
-			      google.charts.setOnLoadCallback(drawChart);
-
-			      // Callback that creates and populates a data table,
-			      // instantiates the pie chart, passes in the data and
-			      // draws it.
-			      function drawChart() {
-
-			        //แผนภูมิแสดงข้อมูลวิเคราะห์พืช
-							var data_plant = google.visualization.arrayToDataTable(set_r);
-
-					 var options_plant = {
-							title: "อัตราความเหมาะสมของพืชแต่ละชนิด",
-							width: 1600,
-							height: 400,
-							bar: {groupWidth: "90%"},
-							legend: { position: "none" },
-						};
-
-			        // Instantiate and draw our chart, passing in some options.
-			        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_plant'));
-			        chart.draw(data_plant,options_plant);
-
-			      }
-					},
-					type: 'GET'
-				});
-	}
-</script>
-
 <script type="text/javascript" name="unknow_1">
 		  function initAutocomplete() {
 		    var input = document.getElementById('pac-input');
@@ -1873,7 +1806,7 @@
 			</ul>
 		</div>
 
-		<button id="chartBT" style="background-color:#E65100" class="btn btn-block" onclick="toggle()"><h5><font color="White">test3</font></h5></button>
+		<button id="chartBT" style="background-color:#E65100" class="btn btn-block" onclick="toggle()"><h5><font color="White">test temp</font></h5></button>
 
 
 </div>
@@ -1918,37 +1851,10 @@
 
 
 
-
-<!--start alert-->
-	<div id="pop_data_seccess" class="modal fade">
-	  <div id="pop_seccess" class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-body">
-					ทำการคำนวณข้อมูลสำเร็จแล้ว
-				</div>
-				<div class="modal-footer">
-					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
-				</div>
-			</div>
-		</div>
-	</div>
-<!--end alert-->
-<!--start alert-->
-	<div id="pop_data_seccess2" class="modal fade">
-	  <div id="pop_seccess2" class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-body">
-					ทำการคำนวณข้อมูลสำเร็จแล้ว
-				</div>
-				<div class="modal-footer">
-					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report" data-dismiss="modal" onclick="get_info2()">ยืนยันตำแหน่ง</button>
-				</div>
-			</div>
-		</div>
-	</div>
-<!--end alert-->
-
+<!--แผนภูมิแสดงอุณหภูมิ3hour-->
+										<div id="chart_temp_3hour"></div>
 <button id="myBtn" title="Go to top">Top</button>
+
 
 
 <script src="js/marker.js"></script>

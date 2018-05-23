@@ -6,6 +6,7 @@ $(document).ready(function(){
     var month = $("#select_month").val();
     set_chart_allyear();
     set_chart_month(year,month);
+    set_chart_3hour();
 
 
 
@@ -60,6 +61,12 @@ $(document).ready(function(){
     },
     function(result){
      $("#chart_temp_month").html(result);
+    });
+  }
+
+  function set_chart_3hour(){
+    $.post("./Chart/temp/chart_temp_3hour.php",function(result){
+      $("#chart_temp_3hour").html(result);
     });
   }
 

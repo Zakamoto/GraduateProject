@@ -1,5 +1,5 @@
 
-<div id="chart_year" style="width:1500px;"></div>
+<center><div id="chart_year" style="width:1400px;"></div></center>
 
 <script type="text/javascript">
 Highcharts.chart('chart_year', {
