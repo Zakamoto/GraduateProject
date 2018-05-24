@@ -1,5 +1,5 @@
 
-<center><div id="chart_3hour" style="width:1400px;"></div></center>
+<center><div id="chart_3hour2" style="width:1400px;"></div></center>
 
 <script type="text/javascript">
 $.ajax({
@@ -17,11 +17,11 @@ $.ajax({
         var time = data.Header['LastBuiltDate'];
         for(var i = 0; i < data.Stations.length ; i++){
           set_x[i] = data.Stations[i]['Province'];
-          temp_value[i] = data.Stations[i]['Observe']['Temperature']['Value'];
+          temp_value[i] = data.Stations[i]['Observe']['RelativeHumidity']['Value'];
         }
-        Highcharts.chart('chart_3hour', {
+        Highcharts.chart('chart_3hour2', {
           title: {
-              text: 'กราฟแสดงอุณหภูมิประจำวันเวลา'+time
+              text: 'กราฟแสดงความชื้นประจำวันเวลา'+time
           },
           xAxis: {
               categories: set_x
@@ -29,23 +29,13 @@ $.ajax({
 
           yAxis: {
               title: {
-                  text: 'ชั่โมง'
+                  text: 'ความชื้นสัมพันธ์'
               }
-          },
-          labels: {
-              items: [{
-                  html: 'จำนวน ชั่วโมงทั้งหมด',
-                  style: {
-                      left: '50px',
-                      top: '18px',
-                      color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                  }
-              }]
           },
           series: [
           {
               type: 'spline',
-              name: 'อุณหภูมิ',
+              name: 'ความชื้นสัมพันธ์',
               data: temp_value,
               marker: {
                   lineWidth: 2,

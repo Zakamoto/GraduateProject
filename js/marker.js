@@ -1,74 +1,135 @@
 $(document).ready(function(){
 
-  $("#Report").hide();
+  $("#Report_temp").hide();
+  $("#Report_moisture").hide();
+  $("#table_test").hide();
 
-    var year = $("#select_year").val();
-    var month = $("#select_month").val();
-    set_chart_allyear();
-    set_chart_month(year,month);
-    set_chart_3hour();
+    table_test(1);
 
+    var moisture_yearall = $("#select_moisture_allyear").val();
+    var moisture_year = $("#select_moisture_year").val();
+    var moisture_month = $("#select_moisture_month").val();
+    set_chart_moistureyear(moisture_yearall);
+    set_chart_moisturemonth(moisture_year,moisture_month);
+    set_chart_moisture3hour();
 
-
-  $("#select_year_all").change(function(){
-    var year = $("#select_year_all").val();
-    set_chart_someyear(year)
-  });
-
-  $("#select_year").change(function(){
-    var year = $("#select_year").val();
-    var month = $("#select_month").val();
-    set_chart_month(year,month);
-  });
-  $("#select_month").change(function(){
-    var year = $("#select_year").val();
-    var month = $("#select_month").val();
-    set_chart_month(year,month);
-  });
+    var temp_yearall = $("#select_temp_allyear").val();
+    var temp_year = $("#select_temp_year").val();
+    var temp_month = $("#select_temp_month").val();
+    set_chart_tempyear(temp_yearall);
+    set_chart_tempmonth(temp_year,temp_month);
+    set_chart_temp3hour();
 
 
-
-//แผนภูมิรายปีที่แสดงทันทีเมื่อเปิดหน้าเว็บตอนแรก
-  function set_chart_allyear(){
-    $.post("./Chart/temp/chart_temp_allyear.php",
-    function(result){
-      $("#chart_temp_year").html(result);
+    $("#change_page1").change(function(){
+      var page = $("#change_page1").val();
+      table_test(page);
     });
-  }
 
-//แผนภูมิแสดงข้อมูลเฉลี่ยรายปี
-  function set_chart_someyear(year){
-    if($("select_year_all").val()==0)
-      set_chart_allyear();
-    else{
-      console.log(5555555555);
-      $.post("./set_data_chart.php",{
-        type:1,
+
+
+//start change of moisture group
+  $("#select_moisture_allyear").change(function(){
+    var year = $("#select_moisture_allyear").val();
+    set_chart_moistureyear(year)
+  });
+  $("#select_moisture_year").change(function(){
+    var year = $("#select_moisture_year").val();
+    var month = $("#select_moisture_month").val();
+    set_chart_moisturemonth(year,month);
+  });
+  $("#select_moisture_month").change(function(){
+    var year = $("#select_moisture_year").val();
+    var month = $("#select_moisture_month").val();
+    set_chart_moisturemonth(year,month);
+  });
+//end change of moisture group
+
+//start change of temp group
+  $("#select_temp_allyear").change(function(){
+    var year = $("#select_temp_allyear").val();
+    set_chart_tempyear(year)
+  });
+  $("#select_temp_year").change(function(){
+    var year = $("#select_temp_year").val();
+    var month = $("#select_temp_month").val();
+    set_chart_tempmonth(year,month);
+  });
+  $("#select_temp_month").change(function(){
+    var year = $("#select_temp_year").val();
+    var month = $("#select_temp_month").val();
+    set_chart_tempmonth(year,month);
+  });
+//end change of temp group
+
+
+
+  //แผนภูมิแสดงข้อมูลความชื้นรายปี
+    function set_chart_moistureyear(year){
+        $.post("./set_data_moisturechart.php",{
+          type:1,
+          year:year,
+        },
+        function(result){
+          $("#chart_moisture_year").html(result);
+        });
+      }
+  //แผนภูมความชื้นรายเดือน
+    function set_chart_moisturemonth(year,month){
+      $.post("./set_data_moisturechart.php",{
+        type:2,
         year:year,
+        month:month,
       },
       function(result){
-        $("#chart_temp_year").html(result);
+       $("#chart_moisture_month").html(result);
       });
-      }
+    }
+  //แผนภูมิแสดงความชื้นปัจจุบัน
+    function set_chart_moisture3hour(){
+      $.post("./Chart/moisture/chart_moisture_3hour.php",function(result){
+        $("#chart_moisture_3hour").html(result);
+      });
     }
 
 
-  function set_chart_month(year,month){
-    $.post("./set_data_chart.php",{
-      type:2,                     //แผนภูมิอุณหภูมิรายเดือน
-      year:year,
-      month:month,
-    },
-    function(result){
-     $("#chart_temp_month").html(result);
-    });
-  }
 
-  function set_chart_3hour(){
-    $.post("./Chart/temp/chart_temp_3hour.php",function(result){
-      $("#chart_temp_3hour").html(result);
-    });
-  }
+
+    //แผนภูมิแสดงข้อมูลอุณหภูมิรายปี
+      function set_chart_tempyear(year){
+          $.post("./set_data_tempchart.php",{
+            type:1,
+            year:year,
+          },
+          function(result){
+            $("#chart_temp_year").html(result);
+          });
+        }
+    //แผนภูมิอุณหภูมิรายเดือน
+      function set_chart_tempmonth(year,month){
+        $.post("./set_data_tempchart.php",{
+          type:2,
+          year:year,
+          month:month,
+        },
+        function(result){
+         $("#chart_temp_month").html(result);
+        });
+      }
+    //แผนภูมิแสดงอุณหภูมิปัจจุบัน
+      function set_chart_temp3hour(){
+        $.post("./Chart/temp/chart_temp_3hour.php",function(result){
+          $("#chart_temp_3hour").html(result);
+        });
+      }
+
+      function table_test(page){
+        $.post("./set_data_table.php",{
+          page:page,
+        },function(result){
+          $("#table_content").html(result);
+        });
+      }
 
 
 

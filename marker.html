@@ -1656,14 +1656,32 @@
 			    }
 			}
 
-			function toggle() {
-		    var x = document.getElementById("Report");
+			function toggle_temp() {
+		    var x = document.getElementById("Report_temp");
 		    if (x.style.display === "none") {
 		        x.style.display = "block";
 		    } else {
 		        x.style.display = "none";
 		    }
 		}
+
+		function toggle_moisture() {
+			var x = document.getElementById("Report_moisture");
+			if (x.style.display === "none") {
+					x.style.display = "block";
+			} else {
+					x.style.display = "none";
+			}
+	}
+
+	function toggle_table() {
+		var x = document.getElementById("table_test");
+		if (x.style.display === "none") {
+				x.style.display = "block";
+		} else {
+				x.style.display = "none";
+		}
+}
 			// When the user clicks on the button, scroll to the top of the document
 
 		$(function(){
@@ -1684,7 +1702,15 @@
 					function (e) {
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
-				$('#chartBT').click(
+				$('#tempBT').click(
+					function (e) {
+						$('html, body').animate({scrollTop: 760}, 800);
+				});
+				$('#moistureBT').click(
+					function (e) {
+						$('html, body').animate({scrollTop: 760}, 800);
+				});
+				$('#tableBT').click(
 					function (e) {
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
@@ -1806,28 +1832,46 @@
 			</ul>
 		</div>
 
-		<button id="chartBT" style="background-color:#E65100" class="btn btn-block" onclick="toggle()"><h5><font color="White">test temp</font></h5></button>
+
+		<button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#itemtest"><h5><font color="White">test all</font></h5></button>
+		<div id="itemtest" class="panel-collapse collapse">
+			<ul class="list-group">
+				<button id="tempBT" style="background-color:white;" class="btn btn" onclick="toggle_temp()"><h5>test temp</h5></button>
+				<button id="moistureBT" style="background-color:white;" class="btn" onclick="toggle_moisture()"><h5>test moisture</h5></button>
+				<button id="tableBT" style="background-color:white;" class="btn" onclick="toggle_table()"><h5>test table</h5></button>
+			</ul>
+		</div>
+</div>
 
 
+<div id="table_test">
+	<div id="table_content"></div>
+	<select id="change_page1" class="form-control" style="max-width: 120px;">
+	  <option value="1">1</option>
+	  <option value="2">2</option>
+	  <option value="3">3</option>
+	  <option value="4">4</option>
+	  <option value="5">5</option>
+	</select>
 </div>
 
 
 <!--End menu option-->
-<div id="Report">
+<div id="Report_temp">
 
 
 <!--แผนภูมิแสดงอุณหภูมิเป็นปี-->
-										<select class="form-control" style="max-width: 120px;" id="select_year_all">
+										<select class="form-control" style="max-width: 120px;" id="select_temp_allyear">
 											<option value="0">ทั้งหมด</option>
 											<option value="1">2557</option>
-											<option value="2">2559</option>
+											<option value="2">2558</option>
 											<option value="3">2559</option>
 										</select>
 										<div id="chart_temp_year"></div>
 
 
 <!--แผนภูมิแสดงอุณหภูมิรายเดือน-->
-										<select class="form-control" style="max-width: 120px;float:left;" id="select_month">
+										<select class="form-control" style="max-width: 120px;float:left;" id="select_temp_month">
 											<option value="มกราคม">มกราคม</option>
 											<option value="กุมภาพันธ์">กุมภาพันธ์</option>
 											<option value="มีนาคม">มีนาคม</option>
@@ -1841,7 +1885,7 @@
 											<option value="พฤศจิกายน">พฤศจิกายน</option>
 											<option value="ธันวาคม">ธันวาคม</option>
 										</select>
-										<select class="form-control" style="max-width: 120px;" id="select_year">
+										<select class="form-control" style="max-width: 120px;" id="select_temp_year">
 					            <option value="0">2557</option>
 					            <option value="1">2558</option>
 					            <option value="2">2559</option>
@@ -1853,6 +1897,55 @@
 
 <!--แผนภูมิแสดงอุณหภูมิ3hour-->
 										<div id="chart_temp_3hour"></div>
+
+</div>
+
+
+<div id="Report_moisture">
+
+
+<!--แผนภูมิแสดงความชื้นเป็นปี-->
+										<select class="form-control" style="max-width: 120px;" id="select_moisture_allyear">
+											<option value="0">ทั้งหมด</option>
+											<option value="1">2557</option>
+											<option value="2">2558</option>
+											<option value="3">2559</option>
+										</select>
+										<div id="chart_moisture_year"></div>
+
+
+<!--แผนภูมิแสดงความชื้นรายเดือน-->
+										<select class="form-control" style="max-width: 120px;float:left;" id="select_moisture_month">
+											<option value="มกราคม">มกราคม</option>
+											<option value="กุมภาพันธ์">กุมภาพันธ์</option>
+											<option value="มีนาคม">มีนาคม</option>
+											<option value="เมษายน">เมษายน</option>
+											<option value="พฤษภาคม">พฤษภาคม</option>
+											<option value="มิถุนายน">มิถุนายน</option>
+											<option value="กรกฎาคม">กรกฎาคม</option>
+											<option value="สิงหาคม">สิงหาคม</option>
+											<option value="กันยายน">กันยายน</option>
+											<option value="ตุลาคม">ตุลาคม</option>
+											<option value="พฤศจิกายน">พฤศจิกายน</option>
+											<option value="ธันวาคม">ธันวาคม</option>
+										</select>
+										<select class="form-control" style="max-width: 120px;" id="select_moisture_year">
+					            <option value="0">2557</option>
+					            <option value="1">2558</option>
+					            <option value="2">2559</option>
+					          </select>
+
+										<div id="chart_moisture_month"></div>
+
+
+
+<!--แผนภูมิแสดงความชื้นิ3hour-->
+										<div id="chart_moisture_3hour"></div>
+
+</div>
+
+
+
 <button id="myBtn" title="Go to top">Top</button>
 
 
