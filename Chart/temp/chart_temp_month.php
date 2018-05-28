@@ -1,5 +1,5 @@
 
-<center><div id="chart_month" style="width:1400px;"></div></center>
+<center><div id="chart_month"></div></center>
 
 <script type="text/javascript">
 Highcharts.chart('chart_month', {

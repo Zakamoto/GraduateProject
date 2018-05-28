@@ -1,5 +1,5 @@
 
-<center><div id="chart_3hour" style="width:1400px;"></div></center>
+<center><div id="chart_3hour"></div></center>
 
 <script type="text/javascript">
 $.ajax({
