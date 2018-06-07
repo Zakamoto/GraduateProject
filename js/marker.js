@@ -5,6 +5,9 @@ $(document).ready(function(){
   $("#table_test").hide();
 
     table_test(1);
+    select_time_temp(1);
+    select_time_mois(1);
+
 
     var moisture_yearall = $("#select_moisture_allyear").val();
     var moisture_year = $("#select_moisture_year").val();
@@ -131,6 +134,164 @@ $(document).ready(function(){
         });
       }
 
+
+
+//dropdown_temp
+
+
+
+      $("#select_year_temp3hour").change(function(){
+        $("#select_month_temp3hour").empty();
+        $("#select_date_temp3hour").empty();
+        $("#select_temp3hour").empty();
+        if($("#select_year_temp3hour").val()!=0)
+          select_time_temp(2);
+      });
+      $("#select_month_temp3hour").change(function(){
+        $("#select_date_temp3hour").empty();
+        $("#select_temp3hour").empty();
+        if($("#select_month_temp3hour").val()!=0)
+          select_time_temp(3);
+      });
+      $("#select_date_temp3hour").change(function(){
+        $("#select_temp3hour").empty();
+          select_time_temp(4);
+      });
+
+      $("#select_temp3hour").change(function(){
+        var year3 = $("#select_year_temp3hour").val();
+        var month3 = $("#select_month_temp3hour").val();
+        var date3 = $("#select_date_temp3hour").val();
+        var time3 = $("#select_temp3hour").val();
+        $.post("set_data_tempchart.php",{
+          type:100,
+          year3: year3,
+          month3: month3,
+          date3: date3,
+          time3: time3,
+        },function(result){
+          $("#chart_tempture_3hour").html(result);
+        });
+      });
+
+
+
+      function select_time_temp(settime){
+        if(settime==1){         //นำปีมาแสดง(เป็นส่วนเริ่มต้น)
+          $.post("./dropdown_time.php",{
+            type:1,
+          },
+          function(result){
+            $("#select_year_temp3hour").html(result);
+          });
+        }
+        else if(settime==2){    //นำเดือนมาแสดง
+          $.post("./dropdown_time.php",{
+            type:2,
+          },
+          function(result){
+            $("#select_month_temp3hour").html(result);
+          });
+        }
+        else if(settime==3){    //เลือกวันที่มีจำนวนตรงกับเดือน
+          var month = $("#select_month_temp3hour").val();
+          $.post("./dropdown_time.php",{
+            type:3,
+            month:month,
+          },
+          function(result){
+            $("#select_date_temp3hour").html(result);
+          });
+        }
+        else {                  //เลือกเวลา
+          $.post("./dropdown_time.php",{
+            type:4
+          },
+          function(result){
+            $("#select_temp3hour").html(result);
+          });
+        }
+      }
+
+
+
+
+
+//dropdown_moisture
+
+
+      $("#select_year_mois3hour").change(function(){
+        $("#select_month_mois3hour").empty();
+        $("#select_date_mois3hour").empty();
+        $("#select_mois3hour").empty();
+        if($("#select_year_mois3hour").val()!=0)
+          select_time_mois(2);
+      });
+      $("#select_month_mois3hour").change(function(){
+        $("#select_date_mois3hour").empty();
+        $("#select_mois3hour").empty();
+        if($("#select_month_mois3hour").val()!=0)
+          select_time_mois(3);
+      });
+      $("#select_date_mois3hour").change(function(){
+        $("#select_mois3hour").empty();
+          select_time_mois(4);
+      });
+
+      $("#select_time3hour").change(function(){
+        var year3 = $("#select_year_mois3hour").val();
+        var month3 = $("#select_month_mois3hour").val();
+        var date3 = $("#select_date_mois3hour").val();
+        var time3 = $("#select_mois3hour").val();
+        $.post("set_data_moisturechart.php",{
+          type:100,
+          year3: year3,
+          month3: month3,
+          date3: date3,
+          time3: time3,
+        },function(result){
+          $("#chart_moisture_3hour").html(result);
+        });
+      });
+
+
+
+      function select_time_mois(settime){
+        if(settime==1){         //นำปีมาแสดง(เป็นส่วนเริ่มต้น)
+          $.post("./dropdown_time.php",{
+            type:1,
+          },
+          function(result){
+            $("#select_year_mois3hour").html(result);
+          });
+        }
+        else if(settime==2){    //นำเดือนมาแสดง
+          $.post("./dropdown_time.php",{
+            type:2,
+          },
+          function(result){
+            $("#select_month_mois3hour").html(result);
+          });
+        }
+        else if(settime==3){    //เลือกวันที่มีจำนวนตรงกับเดือน
+          var month = $("#select_month_mois3hour").val();
+          $.post("./dropdown_time.php",{
+            type:3,
+            month:month,
+          },
+          function(result){
+            $("#select_date_mois3hour").html(result);
+          });
+        }
+        else {                  //เลือกเวลา
+          $.post("./dropdown_time.php",{
+            type:4
+          },
+          function(result){
+            $("#select_mois3hour").html(result);
+          });
+        }
+      }
 
 
 

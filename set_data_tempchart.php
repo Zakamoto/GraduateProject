@@ -35,6 +35,20 @@ if($type == 1){     //ข้อมูลแผนภูมิรายปี
 
   include 'chart/temp/chart_temp_year.php';
 }
+
+else if($type==100){          //ลองใส่ข้อมูลจริงดู
+  $year3 = $_POST['year3'];
+  $month3 = $_POST['month3'];
+  $date3 = $_POST['date3'];
+  $time3 = $_POST['time3'];
+
+
+
+  include 'chart/moisture/chart_temp_select.php';
+}
+
+
+
 else{    //ข้อมูลแผนภูมิรายเดือน
 
   $month = $_POST['month'];

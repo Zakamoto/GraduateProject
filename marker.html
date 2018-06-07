@@ -1859,18 +1859,21 @@
 			<!--แผนภูมิแสดงอุณหภูมิเป็นปี-->
 			<div class="row">
 										<div style="background-color:#D5F5E3;width:15%;">
+												<center>
 													<select class="form-control" style="max-width: 120px;" id="select_temp_allyear">
 														<option value="0">ทั้งหมด</option>
 														<option value="1">2557</option>
 														<option value="2">2558</option>
 														<option value="3">2559</option>
 													</select>
+												</center>
 										</div>
 										<div style="width:85%;" id="chart_temp_year"></div>
 			</div>
 			<!--แผนภูมิแสดงอุณหภูมิรายเดือน-->
 			<div class="row">
 											<div style="background-color:#ABEBC6;width:15%">
+												<center>
 													<select class="form-control" style="max-width: 120px;" id="select_temp_month">
 														<option value="มกราคม">มกราคม</option>
 														<option value="กุมภาพันธ์">กุมภาพันธ์</option>
@@ -1890,7 +1893,8 @@
 								            <option value="1">2558</option>
 								            <option value="2">2559</option>
 								          </select>
-												</div>
+												</center>
+											</div>
 													<div style="width:85%;" id="chart_temp_month"></div>
 			</div>
 
@@ -1898,7 +1902,14 @@
 
 			<!--แผนภูมิแสดงอุณหภูมิ3hour-->
 												<div class="row">
-													<div style="background-color:#82E0AA;width:15%"></div>
+													<div style="background-color:#82E0AA;width:15%">
+														<center>
+															<select class="form-control" style="max-width: 150px;" id="select_year_temp3hour"></select>
+															<select class="form-control" style="max-width: 150px;" id="select_month_temp3hour"></select>
+															<select class="form-control" style="max-width: 150px;" id="select_date_temp3hour"></select>
+															<select class="form-control" style="max-width: 150px;" id="select_temp3hour"></select>
+														</center>
+													</div>
 													<div style="width:85%;" id="chart_temp_3hour"></div>
 												</div>
 </div>
@@ -1910,38 +1921,42 @@
 <!--แผนภูมิแสดงความชื้นเป็นปี-->
 										<div class="row">
 											<div style="background-color:#EAF2F8;width:15%">
-										<select class="form-control" style="max-width: 120px;" id="select_moisture_allyear">
-											<option value="0">ทั้งหมด</option>
-											<option value="1">2557</option>
-											<option value="2">2558</option>
-											<option value="3">2559</option>
-										</select>
+												<center>
+													<select class="form-control" style="max-width: 120px;" id="select_moisture_allyear">
+														<option value="0">ทั้งหมด</option>
+														<option value="1">2557</option>
+														<option value="2">2558</option>
+														<option value="3">2559</option>
+													</select>
+												</center>
 										</div>
-										<div style="width:85%;" id="chart_moisture_year"></div>
+											<div style="width:85%;" id="chart_moisture_year"></div>
 										</div>
 
 <!--แผนภูมิแสดงความชื้นรายเดือน-->
 										<div class="row">
 										<div style="background-color:#D4E6F1;width:15%">
-										<select class="form-control" style="max-width: 120px;" id="select_moisture_month">
-											<option value="มกราคม">มกราคม</option>
-											<option value="กุมภาพันธ์">กุมภาพันธ์</option>
-											<option value="มีนาคม">มีนาคม</option>
-											<option value="เมษายน">เมษายน</option>
-											<option value="พฤษภาคม">พฤษภาคม</option>
-											<option value="มิถุนายน">มิถุนายน</option>
-											<option value="กรกฎาคม">กรกฎาคม</option>
-											<option value="สิงหาคม">สิงหาคม</option>
-											<option value="กันยายน">กันยายน</option>
-											<option value="ตุลาคม">ตุลาคม</option>
-											<option value="พฤศจิกายน">พฤศจิกายน</option>
-											<option value="ธันวาคม">ธันวาคม</option>
-										</select>
-										<select class="form-control" style="max-width: 120px;" id="select_moisture_year">
-					            <option value="0">2557</option>
-					            <option value="1">2558</option>
-					            <option value="2">2559</option>
-					          </select>
+											<center>
+												<select class="form-control" style="max-width: 120px;" id="select_moisture_month">
+													<option value="มกราคม">มกราคม</option>
+													<option value="กุมภาพันธ์">กุมภาพันธ์</option>
+													<option value="มีนาคม">มีนาคม</option>
+													<option value="เมษายน">เมษายน</option>
+													<option value="พฤษภาคม">พฤษภาคม</option>
+													<option value="มิถุนายน">มิถุนายน</option>
+													<option value="กรกฎาคม">กรกฎาคม</option>
+													<option value="สิงหาคม">สิงหาคม</option>
+													<option value="กันยายน">กันยายน</option>
+													<option value="ตุลาคม">ตุลาคม</option>
+													<option value="พฤศจิกายน">พฤศจิกายน</option>
+													<option value="ธันวาคม">ธันวาคม</option>
+												</select>
+												<select class="form-control" style="max-width: 120px;" id="select_moisture_year">
+							            <option value="0">2557</option>
+							            <option value="1">2558</option>
+							            <option value="2">2559</option>
+							          </select>
+											</center>
 										</div>
 										<div style="width:85%;" id="chart_moisture_month"></div>
 										</div>
@@ -1949,7 +1964,14 @@
 
 <!--แผนภูมิแสดงความชื้นิ3hour-->
 										<div class="row">
-										<div style="background-color:#A9CCE3;width:15%"></div>
+										<div style="background-color:#A9CCE3;width:15%">
+											<center>
+												<select class="form-control" style="max-width: 150px;" id="select_year_mois3hour"></select>
+												<select class="form-control" style="max-width: 150px;" id="select_month_mois3hour"></select>
+												<select class="form-control" style="max-width: 150px;" id="select_date_mois3hour"></select>
+												<select class="form-control" style="max-width: 150px;" id="select_mois3hour"></select>
+											</center>
+										</div>
 										<div style="width:85%;" id="chart_moisture_3hour"></div>
 										</div>
 </div>
