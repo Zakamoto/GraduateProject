@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
-  $("#Report_temp").hide();
+  $("#Report").hide();
+//  $("#Report_temp").hide();
   $("#Report_moisture").hide();
   $("#table_test").hide();
 
@@ -24,6 +25,23 @@ $(document).ready(function(){
     set_chart_temp3hour();
 
 
+
+
+
+//option แสดง div อุณหถูมิ , ความชื้น
+
+  $("#option_weather").change(function(){
+    if($("#option_weather").val()==1){
+      $("#Report_temp").show();
+      $("#Report_moisture").hide();
+    }
+    else {
+      $("#Report_moisture").show();
+      $("#Report_temp").hide();
+    }
+  });
+
+//ตาราง
     $("#change_page1").change(function(){
       var page = $("#change_page1").val();
       table_test(page);
@@ -170,7 +188,8 @@ $(document).ready(function(){
           date3: date3,
           time3: time3,
         },function(result){
-          $("#chart_tempture_3hour").html(result);
+          console.log(result);
+          $("#chart_temp_3hour").html(result);
         });
       });
 
@@ -238,7 +257,7 @@ $(document).ready(function(){
           select_time_mois(4);
       });
 
-      $("#select_time3hour").change(function(){
+      $("#select_mois3hour").change(function(){
         var year3 = $("#select_year_mois3hour").val();
         var month3 = $("#select_month_mois3hour").val();
         var date3 = $("#select_date_mois3hour").val();

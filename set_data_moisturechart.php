@@ -1,10 +1,9 @@
 <?php
 
+include "get_data3hour.php";
+
 //จาก marker.js
 $type = $_POST['type'];
-$year = $_POST['year'];
-
-
 
 
 
@@ -14,6 +13,7 @@ $year = $_POST['year'];
 
 
 if($type == 1){     //ข้อมูลแผนภูมิรายปี
+  $year = $_POST['year'];
   if($year == 0){
   $data1 = [1,2,3,4,5,6,7,8,9,10,11,12,13];
   $data2 = [2,3,4,5,6,7,8,9,10,11,12,13,14];
@@ -45,13 +45,13 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
   $date3 = $_POST['date3'];
   $time3 = $_POST['time3'];
 
-  
+  $data = get_data3hour($year3,$month3,$date3,$time3);
 
   include 'chart/moisture/chart_moisture_select.php';
 }
 
 else{    //ข้อมูลแผนภูมิรายเดือน
-
+$year = $_POST['year'];
   $month = $_POST['month'];
   if($year == 0)
   $data = [1,2,3,4,5,6,7,8,9,10,11,12,13];

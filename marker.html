@@ -418,6 +418,10 @@
 
 			}
 		}
+		function weatherBT(){
+			toggle_weather();
+			Allweather();
+		}
 		function Allweather(){
 			$("#itemmoisture").hide();
 			$("#itemTemp").hide();
@@ -1655,23 +1659,14 @@
 			    }
 			}
 
-			function toggle_temp() {
-		    var x = document.getElementById("Report_temp");
+			function toggle_weather() {
+		    var x = document.getElementById("Report");
 		    if (x.style.display === "none") {
 		        x.style.display = "block";
 		    } else {
 		        x.style.display = "none";
 		    }
 		}
-
-		function toggle_moisture() {
-			var x = document.getElementById("Report_moisture");
-			if (x.style.display === "none") {
-					x.style.display = "block";
-			} else {
-					x.style.display = "none";
-			}
-	}
 
 	function toggle_table() {
 		var x = document.getElementById("table_test");
@@ -1698,14 +1693,6 @@
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
 				$('#enter_position_2').click(
-					function (e) {
-						$('html, body').animate({scrollTop: 760}, 800);
-				});
-				$('#tempBT').click(
-					function (e) {
-						$('html, body').animate({scrollTop: 760}, 800);
-				});
-				$('#moistureBT').click(
 					function (e) {
 						$('html, body').animate({scrollTop: 760}, 800);
 				});
@@ -1783,31 +1770,8 @@
 	</div>
 
 
-	<button class="btn btn-success  btn-block" data-toggle="collapse" data-target="#itemWeather" onclick="radioWeather()"><h5>สภาพภูมิอากาศ</h5></button>
-	<div id="itemWeather" class="panel-collapse collapse">
-			<ul class="list-group">
-				<li class="list-group-item"><input type="radio" name="warether" onclick="Allweather()"><font style="padding-left: 25px;">สภาพอากาศโดยรวม</font></li>
-				<li class="list-group-item"><input type="radio" name="warether" onclick="temperature()" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 25px;">อุณหภูมิ</font>
-					<div id="itemTemp" class="panel-collapse collapse">
-						<button class="btn" style="background-color:#0077e6"></button><font style="padding-left:25px;">อุณหภูมิ น้อยกว่า 11 องศา</font><br/>
-							<button class="btn" style="background-color:#3bf8ff"></button><font style="padding-left:25px;">อุณหภูมิ อยู่ในระหว่าง 11 - 20 องศา</font><br/>
-							<button class="btn" style="background-color:#ffc41d"></button><font style="padding-left:25px;">อุณหภูมิ อยู่ในระหว่าง 21 - 30 องศา</font><br/>
-							<button class="btn" style="background-color:#dc151e"></button><font style="padding-left:25px;">อุณหภูมิ อยู่ในระหว่าง 31 - 40 องศา</font><br/>
-							<button class="btn" style="background-color:#ff0a21"></button><font style="padding-left:25px;">อุณหภูมิ มากกว่า 40 องศา</font><br/>
-					</div>
-				</li>
-				<li class="list-group-item"><input type="radio" name="warether" onclick="moisture()" data-toggle="collapse" data-target="#itemmoisture"><font style="padding-left: 25px;">ความชื้น</font>
-					<div id="itemmoisture" class="panel-collapse collapse">
-							<button class="btn" style="background-color:#CC0000"></button><font style="padding-left:25px;">ความชื้น น้อยกว่า 21%</font><br/>
-							<button class="btn" style="background-color:#E65100"></button><font style="padding-left:25px;">ความชื้น อยู่ในระหว่าง 21% - 40%</font><br/>
-							<button class="btn" style="background-color:#FFEB3B"></button><font style="padding-left:25px;">ความชื้น อยู่ในระหว่าง 41% - 60%</font><br/>
-							<button class="btn" style="background-color:#00FF00"></button><font style="padding-left:25px;">ความชื้น อยู่ในระหว่าง 61% - 80%</font><br/>
-							<button class="btn" style="background-color:#388E3C"></button><font style="padding-left:25px;">ความชื้น มากกว่า 80%</font><br/>
-					</div>
-				</li>
-			</ul>
+	<button id="weatherBT" class="btn btn-success btn-block" onclick="weatherBT()"><h5>สภาพภูมิอากาศ</h5></button>
 
-		</div>
 
 		<button class="btn btn-yellow btn-block" data-toggle="collapse" data-target="#itemArea" onclick="radioGeo()"><h5><font color="White">สภาพภูมิประเทศ</font></h5></button>
 		<div id="itemArea" class="panel-collapse collapse">
@@ -1833,8 +1797,6 @@
 		<button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#itemtest"><h5><font color="White">test all</font></h5></button>
 		<div id="itemtest" class="panel-collapse collapse">
 			<ul class="list-group">
-				<button id="tempBT" style="background-color:white;" class="btn btn" onclick="toggle_temp()"><h5>test temp</h5></button>
-				<button id="moistureBT" style="background-color:white;" class="btn" onclick="toggle_moisture()"><h5>test moisture</h5></button>
 				<button id="tableBT" style="background-color:white;" class="btn" onclick="toggle_table()"><h5>table ความสูงจากระดับน้ำทะเล</h5></button>
 			</ul>
 		</div>
@@ -1852,6 +1814,18 @@
 	</select>
 </div>
 
+
+
+
+
+
+
+<div id="Report">
+
+	<select id="option_weather">
+		<option value=1>อุณหภูมิ</option>
+		<option value=2>ความชื้น</option>
+	</select>
 
 <!--End menu option-->
 <div id="Report_temp" style="clear:both;">
@@ -1976,10 +1950,10 @@
 										</div>
 </div>
 
+	<button id="myBtn" title="Go to top">Top</button>
 
 
-<button id="myBtn" title="Go to top">Top</button>
-
+</div><!---ของ div report-->
 
 
 <script src="js/marker.js"></script>

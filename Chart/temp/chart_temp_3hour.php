@@ -1,5 +1,5 @@
 
-<center><div id="chart_3hour"></div></center>
+<center><div id="chart_3hour" style="width:1400px;"></div></center>
 
 <script type="text/javascript">
 $.ajax({
@@ -31,16 +31,6 @@ $.ajax({
               title: {
                   text: 'ชั่โมง'
               }
-          },
-          labels: {
-              items: [{
-                  html: 'จำนวน ชั่วโมงทั้งหมด',
-                  style: {
-                      left: '50px',
-                      top: '18px',
-                      color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-                  }
-              }]
           },
           series: [
           {

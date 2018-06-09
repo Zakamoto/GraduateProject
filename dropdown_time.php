@@ -8,6 +8,8 @@ if($type==1){?>
 <option value="1">2557</option>
 <option value="2">2558</option>
 <option value="3">2559</option>
+<option value="4">2560</option>
+<option value="5">2561</option>
 
 <?php } else if($type==2) { ?>
 <option value="0">กรุณาเลือเดือน</option>
@@ -25,20 +27,21 @@ if($type==1){?>
 <option value="12">ธันวาคม</option>
 
 <?php } else if($type==3) {
+  $date_Of_Month = $_POST['month'];
   if($date_Of_Month==1||$date_Of_Month==3||$date_Of_Month==5||$date_Of_Month==7||$date_Of_Month==8||$date_Of_Month==10||$date_Of_Month==12) { ?>
     <option value="0">กรุณาเลือกวัน</option>
     <?php for($i=1;$i<=31;$i++){ ?>
-      <option value=<?php $i ?>><?php echo $i; ?></option>
+      <option value="<?= $i ?>"><?php echo $i; ?></option>
     <?php }
    } else if($date_Of_Month==4||$date_Of_Month==6||$date_Of_Month==9||$date_Of_Month==11) { ?>
      <option value="0">กรุณาเลือกวัน</option>
     <?php for($i=1;$i<=30;$i++){ ?>
-      <option value=<?php $i ?>><?php echo $i; ?></option>
+      <option value="<?= $i ?>"><?php echo $i; ?></option>
     <?php }
    } else { ?>
      <option value="0">กรุณาเลือกวัน</option>
     <?php for($i=1;$i<=28;$i++){ ?>
-      <option value=<?php $i ?>><?php echo $i; ?></option>
+      <option value="<?= $i ?>"><?php echo $i; ?></option>
     <?php }
    }
 } else { ?>

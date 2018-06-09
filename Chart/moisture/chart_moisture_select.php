@@ -4,10 +4,10 @@
 <script type="text/javascript">
         Highcharts.chart('chart_3hour_select2', {
           title: {
-              text: 'กราฟแสดงความชื้นประจำวันเวลา'+time
+              text: 'กราฟแสดงความชื้น'
           },
           xAxis: {
-              categories: set_x
+              categories: [1,2,3,4,5]
           },
 
           yAxis: {
@@ -19,7 +19,9 @@
           {
               type: 'spline',
               name: 'ความชื้นสัมพันธ์',
-              data: <?php for($i){ $data[$i]; } ?>,
+              data: [<?= $data[0]['RH']; ?>,<?= $data[1]['RH']; ?>,<?= $data[2]['RH']; ?>,
+              <?= $data[3]['RH']; ?>,<?= $data[4]['RH']; ?>
+            ],
               marker: {
                   lineWidth: 2,
                   lineColor: Highcharts.getOptions().colors[1],
@@ -27,5 +29,4 @@
               }
           }]
         });
-});
 </script>
