@@ -5,14 +5,10 @@ $type = $_POST['type'];
 
 if($type==1){?>
 <option value="0">กรุณาเลือกปี</option>
-<option value="1">2557</option>
-<option value="2">2558</option>
-<option value="3">2559</option>
-<option value="4">2560</option>
 <option value="5">2561</option>
 
 <?php } else if($type==2) { ?>
-<option value="0">กรุณาเลือเดือน</option>
+<option value="0">กรุณาเลือกเดือน</option>
 <option value="1">มกราคม</option>
 <option value="2">กุมภาพันธ์</option>
 <option value="3">มีนาคม</option>

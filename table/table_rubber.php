@@ -23,12 +23,80 @@
       </thead>
 
       <tbody>
-        <?php for($i=$start;$i<sizeof($data);$i++){ ?>
-            <tr>
-              <td><?php echo $data[$i]['Name']; ?></td>
-              <td><?php echo $data[$i]['Sum']; ?></td>
-            </tr>
-      <?php } ?>
+            <?php 
+            switch ($start) {
+              case "0":
+              case "1": {
+                for($i=0;$i<10;$i++){ ?>
+                  <tr>
+                  <td><?php echo $data[$i]['Name']; ?></td>
+                  <td><?php echo $data[$i]['Sum']; ?></td>
+                </tr>  
+        <?php 
+              }
+              break;
+            }
+              case "2": {
+                for($i=10;$i<20;$i++){ ?>
+                  <tr>
+                  <td><?php echo $data[$i]['Name']; ?></td>
+                  <td><?php echo $data[$i]['Sum']; ?></td>
+                </tr> 
+        <?php 
+              }
+              break;
+            }
+              case "3": {
+                for($i=20;$i<30;$i++){ ?>
+                  <tr>
+                  <td><?php echo $data[$i]['Name']; ?></td>
+                  <td><?php echo $data[$i]['Sum']; ?></td>
+                </tr> 
+        <?php 
+              }
+              break;
+            }
+              case "4": {
+                for($i=30;$i<40;$i++){ ?>
+                  <tr>
+                  <td><?php echo $data[$i]['Name']; ?></td>
+                  <td><?php echo $data[$i]['Sum']; ?></td>
+                </tr> 
+        <?php 
+              }
+              break;
+            }
+              case "5": {
+                for($i=40;$i<50;$i++){ ?>
+                  <tr>
+                  <td><?php echo $data[$i]['Name']; ?></td>
+                  <td><?php echo $data[$i]['Sum']; ?></td>
+                </tr> 
+        <?php 
+              }
+              break;
+            }
+              case "6": {
+                for($i=50;$i<60;$i++){ ?>
+                  <tr>
+                  <td><?php echo $data[$i]['Name']; ?></td>
+                  <td><?php echo $data[$i]['Sum']; ?></td>
+                </tr> 
+        <?php 
+              }
+              break;
+            }
+              case "7": {
+                for($i=60;$i<sizeof($data);$i++){ ?>
+                  <tr>
+                  <td><?php echo $data[$i]['Name']; ?></td>
+                  <td><?php echo $data[$i]['Sum']; ?></td>
+                </tr> 
+        <?php 
+              }
+              break;
+            }
+          } ?>
       </tbody>
 
     </table>

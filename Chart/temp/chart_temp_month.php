@@ -12,7 +12,7 @@ Highcharts.chart('chart_month', {
 
   yAxis: {
       title: {
-          text: 'ชั่โมง'
+          text: 'ชั่วโมง'
       }
   },
   labels: {
