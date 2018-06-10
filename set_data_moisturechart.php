@@ -47,7 +47,11 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
 
   $data = get_dataSelect($year3,$month3,$date3,$time3);
 
-  include 'chart/moisture/chart_moisture_select.php';
+  if($data)
+    include 'chart/moisture/chart_moisture_select.php';
+  else
+    echo "ไม่พบข้อมูล";
+
 }
 
 else{    //ข้อมูลแผนภูมิรายเดือน
