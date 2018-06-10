@@ -659,6 +659,7 @@
 			*/
 		}
 		function rice(){
+			toggle_table()
 				if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
 					checkRadioGeo = false;
@@ -1441,7 +1442,8 @@
 
 
 		function get_info(){
-
+			console.log(55555);
+			toggle_area_result();
 
 			var info_lat = get_lat_info;
 			var info_lng = get_lng_info;
@@ -1516,20 +1518,20 @@
 							$('#show_slope_palm').html(info_slope);
 
 							$('#address').html(address_info);
+							/*
 							console.log(address_info);
-
-
 							console.log(select_near);
 							console.log(select_lat);
 							console.log(select_lng);
 							console.log(info_temp);
 							console.log(info_rain);
 							console.log(index);
-
+							*/
 
 						},
 						type: 'GET'
 					});
+
 		}
 
 
@@ -1538,8 +1540,9 @@
 
 
 		function get_info2(){
+			console.log(44444);
+			toggle_area_result();
 
-			console.log(address_info);
 			var info_lat = getCurrentPosition.lat;
 			var info_lng = getCurrentPosition.lng;
 
@@ -1613,20 +1616,20 @@
 							$('#show_slope_palm').html(info_slope);
 
 							$('#address').html(address_info);
+							/*
 							console.log(address_info);
-
-
 							console.log(select_near);
 							console.log(select_lat);
 							console.log(select_lng);
 							console.log(info_temp);
 							console.log(info_rain);
 							console.log(index);
-
+*/
 
 						},
 						type: 'GET'
 					});
+
 		}
 
 
@@ -1657,6 +1660,16 @@
 			    } else {
 			        document.getElementById("myBtn").style.display = "none";
 			    }
+			}
+
+
+			function toggle_area_result(){
+				var x = document.getElementById("area_result");
+		    if (x.style.display === "none") {
+		        x.style.display = "block";
+		    } else {
+		        x.style.display = "none";
+		    }
 			}
 
 			function toggle_weather() {
@@ -1793,7 +1806,7 @@
 			</ul>
 		</div>
 
-
+		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
 		<button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#itemtest"><h5><font color="White">test all</font></h5></button>
 		<div id="itemtest" class="panel-collapse collapse">
 			<ul class="list-group">
@@ -1804,14 +1817,9 @@
 
 
 <div id="table_test">
+	<div id="chart_content"></div>
 	<div id="table_content"></div>
-	<select id="change_page1" class="form-control" style="max-width: 120px;">
-	  <option value="1">1</option>
-	  <option value="2">2</option>
-	  <option value="3">3</option>
-	  <option value="4">4</option>
-	  <option value="5">5</option>
-	</select>
+	<select id="change_page1" class="form-control" style="max-width: 120px;"></select>
 </div>
 
 
@@ -1954,6 +1962,368 @@
 
 
 </div><!---ของ div report-->
+
+
+<!--start result-->
+<div id="area_result">
+
+		<div id="Report_area" class="container">
+		<center><h3>ข้อมูลพื้นที่</h3></center><br />
+		<h5>ตำแหน่งสถานที่ :
+		<div class="card">
+			<div class="card-block">
+				 <div id="address"><br/></div>
+			</div>
+		</div>
+	</h5>
+		</div>
+
+		<div class="row" id="Report_plant">
+
+									<div class="col" id="Report_chart_plant">
+										<div>
+												<p></p>
+												<center><h2>แผนภูมิแสดงอัตราความเหมาะสม</h2></center>
+												<p></p>
+												<div class="modal-body">
+													<center><div id="chart_div_plant"></div></center>
+												</div>
+											</div>
+										</div>
+
+						<div class="col" id="Report_detail_plant">
+							<!--start Display result-->
+
+										<div style="padding-top:20px;" class="col">
+
+											<center><h2>รายละเอียด</h2></center>
+											<br/>
+										<table class="table table-hover">
+
+												<tr>
+													<th>ข้าว</th>
+													<td>พื้นที่เหมาะสมมากต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_rice" data-toggle="modal" data-target="#pop_rice">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>อ้อย</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_cane" data-toggle="modal" data-target="#pop_cane">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>มันสำปะหลัง</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_cassava" data-toggle="modal" data-target="#pop_cassava">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>ยางพารา</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_rubber" data-toggle="modal" data-target="#pop_rubber">ดูรายละเอียด</button></td>
+												</tr>
+												<tr>
+													<th>ปาล์มน้ำมัน</th>
+													<td>พื้นที่มีความเหมาะสมน้อยต่อการปลูก</td>
+													<td><button class="btn btn-info" id="Display_palm" data-toggle="modal" data-target="#pop_palm">ดูรายละเอียด</button></td>
+												</tr>
+
+										</table>
+										</div>
+
+							<!--End Display result-->
+
+						</div>
+
+					</div>
+
+
+</div>
+
+
+
+
+
+
+<!--End result-->
+
+<!--start alert-->
+	<div id="pop_data_seccess" class="modal fade">
+	  <div id="pop_seccess" class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					ทำการคำนวณข้อมูลสำเร็จแล้ว
+				</div>
+				<div class="modal-footer">
+					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--end alert-->
+<!--start alert-->
+	<div id="pop_data_seccess2" class="modal fade">
+	  <div id="pop_seccess2" class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					ทำการคำนวณข้อมูลสำเร็จแล้ว
+				</div>
+				<div class="modal-footer">
+					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-dismiss="modal" onclick="get_info2()">ยืนยันตำแหน่ง</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--end alert-->
+
+
+
+
+
+<!--Start pop up results-->
+<div id="pop_rice" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ ข้าว</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+					</tr>
+					<tr>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_rice"></div></td>
+						<td>15 -25</td>
+					</tr>
+					<tr>
+						<th>ปริมาณน้ำฝน(mm)</th>
+						<td><div id="show_rain_rice"></div></td>
+						<td>150 - 400 ต่อเดือน</td>
+					</tr>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_rice"></div></td>
+						<td>ไม่เกิน 700</td>
+					</tr>
+
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+
+<div id="pop_cane" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ อ้อย</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+					</tr>
+					<tr>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_cane"></div></td>
+						<td>26 - 35</td>
+					</tr>
+					<tr  bgcolor="#C0392B">
+						<th>ปริมาณน้ำฝน(mm)</th>
+						<td><div id="show_rain_cane"></div></td>
+						<td>1200 - 1500 ต่อปี</td>
+					</tr>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_cane"></div></td>
+						<td>ไม่เกิน 1500</td>
+					</tr>
+
+				</table>
+
+
+
+
+
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+<div id="pop_palm" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ ปาล์มน้ำมัน</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+					</tr>
+					<tr>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_palm"></div></td>
+						<td>25 - 28</td>
+					</tr>
+					<tr  bgcolor="#C0392B">
+						<th>ปริมาณน้ำฝน(mm)</th>
+						<td><div id="show_rain_palm"></div></td>
+						<td>1800 - 2000 ต่อปี</td>
+					</tr>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_palm"></div></td>
+						<td>ไม่เกิน 500</td>
+					</tr>
+
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+<div id="pop_rubber" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ ยางพารา</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+					</tr>
+					<tr>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_rubber"></div></td>
+						<td>26 - 30</td>
+					</tr>
+					<tr  bgcolor="#C0392B">
+						<th>ปริมาณน้ำฝน(mm)</th>
+						<td><div id="show_rain_rubber"></div></td>
+						<td>1250 ต่อปี</td>
+					</tr>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_rubber"></div></td>
+						<td>ไม่เกิน 200</td>
+					</tr>
+
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+<div id="pop_cassava" class="modal fade">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<a>รายละเอียดการวิเคราะห์ มันสำปะหลัง</a>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+			</div>
+
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr>
+						<td></td>
+						<th>ข้อมูลสภาพพื้นที่</th>
+						<th>ข้อมูลที่ช่วงที่เหมาะสม</th>
+					</tr>
+					<tr>
+						<th>อุณหภูมิ(c)</th>
+						<td><div id="show_temp_cassava"></div></td>
+						<td>10 - 30</td>
+					</tr>
+					<tr>
+						<th>ปริมาณน้ำฝน(mm)</th>
+						<td><div id="show_rain_cassava"></div></td>
+						<td>500 - 2500 ต่อปี</td>
+					</tr>
+					<tr>
+						<th>ความสูงจากระดับน้ำทะเล(m)</th>
+						<td><div id="show_levelsea_cassava"></div></td>
+						<td>ไม่เกิน 200</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
+
+
+		</div>
+  </div>
+</div>
+
+
+<!--END pop up results-->
+
+
+
 
 
 <script src="js/marker.js"></script>

@@ -4,16 +4,7 @@
 
 <?php
 
-if($page==1)
-$start = 1;
-else if($page==2)
-$start = 11;
-else if($page==3)
-$start = 21;
-else if($page==4)
-$start = 31;
-else
-$start = 41;
+  $start = $page;
 
  ?>
 
@@ -24,17 +15,27 @@ $start = 41;
     <table class="ui celled table" style="width:100%">
       <thead  style="background-color:green;">
         <tr>
-          <th>55555</th>
-          <th>55555</th>
+          <th>จังหวัด</th>
+          <th>ปี</th>
+          <th>เดือน</th>
+          <th>วันที่</th>
+          <th>เวลา</th>
+          <th>อุณหภูมิ</th>
+          <th>ความชื้น</th>
         </tr>
       </thead>
 
       <tbody>
-        <?php for($i=$start;$i<($start+10);$i++){ ?>
-        <tr>
-          <td><?php echo $i; ?></td>
-          <td><?php echo $data[$i]; ?></td>
-        </tr>
+        <?php for($i=$start;$i<sizeof($data);$i++){ ?>
+            <tr>
+              <td><?php echo $data[$i]['Name']; ?></td>
+              <td><?php echo $data[$i]['Year']; ?></td>
+              <td><?php echo $data[$i]['Month']; ?></td>
+              <td><?php echo $data[$i]['Date']; ?></td>
+              <td><?php echo $data[$i]['Time']; ?></td>
+              <td><?php echo $data[$i]['TC']; ?></td>
+              <td><?php echo $data[$i]['RH']; ?></td>
+            </tr>
       <?php } ?>
       </tbody>
 

@@ -1,10 +1,14 @@
 
-<center><div id="chart_3hour_select2" style="width:1400px;"></div></center>
+<center><div id="chart_rice" style="width:1500px;"></div></center>
 
 <script type="text/javascript">
-        Highcharts.chart('chart_3hour_select2', {
+        <?php
+        include "../../get_data.php";
+        $data = get_dataAll();
+        ?>
+        Highcharts.chart('chart_rice', {
           title: {
-              text: 'กราฟแสดงความชื้น'
+              text: 'กราฟแสดงอุณหภูมิ'
           },
           xAxis: {
               categories: [
@@ -16,16 +20,16 @@
 
           yAxis: {
               title: {
-                  text: 'ความชื้นสัมพันธ์'
+                  text: 'อุณหภูมิ'
               }
           },
           series: [
           {
               type: 'spline',
-              name: 'ความชื้นสัมพันธ์',
+              name: 'column',
               data: [
                       <?php for($i=0;$i<sizeof($data);$i++){ ?>
-                        <?= $data[$i]['RH']; ?>,
+                        <?= $data[$i]['TC']; ?>,
                       <?php } ?>
                     ],
               marker: {

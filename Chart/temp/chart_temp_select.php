@@ -7,7 +7,11 @@
               text: 'กราฟแสดงอุณหภูมิ'
           },
           xAxis: {
-              categories: [1,2,3,4,5]
+              categories: [
+                            <?php for($i=0;$i<sizeof($data);$i++){ ?>
+                              <?= json_encode($data[$i]['Name']); ?>,
+                            <?php } ?>
+                          ]
           },
 
           yAxis: {
@@ -19,9 +23,11 @@
           {
               type: 'spline',
               name: 'อุณหภูมิ',
-              data: [<?= $data[0]['TC']; ?>,<?= $data[1]['TC']; ?>,<?= $data[2]['TC']; ?>,
-              <?= $data[3]['TC']; ?>,<?= $data[4]['TC']; ?>
-            ],
+              data: [
+                      <?php for($i=0;$i<sizeof($data);$i++){ ?>
+                        <?= $data[$i]['TC']; ?>,
+                      <?php } ?>
+                    ],
               marker: {
                   lineWidth: 2,
                   lineColor: Highcharts.getOptions().colors[1],

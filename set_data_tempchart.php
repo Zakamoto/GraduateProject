@@ -1,6 +1,6 @@
 <?php
 
-include "get_data3hour.php";
+include "get_data.php";
 
 //จาก marker.js
 $type = $_POST['type'];
@@ -45,7 +45,7 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
   $date3 = $_POST['date3'];
   $time3 = $_POST['time3'];
 
-  $data = get_data3hour($year3,$month3,$date3,$time3);
+  $data = get_dataSelect($year3,$month3,$date3,$time3);
 
   include 'Chart/temp/chart_temp_select.php';
 }
