@@ -4,10 +4,21 @@ $(document).ready(function(){
 //  $("#Report_temp").hide();
   $("#Report_moisture").hide();
   $("#table_test").hide();
+  $("#area_result").hide();
+
 
     table_test(1);
     select_time_temp(1);
     select_time_mois(1);
+    dropdown_table(5);
+    rice_chart();
+
+    function rice_chart(){
+        $.post("./Chart/plant/rice_chart.php",function(result){
+          console.log(result);
+          $("#chart_content").html(result);
+        });
+    }
 
 
     var moisture_yearall = $("#select_moisture_allyear").val();
@@ -42,10 +53,29 @@ $(document).ready(function(){
   });
 
 //ตาราง
+
+
+
+
     $("#change_page1").change(function(){
       var page = $("#change_page1").val();
       table_test(page);
+
     });
+          function table_test(page){
+            $.post("./set_data_table.php",{
+              page:page,
+            },function(result){
+              $("#table_content").html(result);
+            });
+          }
+          function dropdown_table(page){
+            $.post("./dropdown_page.php",{
+              page:page,
+            },function(result){
+              $("#change_page1").html(result);
+            });
+          }
 
 
 
@@ -144,14 +174,6 @@ $(document).ready(function(){
         });
       }
 
-      function table_test(page){
-        $.post("./set_data_table.php",{
-          page:page,
-        },function(result){
-          $("#table_content").html(result);
-        });
-      }
-
 
 
 //dropdown_temp
@@ -188,7 +210,6 @@ $(document).ready(function(){
           date3: date3,
           time3: time3,
         },function(result){
-          console.log(result);
           $("#chart_temp_3hour").html(result);
         });
       });
