@@ -12,11 +12,17 @@ $(document).ready(function(){
     select_time_mois(1);
     dropdown_table(5);
     rice_chart();
+    area_table();
+
 
     function rice_chart(){
         $.post("./Chart/plant/rice_chart.php",function(result){
-          console.log(result);
           $("#chart_content").html(result);
+        });
+    }
+    function area_table(){
+        $.post("./table/area_table.php",function(result){
+          $("#area_table").html(result);
         });
     }
 
@@ -210,6 +216,7 @@ $(document).ready(function(){
           date3: date3,
           time3: time3,
         },function(result){
+          console.log(result);
           $("#chart_temp_3hour").html(result);
         });
       });
@@ -290,6 +297,7 @@ $(document).ready(function(){
           date3: date3,
           time3: time3,
         },function(result){
+          console.log(result);
           $("#chart_moisture_3hour").html(result);
         });
       });

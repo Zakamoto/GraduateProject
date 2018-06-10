@@ -47,7 +47,10 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
 
   $data = get_dataSelect($year3,$month3,$date3,$time3);
 
-  include 'Chart/temp/chart_temp_select.php';
+  if($data)
+    include 'Chart/temp/chart_temp_select.php';
+  else
+    echo "ไม่พบข้อมูล";
 }
 
 
