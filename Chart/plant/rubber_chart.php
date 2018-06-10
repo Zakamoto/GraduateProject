@@ -1,14 +1,14 @@
 
-<center><div id="chart_rice" style="width:1500px;"></div></center>
+<center><div id="chart_rubber" style="width:1500px;"></div></center>
 
 <script type="text/javascript">
         <?php
         include "../../get_data.php";
-        $data = get_chart_rice();
+        $data = get_chart_rubber();
         ?>
-        Highcharts.chart('chart_rice', {
+        Highcharts.chart('chart_rubber', {
           title: {
-              text: 'ข้อมูลเฉลี่ยผลผลิตต่อเนื้อที่ปลูก ปี 2557 - 2559'
+              text: 'ข้อมูลเฉลี่ยผลผลิตต่อเนื้อที่กรีด ปี 2557 - 2559'
           },
           xAxis: {
               categories: [

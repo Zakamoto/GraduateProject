@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+	<!-- Bootstrap core CSS-->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Custom fonts for this template-->
+	<link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!-- Page level plugin CSS-->
+	<link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+	<link href="vendor/datatables/dataTables.bootstrap4(1).css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="css2/sb-admin.css" rel="stylesheet">
+	<link href="css2/tracking.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -159,6 +169,7 @@
 		var elevatorValue;
 		var getCurrentPosition;
 		var arrayTemperature = new Array(77);
+		let radioValue = 0;
 		function initialize() { // ฟังก์ชันแสดงแผนที่
 			GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
 			// กำหนดจุดเริ่มต้นของแผนที่
@@ -659,7 +670,8 @@
 			*/
 		}
 		function rice(){
-			toggle_table()
+			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			toggle_table();
 				if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
 					checkRadioGeo = false;
@@ -675,17 +687,13 @@
 						options: {
 							styleId: 2,
 							templateId: 2
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#00FF00',
-							fillOpacity: 0.3
 						}
-						}]
 				});
 					layer.setMap(map);
 		}
 		function cane() {
+			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
 					checkRadioGeo = false;
@@ -702,13 +710,7 @@
 						options: {
 							styleId: 2,
 							templateId: 2
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#ffc107',
-							fillOpacity: 0.3
 						}
-						}]
 				});
 					layer.setMap(map);
 			/*	$.ajax({
@@ -759,6 +761,8 @@
 							});  */
 		}
 		function palm(){
+			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
 					checkRadioGeo = false;
@@ -775,13 +779,7 @@
 						options: {
 							styleId: 2,
 							templateId: 2
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#dc3545',
-							fillOpacity: 0.3
 						}
-						}]
 				});
 					layer.setMap(map);
 			/*
@@ -832,6 +830,8 @@
 							}); */
 		}
 		function rubber(){
+			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
 					checkRadioGeo = false;
@@ -848,13 +848,7 @@
 						options: {
 							styleId: 2,
 							templateId: 2
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#343a40',
-							fillOpacity: 0.3
 						}
-						}]
 				});
 					layer.setMap(map);
 					checkRadioPlant = true;
@@ -906,6 +900,8 @@
 							}); */
 		}
 		function cassava(){
+			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
 					checkRadioGeo = false;
@@ -922,13 +918,7 @@
 						options: {
 							styleId: 2,
 							templateId: 2
-						},
-						styles: [{
-						polygonOptions: {
-							fillColor: '#fd7e14',
-							fillOpacity: 0.3
 						}
-						}]
 				});
 					layer.setMap(map);
 			/*
@@ -1364,6 +1354,10 @@
 			checkRadioWeather = true;
 		}
 		function radioPlant() {
+			radioValue = 0;
+			var x = document.getElementById("table_test");
+			if (x.style.display = "block")
+				x.style.display = "none";
 			var ele = document.getElementsByName("plant");
 			for(var i=0;i<ele.length;i++)
 				ele[i].checked = false;
@@ -1683,12 +1677,12 @@
 
 	function toggle_table() {
 		var x = document.getElementById("table_test");
-		if (x.style.display === "none") {
+		if (radioValue != 0) {
 				x.style.display = "block";
 		} else {
 				x.style.display = "none";
 		}
-}
+	}
 			// When the user clicks on the button, scroll to the top of the document
 
 		$(function(){
@@ -1774,11 +1768,11 @@
 			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant" onclick="radioPlant()"><h5>ผลผลิตต่อไรของพืช</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
-					<li class="list-group-item"><input type="radio" name="plant" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
-					<li class="list-group-item"><input type="radio" name="plant" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font></li>
-					<li class="list-group-item"><input type="radio" name="plant" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
-					<li class="list-group-item"><input type="radio" name="plant" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font></li>
-					<li class="list-group-item"><input type="radio" name="plant" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" id="plantData"  value="1" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="2" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="3" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="4" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font></li>
+					<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="5" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
 				</ul>
 	</div>
 
@@ -1792,27 +1786,20 @@
 				<li class="list-group-item"><center><b>ความสูงจากระดับน้ำทะเล</b></center>
 					<div class="card-block" style="padding-top:5px;">
 						<input type="radio" name="high" value="point" onclick="elevation()" data-toggle="collapse" data-target="#high_level_1"/><font style="padding-left:15px;">แสดงข้อมูลในจุดที่ต้องการ</font><br/>
-						<input type="radio" name="high" value="area" data-toggle="collapse" onclick="elevationAverage()" data-target="#high_level_2"/><font style="padding-left:15px;">แสดงข้อมูลเฉลี่ยทั่วประเทศ</font>
-						<div id="high_level_1" class="panel-collapse collapse">ทำการนำ "คลิก" บนแผนที่เพื่อทราบความสูง</div>
-						<div id="high_level_2" class="panel-collapse collapse">
-							<button class="btn" style="background-color:#CC0000"></button><font style="padding-left:25px;">ความสูง > 1500</font><br/>
-							<button class="btn" style="background-color:#E65100"></button><font style="padding-left:25px;">ความสูง > 1000 - 1500</font><br/>
-							<button class="btn" style="background-color:#FFEB3B"></button><font style="padding-left:25px;">ความสูง > 500 - 1000</font><br/>
-							<button class="btn" style="background-color:#00FF00"></button><font style="padding-left:25px;">ความสูง > 100 - 500</font><br/>
-							<button class="btn" style="background-color:#388E3C"></button><font style="padding-left:25px;">ความสูง 0 - 100</font><br/>
-						</div>
-					</div>
-					<li class="list-group-item"><left><input type="radio" name="warether" onclick="sunlight()" data-toggle="collapse" data-target="#itemTemp"><font style="padding-left: 15px;">แสงแดด</font>
+						<div id="high_level_1" class="panel-collapse collapse">ทำการนำ "คลิก" บนแผนที่เพื่อตรวจสอบความสูง</div>
+		
 			</ul>
 		</div>
 
 		<button id="linkSearch" class="btn btn-warning btn-block"><h5><font color="White">ตรวจสอบพื้นที่ที่ต้องการทราบคุณสมบัติ</font></h5></button>
+		<!--
 		<button class="btn btn-warning btn-block" data-toggle="collapse" data-target="#itemtest"><h5><font color="White">test all</font></h5></button>
 		<div id="itemtest" class="panel-collapse collapse">
 			<ul class="list-group">
 				<button id="tableBT" style="background-color:white;" class="btn" onclick="toggle_table()"><h5>table ความสูงจากระดับน้ำทะเล</h5></button>
 			</ul>
 		</div>
+	-->
 </div>
 
 

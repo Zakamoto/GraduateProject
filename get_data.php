@@ -11,11 +11,89 @@ function get_dataAll(){
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
 
-if($data){
-    return $data;
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
 }
-else
-  return "ไม่พบข้อมูล";
+
+function get_chart_rubber(){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT Sum, Name FROM rubber");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
+}
+
+function get_chart_cassava(){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT Sum, Name FROM cassava");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
+}
+
+function get_chart_oilplam(){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT Sum, Name FROM oilplam");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
+}
+function get_chart_sugarcane(){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT Sum, Name FROM sugarcane");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
+}
+function get_chart_rice(){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT Sum, Name FROM ricepee");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
 }
 
 function get_dataSelect($y,$month,$date,$time){
@@ -34,11 +112,11 @@ function get_dataSelect($y,$month,$date,$time){
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
 
-if($data){
-    return $data;
-}
-else
-  return "ไม่พบข้อมูล";
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
 }
 
 

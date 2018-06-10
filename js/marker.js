@@ -1,23 +1,100 @@
 $(document).ready(function(){
-
   $("#Report").hide();
 //  $("#Report_temp").hide();
   $("#Report_moisture").hide();
   $("#table_test").hide();
   $("#area_result").hide();
+  //console.log(radioValue);
+  /*setInterval(function() 
+  { ObserveInputValue($('#plantData').val()); 
+  }, 100);
+  */
 
-
-    table_test(1);
+  var lastSelected = "0";
+    $(function () {
+        //if you have any radio selected by default
+        lastSelected = $('[name="plant"]:checked').val();
+        if (lastSelected = "1")
+        {
+          rice_chart();
+          table_rice(0);
+        }
+    });
+    $(document).on('click', '[name="plant"]', function () {
+        if (lastSelected != $(this).val() && typeof lastSelected != "undefined") {
+          //alert($(this).val());
+          if (lastSelected != "0" || lastSelected != "1") {
+            switch($(this).val()) {
+              case "1":
+                  rice_chart();
+                  table_rice(0);
+                  break;
+              case "4":
+                  rubber_chart();
+                  table_rubber(0);
+                  break;
+              case "5":
+                  cassava_chart();
+                  table_cassava(0);
+                  break;
+              case "2":
+                  sugarcane_chart();
+                  table_sugarcane(0);
+                  break;
+              case "3":
+                  oilpalm_chart();
+                  table_oilpalm(0);
+                  break;
+            }
+          }
+            //alert("radio box with value " + $('[name="plant"][value="' + lastSelected + '"]').val() + " was deselected");
+        }
+        lastSelected = $(this).val();
+    });
+  
+    //table_test(1);
     select_time_temp(1);
     select_time_mois(1);
     dropdown_table(5);
-    rice_chart();
+    
 
     function rice_chart(){
         $.post("./Chart/plant/rice_chart.php",function(result){
-          console.log(result);
+          console.log("rice chart");
           $("#chart_content").html(result);
         });
+    }
+
+    function rubber_chart(){
+      //console.log("runber_charat used");
+      $.post("./Chart/plant/rubber_chart.php",function(result){
+        console.log("chart rubber");
+        $("#chart_content").html(result);
+      });
+    }
+
+  function cassava_chart(){
+    //console.log(radioValue);
+    $.post("./Chart/plant/cassava_chart.php",function(result){
+      console.log("cassava chart");
+      $("#chart_content").html(result);
+    });
+  }
+
+  function oilpalm_chart(){
+    //console.log(radioValue);
+    $.post("./Chart/plant/oilpalm_chart.php",function(result){
+      console.log("oilpalm chart");
+      $("#chart_content").html(result);
+      });
+    }
+
+  function sugarcane_chart(){
+    //console.log(radioValue);
+    $.post("./Chart/plant/sugarcane_chart.php",function(result){
+      console.log("sugarcane chart");
+      $("#chart_content").html(result);
+      });
     }
 
 
@@ -65,6 +142,46 @@ $(document).ready(function(){
           function table_test(page){
             $.post("./set_data_table.php",{
               page:page,
+            },function(result){
+              $("#table_content").html(result);
+            });
+          }
+          function table_rice(page){
+            $.post("./set_data_table.php",{
+              page:page,
+              type: "rice",
+            },function(result){
+              $("#table_content").html(result);
+            });
+          }
+          function table_rubber(page){
+            $.post("./set_data_table.php",{
+              page:page,
+              type: "rubber",
+            },function(result){
+              $("#table_content").html(result);
+            });
+          }
+          function table_cassava(page){
+            $.post("./set_data_table.php",{
+              page:page,
+              type: "cassava",
+            },function(result){
+              $("#table_content").html(result);
+            });
+          }
+          function table_sugarcane(page){
+            $.post("./set_data_table.php",{
+              page:page,
+              type: "sugarcane",
+            },function(result){
+              $("#table_content").html(result);
+            });
+          }
+          function table_oilpalm(page){
+            $.post("./set_data_table.php",{
+              page:page,
+              type: "oilpalm",
             },function(result){
               $("#table_content").html(result);
             });

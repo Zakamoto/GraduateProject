@@ -26,7 +26,7 @@
         <?php for($i=$start;$i<sizeof($data);$i++){ ?>
             <tr>
               <td><?php echo $data[$i]['Name']; ?></td>
-              <td><?php echo $data[$i]['Year']; ?></td>
+              <td><?php echo $data[$i]['Sum']; ?></td>
             </tr>
       <?php } ?>
       </tbody>
