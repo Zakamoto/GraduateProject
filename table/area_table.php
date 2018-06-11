@@ -32,7 +32,7 @@ $plant[4] = "ปาล์ม";
       </thead>
 
       <tbody>
-        <?php for($i=0;$i<sizeof($data);$i++){ ?>
+        <?php for($i=0;$i<5;$i++){ ?>
             <tr>
               <td><?php echo $plant[$i]; ?></td>
               <td>พอใช้</td>

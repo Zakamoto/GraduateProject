@@ -13,7 +13,7 @@
           xAxis: {
               categories: [
                             <?php for($i=0;$i<sizeof($data);$i++){ ?>
-                              <?= json_encode($data[$i]['Name']); ?>,
+                              <?= json_encode($data[$i][0]['Name']); ?>,
                             <?php } ?>
                           ]
           },
@@ -29,7 +29,7 @@
               name: 'ตัน',
               data: [
                       <?php for($i=0;$i<sizeof($data);$i++){ ?>
-                        <?= $data[$i]['Sum']; ?>,
+                        <?= $data[$i][0]['Sum']; ?>,
                       <?php } ?>
                     ],
               marker: {

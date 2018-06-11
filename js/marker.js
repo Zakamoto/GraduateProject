@@ -17,7 +17,8 @@ $(document).ready(function(){
         if (lastSelected = "1")
         {
           rice_chart();
-          table_rice(0);
+          dropdown_table(8);
+          table_rice("0");
         }
     });
     $(document).on('click', '[name="plant"]', function () {
@@ -27,23 +28,28 @@ $(document).ready(function(){
             switch($(this).val()) {
               case "1":
                   rice_chart();
-                  table_rice(0);
+                  dropdown_table(8);
+                  table_rice("0");
                   break;
               case "4":
                   rubber_chart();
-                  table_rubber(0);
+                  dropdown_table(7);
+                  table_rubber("0");
                   break;
               case "5":
                   cassava_chart();
-                  table_cassava(0);
+                  dropdown_table(5);
+                  table_cassava("0");
                   break;
               case "2":
                   sugarcane_chart();
-                  table_sugarcane(0);
+                  dropdown_table(5);
+                  table_sugarcane("0");
                   break;
               case "3":
                   oilpalm_chart();
-                  table_oilpalm(0);
+                  dropdown_table(7);
+                  table_oilpalm("0");
                   break;
             }
           }
@@ -55,12 +61,13 @@ $(document).ready(function(){
     //table_test(1);
     select_time_temp(1);
     select_time_mois(1);
-    dropdown_table(5);
+    
     area_table();
 
 
     function rice_chart(){
         $.post("./Chart/plant/rice_chart.php",function(result){
+          console.log("rice chart");
           $("#chart_content").html(result);
         });
     }
@@ -141,8 +148,29 @@ $(document).ready(function(){
 
     $("#change_page1").change(function(){
       var page = $("#change_page1").val();
-      table_test(page);
-
+      //table_test(page);
+      switch (lastSelected) {
+        case "1": {
+          table_rice(page);
+          break;
+        }
+        case "4": {
+          table_rubber(page);
+          break;
+        }
+        case "5": {
+          table_cassava(page);
+          break;
+        }
+        case "2": {
+          table_sugarcane(page);
+          break;
+        }
+        case "3": {
+          table_oilpalm(page);
+          break;   
+        }
+      }
     });
           function table_test(page){
             $.post("./set_data_table.php",{
@@ -156,6 +184,7 @@ $(document).ready(function(){
               page:page,
               type: "rice",
             },function(result){
+              console.log("table rice");
               $("#table_content").html(result);
             });
           }
@@ -164,10 +193,12 @@ $(document).ready(function(){
               page:page,
               type: "rubber",
             },function(result){
+              console.log("table rubber");
               $("#table_content").html(result);
             });
           }
           function table_cassava(page){
+            console.log("table cassava");
             $.post("./set_data_table.php",{
               page:page,
               type: "cassava",
@@ -176,6 +207,7 @@ $(document).ready(function(){
             });
           }
           function table_sugarcane(page){
+            console.log("table sugarcane");
             $.post("./set_data_table.php",{
               page:page,
               type: "sugarcane",
@@ -184,6 +216,7 @@ $(document).ready(function(){
             });
           }
           function table_oilpalm(page){
+            console.log("table oilpalm");
             $.post("./set_data_table.php",{
               page:page,
               type: "oilpalm",

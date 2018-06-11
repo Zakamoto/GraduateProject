@@ -73,7 +73,9 @@
     border-radius: 10px; /* Rounded corners */
     font-size: 18px; /* Increase font size */
 		}
-
+		div.test {
+			overflow: auto;
+		}
 	</style>
 
 
@@ -157,6 +159,7 @@
 		var isCheckPalm = false;
 		var isCheckRubber = false;
 		var isCheckCassava = false;
+		var checkWeather = false;
 		var arrayAllWeather = [];
 		var arrayAllWeatherCase = [];
 		var arrayWarm = [];
@@ -165,8 +168,10 @@
 		var arrayRain = [];
 		var elevatorValue;
 		var getCurrentPosition;
+		var checkShowGeo = false;
 		var arrayTemperature = new Array(77);
 		let radioValue = 0;
+		var collapsePlant = false;
 		function initialize() { // ฟังก์ชันแสดงแผนที่
 			GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
 			// กำหนดจุดเริ่มต้นของแผนที่
@@ -250,10 +255,6 @@
 		function elevation() {
 			$("#high_level_2").hide();
 			$("#high_level_1").show();
-			if (isCheckEleAvg) {
-				layer.setMap(null);
-				isCheckEleAvg = false;
-			}
 			infowindow = new google.maps.InfoWindow({map: map});
 			var elevator = new google.maps.ElevationService;
 			map.addListener('click', function(event) {
@@ -427,8 +428,18 @@
 			}
 		}
 		function weatherBT(){
+			collapsePlant = false;
+			$("#itemPlant").hide();
+			if (checkRadioGeo) {
+			$("#itemArea").hide();
+			checkRadioGeo = false;
+			}
+			var x = document.getElementById("table_test");
+			x.style.display = "none";
 			toggle_weather();
 			Allweather();
+			this.checked = false;
+			console.log(checkRadioGeo);
 		}
 		function Allweather(){
 			$("#itemmoisture").hide();
@@ -436,7 +447,7 @@
 			if (checkRadioPlant || checkRadioWeather || isCheckEleAvg) {
 				layer.setMap(null);
 			}
-			if (arrayAllWeather.length == 0)
+			if (!checkWeather)
 			{
 				$.ajax({
 						url: 'getxml.php',   // เรียกไฟล์ชือ getxml.php
@@ -477,12 +488,14 @@
 								},
 								type: 'GET'
 							});
+				checkWeather = true;
 			} else {
 				for (var i = 0; i < arrayAllWeather.length; i++) {
 					arrayAllWeather[i].setMap(null);
 				}
 				arrayAllWeather = [];
 				arrayAllWeatherCase = [];
+				checkWeather = false;
 			}
 			checkRadioWeather = false;
 		}
@@ -1351,15 +1364,35 @@
 			checkRadioWeather = true;
 		}
 		function radioPlant() {
-			radioValue = 0;
-			var x = document.getElementById("table_test");
-			if (x.style.display = "block")
-				x.style.display = "none";
+			if (checkWeather)
+			for (var i = 0; i < arrayAllWeather.length; i++) {
+					arrayAllWeather[i].setMap(null);
+			}
+			checkWeather = false;
 			var ele = document.getElementsByName("plant");
 			for(var i=0;i<ele.length;i++)
 				ele[i].checked = false;
+			radioValue = 0;
+			if (checkRadioGeo) {
+			$("#itemArea").hide();
+			checkRadioGeo = false;
+			}
+			var y = document.getElementById("Report");
+			y.style.display = "none";
+			var x = document.getElementById("table_test");
+			if (x.style.display = "block")
+				x.style.display = "none";
+			if (collapsePlant) {
+				$("#itemPlant").hide();
+				collapsePlant = false;
+			} else {
+				$("#itemPlant").show();
+				collapsePlant = true;
+			}
+			console.log(checkRadioGeo);
 		}
 		function radioWeather() {
+			$("#itemPlant").hide();
 			if (checkRadioWeather) {
 				layer.setMap(null);
 			}
@@ -1376,9 +1409,30 @@
 				ele[i].checked = false;
 		}
 		function radioGeo() {
-			if (isCheckEleAvg) {
+			if (checkWeather)
+			for (var i = 0; i < arrayAllWeather.length; i++) {
+					arrayAllWeather[i].setMap(null);
+			}
+			if (!checkRadioGeo) {
+			$("#itemArea").show();
+			checkRadioGeo = true;
+			} else {
+			$("#itemArea").hide();
+			checkRadioGeo = false;	
+			}
+			console.log(checkRadioGeo);
+			var y = document.getElementById("Report");
+			y.style.display = "none";
+			checkWeather = false;
+			collapsePlant = false;
+			$("#itemPlant").hide();
+			if (checkRadioPlant || checkRadioWeather || isCheckEleAvg) {
 				layer.setMap(null);
 			}
+			if (arrayAllWeather.length > 0)
+				layer.setMap(null);
+			var x = document.getElementById("table_test");
+			x.style.display = "none";
 			isCheckEleAvg = false;
 			var ele = document.getElementsByName("high");
 			for(var i=0;i<ele.length;i++)
@@ -1430,8 +1484,6 @@
 					});
 				layer.setMap(map);
 		}
-
-
 		function get_info(){
 			console.log(55555);
 			toggle_area_result();
@@ -1524,12 +1576,6 @@
 					});
 
 		}
-
-
-
-
-
-
 		function get_info2(){
 			console.log(44444);
 			toggle_area_result();
@@ -1622,11 +1668,6 @@
 					});
 
 		}
-
-
-
-
-
 		function codeAddress() {
 		    var address = document.getElementById("search").value;
 		    geocoder.geocode( { 'address': address}, function(results, status) {
@@ -1685,6 +1726,8 @@
 		$(function(){
 
 			$("#linkSearch").click(function(e){
+				$("#itemPlant").hide();
+				$("#high_level_1").hide();
 				e.preventDefault();
 				var link = "search.html";
 				$.get(link, function(res){
@@ -1741,7 +1784,7 @@
 
 <body>
 
-
+<div class="test">
 <!--navbar-->
 	<nav class="navbar navbar-dark bg-primary"></nav>
 	<nav class="navbar navbar-dark bg-primary">
@@ -1762,7 +1805,7 @@
 
 	<!--start menu option-->
   <div class="col-md-3" id="showDDD"></br>
-			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant" onclick="radioPlant()"><h5>ผลผลิตต่อไรของพืช</h5></button>
+			<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant" onclick="radioPlant()"><h5>ผลผลิตของพืช</h5></button>
 			<div id="itemPlant" class="panel-collapse collapse">
 				<ul class="list-group">
 					<li class="list-group-item"><input type="radio" name="plant" id="plantData"  value="1" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
@@ -1803,7 +1846,9 @@
 <div id="table_test">
 	<div id="chart_content"></div>
 	<div id="table_content"></div>
-	<select id="change_page1" class="form-control" style="max-width: 120px;"></select>
+  <center>
+		<select id="change_page1" class="form-control" style="max-width: 120px;"></select>
+  </center>		
 </div>
 
 
@@ -1813,11 +1858,13 @@
 
 
 <div id="Report">
-
+<right>
 	<select id="option_weather">
 		<option value=1>อุณหภูมิ</option>
 		<option value=2>ความชื้น</option>
 	</select>
+</right>
+	
 
 <!--End menu option-->
 <div id="Report_temp" style="clear:both;">
@@ -1828,9 +1875,7 @@
 												<center>
 													<select class="form-control" style="max-width: 120px;" id="select_temp_allyear">
 														<option value="0">ทั้งหมด</option>
-														<option value="1">2557</option>
-														<option value="2">2558</option>
-														<option value="3">2559</option>
+														<option value="3">2561</option>
 													</select>
 												</center>
 										</div>
@@ -1855,9 +1900,7 @@
 														<option value="ธันวาคม">ธันวาคม</option>
 													</select>
 													<select class="form-control" style="max-width: 120px;" id="select_temp_year">
-								            <option value="0">2557</option>
-								            <option value="1">2558</option>
-								            <option value="2">2559</option>
+								            <option value="2">2561</option>
 								          </select>
 												</center>
 											</div>
@@ -1890,9 +1933,7 @@
 												<center>
 													<select class="form-control" style="max-width: 120px;" id="select_moisture_allyear">
 														<option value="0">ทั้งหมด</option>
-														<option value="1">2557</option>
-														<option value="2">2558</option>
-														<option value="3">2559</option>
+														<option value="3">2561</option>
 													</select>
 												</center>
 										</div>
@@ -1918,9 +1959,7 @@
 													<option value="ธันวาคม">ธันวาคม</option>
 												</select>
 												<select class="form-control" style="max-width: 120px;" id="select_moisture_year">
-							            <option value="0">2557</option>
-							            <option value="1">2558</option>
-							            <option value="2">2559</option>
+							            <option value="2">2561</option>
 							          </select>
 											</center>
 										</div>
@@ -2010,6 +2049,6 @@
 <script src="js/marker.js"></script>
 
 <!--javascript-->
-
+</div>
 </body>
 </html>
