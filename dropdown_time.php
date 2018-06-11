@@ -40,14 +40,10 @@ if($type==1){?>
       <option value="<?= $i ?>"><?php echo $i; ?></option>
     <?php }
    }
-} else { ?>
-<option value="0">กรุณาเลือกเวลา</option>
-<option value="1">1.00 น</option>
-<option value="2">4.00 น</option>
-<option value="3">7.00 น</option>
-<option value="4">10.00 น</option>
-<option value="5">13.00 น</option>
-<option value="6">16.00 น</option>
-<option value="7">19.00 น</option>
-<option value="8">22.00 น</option>
-<?php } ?>
+} else {
+  include "get_data.php";
+  $data = get_place();
+  for($i=0;$i<sizeof($data);$i++) { ?>
+<option value="<?= $i ?>"><?php echo $data[$i]['Name']; ?></option>
+<?php }
+} ?>
