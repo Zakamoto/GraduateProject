@@ -43,15 +43,15 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
   $year3 = $_POST['year3'];
   $month3 = $_POST['month3'];
   $date3 = $_POST['date3'];
-  $time3 = $_POST['time3'];
 
-  $data = get_dataSelect($year3,$month3,$date3,$time3);
+  $data = get_dataSelect($year3,$month3,$date3);
 
   if($data)
-    include 'chart/moisture/chart_moisture_select.php';
-  else
-    echo "ไม่พบข้อมูล";
-
+    {include 'chart/moisture/chart_moisture_select.php';}
+  else{
+      $picture = "water";
+      include 'img.php';
+    }
 }
 
 else{    //ข้อมูลแผนภูมิรายเดือน
