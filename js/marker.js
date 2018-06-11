@@ -11,6 +11,7 @@ $(document).ready(function(){
   */
   select_time_temp(1);
   select_time_mois(1);
+  get_place();
   set_chart_moisture3hour();
   set_chart_temp3hour();
   area_table();
@@ -261,6 +262,18 @@ $("#change_page1").change(function(){
         });
       });
 
+
+
+      function get_place(){
+        $.post("./dropdown_time.php",{
+          type:4,
+        },
+        function(result){
+          console.log(result);
+          $("#select_place_temp3hour").html(result);
+          $("#select_place_mois3hour").html(result);
+        });
+      }
 
 
       function select_time_temp(settime){
