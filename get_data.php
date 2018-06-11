@@ -40,10 +40,10 @@ function get_chart_rubber(){
         $add = array($data[$index]);
         array_push($dataSort, $add);
         $data[$index]['Name'] = $data[$loopCount]['Name'];
-        $data[$index]['Sum'] = $data[$loopCount]['Sum']; 
+        $data[$index]['Sum'] = $data[$loopCount]['Sum'];
         } else {
           $add = array($data[$loopCount]);
-          array_push($dataSort, $add);  
+          array_push($dataSort, $add);
         }
     }
   $data = $dataSort;
@@ -75,10 +75,10 @@ function get_chart_cassava(){
         $add = array($data[$index]);
         array_push($dataSort, $add);
         $data[$index]['Name'] = $data[$loopCount]['Name'];
-        $data[$index]['Sum'] = $data[$loopCount]['Sum']; 
+        $data[$index]['Sum'] = $data[$loopCount]['Sum'];
         } else {
           $add = array($data[$loopCount]);
-          array_push($dataSort, $add);  
+          array_push($dataSort, $add);
         }
     }
   $data = $dataSort;
@@ -110,10 +110,10 @@ function get_chart_oilplam(){
         $add = array($data[$index]);
         array_push($dataSort, $add);
         $data[$index]['Name'] = $data[$loopCount]['Name'];
-        $data[$index]['Sum'] = $data[$loopCount]['Sum']; 
+        $data[$index]['Sum'] = $data[$loopCount]['Sum'];
         } else {
           $add = array($data[$loopCount]);
-          array_push($dataSort, $add);  
+          array_push($dataSort, $add);
         }
     }
   $data = $dataSort;
@@ -145,10 +145,10 @@ function get_chart_sugarcane(){
         $add = array($data[$index]);
         array_push($dataSort, $add);
         $data[$index]['Name'] = $data[$loopCount]['Name'];
-        $data[$index]['Sum'] = $data[$loopCount]['Sum']; 
+        $data[$index]['Sum'] = $data[$loopCount]['Sum'];
         } else {
           $add = array($data[$loopCount]);
-          array_push($dataSort, $add);  
+          array_push($dataSort, $add);
         }
     }
   $data = $dataSort;
@@ -180,10 +180,10 @@ function get_chart_rice(){
         $add = array($data[$index]);
         array_push($dataSort, $add);
         $data[$index]['Name'] = $data[$loopCount]['Name'];
-        $data[$index]['Sum'] = $data[$loopCount]['Sum']; 
+        $data[$index]['Sum'] = $data[$loopCount]['Sum'];
         } else {
           $add = array($data[$loopCount]);
-          array_push($dataSort, $add);  
+          array_push($dataSort, $add);
         }
     }
   $data = $dataSort;
@@ -194,7 +194,20 @@ function get_chart_rice(){
     return "ไม่พบข้อมูล";
 }
 
-function get_dataSelect($y,$month,$date,$time){
+function get_place(){
+  $con = conDB();
+
+  $query = $con->query("SELECT * FROM place");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return false;
+}
+
+function get_dataSelect($y,$month,$date){
 
   if($y==1){$year=2557;}
   else if($y==2){$year=2558;}
@@ -206,7 +219,7 @@ function get_dataSelect($y,$month,$date,$time){
   $con = conDB();
 
   //ดึงข้อมูล อุณหภูมิ + ความชื้น
-  $query = $con->query("SELECT TC, RH, place.Name FROM data,place WHERE data.Place=place.Id AND Year=$year AND Month='$month' AND Date=$date AND Time=$time");
+  $query = $con->query("SELECT TC, RH, place.Name FROM data,place WHERE data.Place=place.Id AND Year=$year AND Month='$month' AND Date=$date");
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -214,7 +227,7 @@ function get_dataSelect($y,$month,$date,$time){
       return $data;
   }
   else
-    return "ไม่พบข้อมูล";
+    return false;
 }
 
 
