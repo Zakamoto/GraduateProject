@@ -382,7 +382,10 @@ $("#change_page1").change(function(){
           function(result){
             $("#select_month_mois3hour").html(result);
           });
-          $.post("./Chart/temp/chart_temp_allyear.php",function(result){
+          $.post("./set_data_moisturechart.php",{
+            type:1,
+            year:0,
+          },function(result){
             $("#chart_moisture_year").html(result);
           });
         }
@@ -397,9 +400,11 @@ $("#change_page1").change(function(){
             $("#select_date_mois3hour").html(result);
           });
           $.post("./set_data_moisturechart.php",{
-            type:1,
+            type:3,
             year:year,
+            month:month,
           },function(result){
+            console.log(result);
             $("#chart_moisture_month").html(result);
           });
         }

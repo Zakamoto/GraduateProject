@@ -275,6 +275,23 @@
 							infowindow.setPosition(my_Point);
 							address_info = results[1].formatted_address;
 							//$("#place_value").html(results[1].formatted_address + "ระดับความสูงจากน้ำทะเล " + results[0].elevation + " เมตร" );
+							var str = address_info;
+							var cut1 = 0;
+							var cut2 = 0;
+							var counter = 0;
+							for (var i = 0; i < str.length; i++) {
+								if (str.charAt(i) == ' ' ) {
+									counter++;
+									if (counter == 4) {
+										cut1 = (i+1);
+									}
+									if (counter == 5) {
+										cut2 = (i);
+										break;
+									}
+								}
+							}
+							console.log((str.slice(cut1, cut2)));
 						}
 				  } else {
 					  // กรณีไม่มีข้อมูล
@@ -1932,20 +1949,20 @@
 <!--End menu option-->
 <div id="Report_temp" class="tabcontent">
 
-					<div class="row">
-						<div class="col-md-3" style="background-color:#D5F5E3;">
-								<center><select class="form-control" style="max-width: 150px;" id="select_year_temp3hour"></select></center>
-						</div>
-						<div class="col-md-3" style="background-color:#ABEBC6;">
-							<center><select class="form-control" style="max-width: 150px;" id="select_month_temp3hour"></select></center>
-						</div>
-						<div class="col-md-3" style="background-color:#82E0AA;">
-							<center><select class="form-control" style="max-width: 150px;" id="select_date_temp3hour"></select>	</center>
-						</div>
-						<div class="col-md-3" style="background-color:#A9CCE3;">
-							<center><select class="form-control" style="max-width: 150px;" id="select_place_mois3hour"></select>	</center>
-						</div>
-					</div>
+	<div class="row">
+		<div class="col-md-3" style="background-color:#D5F5E3;">
+				<center><select class="form-control" style="max-width: 150px;" id="select_year_temp3hour"></select></center>
+		</div>
+		<div class="col-md-3" style="background-color:#ABEBC6;">
+			<center><select class="form-control" style="max-width: 150px;" id="select_month_temp3hour"></select></center>
+		</div>
+		<div class="col-md-3" style="background-color:#82E0AA;">
+			<center><select class="form-control" style="max-width: 150px;" id="select_date_temp3hour"></select>	</center>
+		</div>
+		<div class="col-md-3" style="background-color:#1ABC9C;">
+			<center><select class="form-control" style="max-width: 150px;" id="select_place_temp3hour"></select>	</center>
+		</div>
+	</div>
 
 			<!--แผนภูมิแสดงอุณหภูมิเป็นปี-->
 										<div id="chart_temp_year"></div>
@@ -1960,20 +1977,20 @@
 
 <div id="Report_moisture" class="tabcontent">
 
-								<div class="row">
-									<div class="col-md-3" style="background-color:#EAF2F8;">
-										<center><select class="form-control" style="max-width: 150px;" id="select_year_mois3hour"></select></center>
-									</div>
-									<div class="col-md-3" style="background-color:#D4E6F1;">
-										<center><select class="form-control" style="max-width: 150px;" id="select_month_mois3hour"></select></center>
-									</div>
-									<div class="col-md-3" style="background-color:#A9CCE3;">
-										<center><select class="form-control" style="max-width: 150px;" id="select_date_mois3hour"></select>	</center>
-									</div>
-									<div class="col-md-3" style="background-color:#A9CCE3;">
-										<center><select class="form-control" style="max-width: 150px;" id="select_place_mois3hour"></select>	</center>
-									</div>
-								</div>
+	<div class="row">
+		<div class="col-md-3" style="background-color:#EAF2F8;">
+			<center><select class="form-control" style="max-width: 150px;" id="select_year_mois3hour"></select></center>
+		</div>
+		<div class="col-md-3" style="background-color:#D4E6F1;">
+			<center><select class="form-control" style="max-width: 150px;" id="select_month_mois3hour"></select></center>
+		</div>
+		<div class="col-md-3" style="background-color:#A9CCE3;">
+			<center><select class="form-control" style="max-width: 150px;" id="select_date_mois3hour"></select>	</center>
+		</div>
+		<div class="col-md-3" style="background-color:#2ECC71;">
+			<center><select class="form-control" style="max-width: 150px;" id="select_place_mois3hour"></select>	</center>
+		</div>
+	</div>
 
 			<!--แผนภูมิแสดงความชื้นเป็นปี-->
 										<div id="chart_moisture_year"></div>
