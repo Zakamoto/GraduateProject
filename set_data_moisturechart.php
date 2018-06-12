@@ -43,8 +43,9 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
   $year3 = $_POST['year3'];
   $month3 = $_POST['month3'];
   $date3 = $_POST['date3'];
+  $place = $_POST['place'];
 
-  $data = get_dataSelect($year3,$month3,$date3);
+  $data = get_dataSelect($year3,$month3,$date3,$place);
 
   if($data)
     {include 'chart/moisture/chart_moisture_select.php';}
