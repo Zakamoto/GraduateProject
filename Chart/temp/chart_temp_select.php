@@ -27,7 +27,7 @@
                       <?php 
                       $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
                       for ($i = 0; $i < sizeof($data); $i++) {
-                        $dataSort[$data[$i]['Time']] = $data[$i]['TC'];
+                        $dataSort[$data[$i]['Time']] = $data[$i]['RH'];
                       }
                         for($i=0;$i<24;$i++){ ?>
                               <?= $dataSort[$i] ?>,

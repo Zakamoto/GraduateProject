@@ -60,16 +60,17 @@ else{    //ข้อมูลแผนภูมิรายเดือน
 
   $year = $_POST['year'];
   $month = $_POST['month'];
+  $place = $_POST['place'];
 
   $date_in_month = get_date_of_month($month);
+  $data = get_month_place($place,$month);
 
-  if($year == 0)
-  $data = [1,2,3,4,5,6,7,8,9,10,11,12,13];
-  else if($year == 1)
-  $data = [13,12,11,10,9,8,7,6,5,4,3,2,1];
-  else
-  $data = [10,10,10,10,10,10,10,10,10,10,10,10];
-
-  include 'chart/temp/chart_temp_month.php';
+  if($data)
+    {include 'chart/temp/chart_temp_month.php';}
+  else{
+    $picture = "temp";
+    include 'img.php';
+  }
+  
 }
  ?>
