@@ -65,6 +65,7 @@ else{    //ข้อมูลแผนภูมิรายเดือน
   $date_in_month = get_date_of_month($month);
   $data = get_month_place($place,$month);
 
+<<<<<<< HEAD
   if($data)
     {include 'chart/temp/chart_temp_month.php';}
   else{
@@ -72,5 +73,8 @@ else{    //ข้อมูลแผนภูมิรายเดือน
     include 'img.php';
   }
   
+=======
+  include 'chart/temp/chart_temp_month.php';
+>>>>>>> afffbd80ec73d986e1ab8c59723939a100838195
 }
  ?>
