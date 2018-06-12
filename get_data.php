@@ -290,6 +290,19 @@ function get_place(){
     return false;
 }
 
+function get_data_area($place){
+  $con = conDB();
+
+  $query = $con->query("SELECT * FROM calarea WHERE Name='$place'");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return false;
+}
+
 function get_dataSelect($y,$month,$date,$place){
 
   if($y==1){$year=2557;}
