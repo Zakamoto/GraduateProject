@@ -30,13 +30,21 @@ Highcharts.chart('chart_month', {
 
   yAxis: {
       title: {
+<<<<<<< HEAD
           text: 'เซลเซียส'
+=======
+          text: 'องศา/เซลเซียส'
+>>>>>>> 64c37478d1ac14610adba25d3b2791224e1f184e
       }
   },
   series: [
   {
       type: 'column',
+<<<<<<< HEAD
       name: 'อุณหภูมิ',
+=======
+      name: 'วันที่',
+>>>>>>> 64c37478d1ac14610adba25d3b2791224e1f184e
       data: [
           <?php 
             if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
