@@ -43,7 +43,9 @@ if($type==1){?>
 } else {
   include "get_data.php";
   $data = get_place();
-  for($i=0;$i<sizeof($data);$i++) { ?>
-<option value="<?= $i ?>"><?php echo $data[$i]['Name']; ?></option>
+?>
+<option value="0">กรุณาเลือกจังหวัด</option>
+ <?php for($i=0;$i<sizeof($data);$i++) { ?>
+<option value="<?= ($i+1) ?>"><?php echo $data[$i]['Name']; ?></option>
 <?php }
 } ?>

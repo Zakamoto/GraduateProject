@@ -15,7 +15,42 @@ function get_dataAll(){
       return $data;
   }
   else
+    return false;
+}
+
+function get_year_place($place){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  if($place != 0)
+  $query = $con->query("SELECT TC,Month FROM data WHERE data.Place='$place' AND data.Year=2561");
+  else
+  $query = $con->query("SELECT TC,Month FROM data WHERE data.Year=2561");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+  if($data){
+      return $data;
+  }
+  else
     return "ไม่พบข้อมูล";
+}
+
+function get_date_of_month($month){
+
+  if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
+    $data=31;
+  else if($month==2)
+    $data=28;
+  else
+    $data=30;
+
+
+  if($data){
+      return $data;
+  }
+  else
+    return false;
 }
 
 function get_chart_rubber(){
@@ -207,7 +242,7 @@ function get_place(){
     return false;
 }
 
-function get_dataSelect($y,$month,$date){
+function get_dataSelect($y,$month,$date,$place){
 
   if($y==1){$year=2557;}
   else if($y==2){$year=2558;}
@@ -219,7 +254,7 @@ function get_dataSelect($y,$month,$date){
   $con = conDB();
 
   //ดึงข้อมูล อุณหภูมิ + ความชื้น
-  $query = $con->query("SELECT TC, RH, place.Name FROM data,place WHERE data.Place=place.Id AND Year=$year AND Month='$month' AND Date=$date");
+  $query = $con->query("SELECT TC, Time FROM data WHERE data.Place=$place AND Year=$year AND Month='$month' AND Date=$date");
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
 

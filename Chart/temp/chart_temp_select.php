@@ -8,8 +8,8 @@
           },
           xAxis: {
               categories: [
-                            <?php for($i=0;$i<sizeof($data);$i++){ ?>
-                              <?= json_encode($data[$i]['Name']); ?>,
+                            <?php for($i=0;$i<24;$i++){ ?>
+                              <?= $i ?>,
                             <?php } ?>
                           ]
           },
@@ -24,9 +24,14 @@
               type: 'spline',
               name: 'อุณหภูมิ',
               data: [
-                      <?php for($i=0;$i<sizeof($data);$i++){ ?>
-                        <?= $data[$i]['TC']; ?>,
-                      <?php } ?>
+                      <?php 
+                      $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+                      for ($i = 0; $i < sizeof($data); $i++) {
+                        $dataSort[$data[$i]['Time']] = $data[$i]['TC'];
+                      }
+                        for($i=0;$i<24;$i++){ ?>
+                              <?= $dataSort[$i] ?>,
+                        <?php } ?>
                     ],
               marker: {
                   lineWidth: 2,

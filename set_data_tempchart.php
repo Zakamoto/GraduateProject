@@ -43,8 +43,9 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
   $year3 = $_POST['year3'];
   $month3 = $_POST['month3'];
   $date3 = $_POST['date3'];
+  $place3 = $_POST['place'];
 
-  $data = get_dataSelect($year3,$month3,$date3);
+  $data = get_dataSelect($year3,$month3,$date3,$place3);
 
   if($data)
     {include 'Chart/temp/chart_temp_select.php';}
@@ -56,8 +57,12 @@ else if($type==100){          //ลองใส่ข้อมูลจริง
 }
 
 else{    //ข้อมูลแผนภูมิรายเดือน
+
   $year = $_POST['year'];
   $month = $_POST['month'];
+
+  $date_in_month = get_date_of_month($month);
+
   if($year == 0)
   $data = [1,2,3,4,5,6,7,8,9,10,11,12,13];
   else if($year == 1)

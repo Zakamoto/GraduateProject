@@ -150,6 +150,19 @@ $("#change_page1").change(function(){
     }
   }
 });
+
+$("#select_place_temp3hour").change(function(){
+  var place = $("#select_place_temp3hour").val();
+  if (place != 0) {
+  $.post("./Chart/temp/chart_temp_allyear.php",{
+    place:place,
+  },function(result){
+    console.log(result);
+    $("#chart_temp_year").empty();
+    $("#chart_temp_year").html(result);
+  });
+}
+});
           function table_test(page){
             $.post("./set_data_table.php",{
               page:page,
@@ -251,12 +264,15 @@ $("#change_page1").change(function(){
         var year3 = $("#select_year_temp3hour").val();
         var month3 = $("#select_month_temp3hour").val();
         var date3 = $("#select_date_temp3hour").val();
+        var place = $("#select_place_temp3hour").val();
         $.post("set_data_tempchart.php",{
           type:100,
           year3: year3,
           month3: month3,
           date3: date3,
+          place:place,
         },function(result){
+          console.log(result);
           $("#chart_temp_3hour").html(result);
 
         });
@@ -269,7 +285,6 @@ $("#change_page1").change(function(){
           type:4,
         },
         function(result){
-          console.log(result);
           $("#select_place_temp3hour").html(result);
           $("#select_place_mois3hour").html(result);
         });
@@ -292,8 +307,11 @@ $("#change_page1").change(function(){
           function(result){
             $("#select_month_temp3hour").html(result);
           });
-          $.post("./Chart/temp/chart_temp_allyear.php",function(result){
-            $("#chart_temp_year").html(result);
+          $.post("./Chart/temp/chart_temp_allyear.php",{
+            place:0,
+          }
+          ,function(result){
+            $("#chart_temp_year").html(result);console.log(result);
           });
         }
         else {    //เลือกวันที่มีจำนวนตรงกับเดือน

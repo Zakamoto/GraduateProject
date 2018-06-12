@@ -1,58 +1,44 @@
-
 <center><div id="chart_year" style="width:1400px;"></div></center>
-
+<?php
+include "../../get_data.php";
+$place = $_POST['place'];
+$data = get_year_place($place);
+?>
 <script type="text/javascript">
 Highcharts.chart('chart_year', {
   title: {
       text: 'กราฟรวมสรุปรายปี'
   },
   xAxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+      categories: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม'
+      ,'มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พศจิกายน','ธันวาคม']
   },
 
   yAxis: {
       title: {
-          text: 'ชั่โมง'
+          text: 'องศา'
       }
-  },
-  labels: {
-      items: [{
-          html: 'จำนวน ชั่วโมงทั้งหมด',
-          style: {
-              left: '50px',
-              top: '18px',
-              color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-          }
-      }]
   },
   series: [
   {
-      type: 'spline',
+      type: 'column',
       name: 'เฉลี่ยปี 2557',
-      data: [1,2,3,4,5,6,7,8,9,10,11,12,13],
+      data: [
+        <?php
+            for ($i = 1,$sum = 0; $i <= 12; $i++,$sum = 0) {
+                for ($x= 0; $x < sizeof($data);$x++) {
+                    if ($data[$x]['Month'] == $i)
+                    $sum += $data[$x]['TC'];
+                }
+                ?>
+                <?= $sum; ?>,
+        <?php
+            }
+        ?>
+      ],
       marker: {
           lineWidth: 2,
           lineColor: Highcharts.getOptions().colors[1],
-          fillColor: 'white'
-      }
-  },
-  {
-      type: 'spline',
-      name: 'เฉลี่ยปี 2558',
-      data: [2,3,4,5,6,7,8,9,10,11,12,13,14],
-      marker: {
-          lineWidth: 2,
-          lineColor: Highcharts.getOptions().colors[2],
-          fillColor: 'white'
-      }
-  },
-  {
-      type: 'spline',
-      name: 'เฉลี่ยปี 2559',
-      data: [3,4,5,6,7,8,9,10,11,12,13,14,15],
-      marker: {
-          lineWidth: 2,
-          lineColor: Highcharts.getOptions().colors[3],
           fillColor: 'white'
       }
   }]

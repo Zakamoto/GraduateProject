@@ -1,29 +1,37 @@
 
 <center><div id="chart_month" style="width:1400px;"></div></center>
-
 <script type="text/javascript">
+
+<?php
+
+if($month==1){$nameM="มกราคม";}
+else if($month==2){$nameM="กุมภาพันธ์";}
+else if($month==3){$nameM="มีนาคม";}
+else if($month==4){$nameM="เมษายน";}
+else if($month==5){$nameM="พฤษภาคม";}
+else if($month==6){$nameM="มิถุนายน";}
+else if($month==7){$nameM="กรกฎาคม";}
+else if($month==8){$nameM="สิงหาคม";}
+else if($month==9){$nameM="กันยายน";}
+else if($month==10){$nameM="ตุลาคม";}
+else if($month==11){$nameM="พฤศจิกายน";}
+else{$nameM="ธันวาคม";}
+
+?>
+
+
 Highcharts.chart('chart_month', {
   title: {
-      text: 'กราฟรวมสรุปรายเดือน <?php echo $month; ?>'
+      text: 'กราฟรวมสรุปรายเดือน <?php echo $nameM; ?>'
   },
   xAxis: {
-      categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+      categories: [<?php for($i=1;$i<=$date_in_month;$i++){ ?><?=$i?>,<?php }?>]
   },
 
   yAxis: {
       title: {
           text: 'ชั่วโมง'
       }
-  },
-  labels: {
-      items: [{
-          html: 'จำนวน ชั่วโมงทั้งหมด',
-          style: {
-              left: '50px',
-              top: '18px',
-              color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
-          }
-      }]
   },
   series: [
   {
