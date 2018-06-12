@@ -325,8 +325,9 @@ $("#change_page1").change(function(){
           function(result){
             $("#select_month_temp3hour").html(result);
           });
+          var place = $("#select_place_temp3hour").val();
           $.post("./Chart/temp/chart_temp_allyear.php",{
-            place:0,
+            place:place,
           }
           ,function(result){
             $("#chart_temp_year").html(result);console.log(result);
@@ -335,6 +336,7 @@ $("#change_page1").change(function(){
         else {    //เลือกวันที่มีจำนวนตรงกับเดือน
           var year = $("#select_year_temp3hour").val();
           var month = $("#select_month_temp3hour").val();
+          var place = $("#select_place_temp3hour").val();
           $.post("./dropdown_time.php",{
             type:3,
             month:month,
@@ -346,6 +348,7 @@ $("#change_page1").change(function(){
             type:2,
             year:year,
             month:month,
+            place:place,
           },function(result){
             $("#chart_temp_month").html(result);
           });
@@ -420,9 +423,9 @@ $("#change_page1").change(function(){
           function(result){
             $("#select_month_mois3hour").html(result);
           });
-          $.post("./set_data_moisturechart.php",{
-            type:1,
-            year:0,
+          var place = $("#select_place_mois3hour").val();
+          $.post("./Chart/temp/chart_temp_allyear.php",{
+            place:place,
           },function(result){
             $("#chart_moisture_year").html(result);
           });
@@ -430,9 +433,11 @@ $("#change_page1").change(function(){
         else {    //เลือกวันที่มีจำนวนตรงกับเดือน
           var year = $("#select_year_mois3hour").val();
           var month = $("#select_month_mois3hour").val();
+          var place = $("#select_place_mois3hour").val();
           $.post("./dropdown_time.php",{
             type:3,
             month:month,
+            place:place,
           },
           function(result){
             $("#select_date_mois3hour").html(result);
@@ -441,6 +446,7 @@ $("#change_page1").change(function(){
             type:3,
             year:year,
             month:month,
+            place:place,
           },function(result){
             console.log(result);
             $("#chart_moisture_month").html(result);

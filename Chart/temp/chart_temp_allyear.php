@@ -22,7 +22,7 @@ Highcharts.chart('chart_year', {
   series: [
   {
       type: 'column',
-      name: 'เฉลี่ยปี 2557',
+      name: 'เฉลี่ยปี 2561',
       data: [
         <?php
             for ($i = 1,$sum = 0; $i <= 12; $i++,$sum = 0) {
