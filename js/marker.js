@@ -335,6 +335,7 @@ $("#change_page1").change(function(){
         else {    //เลือกวันที่มีจำนวนตรงกับเดือน
           var year = $("#select_year_temp3hour").val();
           var month = $("#select_month_temp3hour").val();
+          var place = $("#select_place_temp3hour").val();
           $.post("./dropdown_time.php",{
             type:3,
             month:month,
@@ -346,6 +347,7 @@ $("#change_page1").change(function(){
             type:2,
             year:year,
             month:month,
+            place:place,
           },function(result){
             $("#chart_temp_month").html(result);
           });

@@ -30,17 +30,37 @@ Highcharts.chart('chart_month', {
 
   yAxis: {
       title: {
-          text: 'ชั่วโมง'
+          text: 'องศา/เซลเซียส'
       }
   },
   series: [
   {
-      type: 'spline',
-      name: 'อุณหภูมิ',
-      data: [<?= $data[0]; ?>,<?= $data[1]; ?>,<?= $data[2]; ?>,
-      <?= $data[3]; ?>,<?= $data[4]; ?>,<?= $data[5]; ?>,
-      <?= $data[6]; ?>,<?= $data[7]; ?>,<?= $data[8]; ?>,
-      <?= $data[9]; ?>,<?= $data[10]; ?>,<?= $data[11]; ?>,
+      type: 'column',
+      name: 'วันที่',
+      data: [
+          <?php 
+            if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
+            $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+            else if($month==2)
+            $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+            else
+            $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+            
+            for ($i = 0; $i < sizeof($data); $i++) {
+                $dataSort[$data[$i]['Date']] = $data[$i]['TC'];
+            }
+            if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
+                for($i=0;$i<31;$i++){ ?>
+                    <?= $dataSort[$i] ?>,
+                <?php } 
+            else if($month==2)
+                for($i=0;$i<28;$i++){ ?>
+                    <?= $dataSort[$i] ?>,
+                <?php }
+            else
+                for($i=0;$i<30;$i++){ ?>
+                    <?= $dataSort[$i] ?>,
+                <?php } ?>
       ],
       marker: {
           lineWidth: 2,

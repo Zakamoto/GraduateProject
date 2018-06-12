@@ -36,6 +36,21 @@ function get_year_place($place){
     return "ไม่พบข้อมูล";
 }
 
+function get_month_place($place,$month){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT TC,RH,Date FROM data WHERE data.Year=2561 AND data.Place='$place' AND data.Month='$month'");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
+}
+
 function get_date_of_month($month){
 
   if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
