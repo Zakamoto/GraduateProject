@@ -27,6 +27,57 @@ function get_year_place($place){
   $query = $con->query("SELECT TC,RH,Month FROM data WHERE data.Place='$place' AND data.Year=2561");
   else
   $query = $con->query("SELECT TC,RH,Month FROM data WHERE data.Year=2561");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> e6e38b23ebca318e3acc36dd0ee2f21c0a36e106
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+  if($data){
+      return $data;
+  }
+  else
+    return false;
+}
+
+function get_month_place($place,$month){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT TC,RH,Date FROM data WHERE data.Year=2561 AND data.Place='$place' AND data.Month='$month'");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+  if($data){
+      return $data;
+  }
+  else
+    return false;
+}
+
+function get_month_place($place,$month){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT TC,RH,Date FROM data WHERE data.Year=2561 AND data.Place='$place' AND data.Month='$month'");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+  if($data){
+      return $data;
+  }
+  else
+    return "ไม่พบข้อมูล";
+}
+
+function get_month_place($place,$month){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT TC,RH,Date FROM data WHERE data.Year=2561 AND data.Place='$place' AND data.Month='$month'");
+>>>>>>> afffbd80ec73d986e1ab8c59723939a100838195
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
   if($data){
@@ -248,6 +299,19 @@ function get_place(){
   $con = conDB();
 
   $query = $con->query("SELECT * FROM place");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return false;
+}
+
+function get_data_area($place){
+  $con = conDB();
+
+  $query = $con->query("SELECT * FROM calarea WHERE Name='$place'");
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
 

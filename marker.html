@@ -216,6 +216,7 @@
 		var arrayTemperature = new Array(77);
 		let radioValue = 0;
 		var collapsePlant = false;
+		var province_mark;
 		function initialize() { // ฟังก์ชันแสดงแผนที่
 			GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
 			// กำหนดจุดเริ่มต้นของแผนที่
@@ -291,7 +292,18 @@
 									}
 								}
 							}
-							console.log((str.slice(cut1, cut2)));
+							province_mark = (str.slice(cut1, cut2));
+							$('#enter_position_1').click(function(){
+								console.log(province_mark);
+								$.post("table/area_table.php",{
+									privince:province_mark,
+								},
+								function(result){
+									console.log(result);
+									$("#area_table").html(result);
+								});
+							});
+
 						}
 				  } else {
 					  // กรณีไม่มีข้อมูล
@@ -299,6 +311,8 @@
 				  }
 				});
 			});
+
+
 
 
 		}
@@ -1729,6 +1743,8 @@
 					});
 
 		}
+
+
 		function codeAddress() {
 		    var address = document.getElementById("search").value;
 		    geocoder.geocode( { 'address': address}, function(results, status) {
@@ -1829,10 +1845,7 @@
 					});
 				});
 
-				$('#enter_position_1').click(
-					function (e) {
-						$('html, body').animate({scrollTop: 760}, 800);
-				});
+
 				$('#enter_position_2').click(
 					function (e) {
 						$('html, body').animate({scrollTop: 760}, 800);
