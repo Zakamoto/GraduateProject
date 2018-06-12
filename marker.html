@@ -226,7 +226,7 @@
 			'<br/>'+
 			'<div name="place_value"id="place_value">ทำการลากไปยังตำแหน่งที่ต้องการ</div>'+
 			'<br/>'+
-			'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess">ยืนยันตำแหน่ง</button>'
+			'<div id="place_button"></div>'
 		        var infowindow = new google.maps.InfoWindow({
 		          content: contentString
 		        });
@@ -273,6 +273,7 @@
 						if (results[1]) {
 							// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
 							$("#place_value").html(results[1].formatted_address); //
+							$("#place_button").html('<button class="btn btn-info" style="float:right;" onclick="popup_cal()">ยืนยันตำแหน่ง</button>');
 							infowindow.setPosition(my_Point);
 							address_info = results[1].formatted_address;
 							//$("#place_value").html(results[1].formatted_address + "ระดับความสูงจากน้ำทะเล " + results[0].elevation + " เมตร" );
@@ -303,6 +304,26 @@
 									$("#area_table").html(result);
 								});
 							});
+							$('#enter_position_2').click(function(){
+								console.log(province_mark);
+								$.post("table/area_table.php",{
+									privince:province_mark,
+								},
+								function(result){
+									console.log(result);
+									$("#area_table").html(result);
+								});
+							});
+							$('#enter_position_3').click(function(){
+								console.log(province_mark);
+								$.post("table/area_table.php",{
+									privince:province_mark,
+								},
+								function(result){
+									console.log(result);
+									$("#area_table").html(result);
+								});
+							});
 
 						}
 				  } else {
@@ -316,6 +337,8 @@
 
 
 		}
+
+
 		// ฟังก์ชั่น สำหรับให้แผนทีไปที่จุดตามค่าตำแหน่งที่ส่งมา
 		function go_to_select_place(placeVal){
 		//	GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
@@ -1560,8 +1583,7 @@
 				layer.setMap(map);
 		}
 		function get_info(){
-			console.log(55555);
-			toggle_area_result();
+
 
 			var info_lat = get_lat_info;
 			var info_lng = get_lng_info;
@@ -1744,6 +1766,15 @@
 
 		}
 
+		function popup_cal(){
+			$.post("popup_cal.php",{area:province_mark,},function(result){
+				if(result==1)
+					$("#Display_rice").click();
+				else
+					$("#pop_alert").click();
+			});
+		}
+
 
 		function codeAddress() {
 		    var address = document.getElementById("search").value;
@@ -1762,6 +1793,7 @@
 
 			// When the user scrolls down 20px from the top of the document, show the button
 			window.onscroll = function() {scrollFunction()};
+
 
 			function scrollFunction() {
 			    if (document.documentElement.scrollTop > 300) {
@@ -2062,11 +2094,12 @@
 	<div id="pop_data_seccess" class="modal fade">
 	  <div id="pop_seccess" class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-body">
+				<div class="modal-body" style="background-color:green;">
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
+					<center>ข้อมูลจะแสดงอยู่ในตารางด้านล่าง</center>
 				<div class="modal-footer">
-					<button id="enter_position_1" style="float:right;" class="btn btn-success" data-dismiss="modal" onclick="get_info()">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_1" style="align:right;" class="btn btn-success" data-dismiss="modal" onclick="get_info()">ตกลง</button>
 				</div>
 			</div>
 		</div>
@@ -2076,25 +2109,42 @@
 	<div id="pop_data_seccess2" class="modal fade">
 	  <div id="pop_seccess2" class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-body">
+				<div class="modal-body" style="background-color:green;">
 					ทำการคำนวณข้อมูลสำเร็จแล้ว
 				</div>
+					<center>ข้อมูลจะแสดงอยู่ในตารางด้านล่าง</center>
 				<div class="modal-footer">
-					<button id="enter_position_2" style="float:right;" class="btn btn-success" data-dismiss="modal" onclick="get_info2()">ยืนยันตำแหน่ง</button>
+					<button id="enter_position_2" style="align:right;" class="btn btn-success" data-dismiss="modal" onclick="get_info2()">ตกลง</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--end alert-->
+<!--start alert-->
+	<div id="pop_data_miss" class="modal fade">
+	  <div id="pop_miss" class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body" style="background-color:red;">
+					คำนวนข้อมูลไม่สำเร็จ
+				</div>
+				<div class="modal-footer">
+					<button id="enter_position_3" style="align:right;background-color:red;" class="btn" data-dismiss="modal" onclick="get_info()">ตกลง</button>
 				</div>
 			</div>
 		</div>
 	</div>
 <!--end alert-->
 
-
+<!--hide button-->
+	<button id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess"></button>
+	<button id="pop_alert" data-toggle="modal" data-target="#pop_data_miss"></button>
 	<button id="myBtn" title="Go to top">Top</button>
 
 
 
 <script src="js/marker.js"></script>
-
 <!--javascript-->
+
 </div>
 </body>
 </html>

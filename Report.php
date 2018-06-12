@@ -3,7 +3,7 @@
     <center>โปรดทำการลาก หมุดปัก บนแผนที่ไปยังตำแหน่งที่ต้องการ<br/>
     <img src="img_option/position.png" width="300px" height="300px"></center>
    <!-- <button id="enter_position" style="float:right;" class="btn btn-success" data-toggle="collapse" data-target="#Report">ยืนยันตำแหน่ง</button> !-->
-    <button id="back" class="btn btn-info">ยกเลิก</button>
+    <button id="back" class="btn btn-info" onclick="toggle_area_result()">ยกเลิก</button>
 
 </div>
 

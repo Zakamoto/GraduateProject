@@ -59,30 +59,16 @@ else{    //ข้อมูลแผนภูมิรายเดือน
   $year = $_POST['year'];
   $month = $_POST['month'];
   $place = $_POST['place'];
-<<<<<<< HEAD
 
   $date_in_month = get_date_of_month($month);
   $data = get_month_place($place,$month);
 
-=======
-<<<<<<< HEAD
-=======
-
-  $date_in_month = get_date_of_month($month);
-  $data = get_month_place($place,$month);
-
->>>>>>> afffbd80ec73d986e1ab8c59723939a100838195
-
-  $date_in_month = get_date_of_month($month);
-  $data = get_month_place($place,$month);
-
->>>>>>> e6e38b23ebca318e3acc36dd0ee2f21c0a36e106
   if($data)
     {include 'chart/moisture/chart_moisture_month.php';}
   else{
       $picture = "water";
       include 'img.php';
     }
-  
+
 }
  ?>

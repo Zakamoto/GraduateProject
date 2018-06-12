@@ -4,6 +4,7 @@ $(document).ready(function(){
 //  $("#Report_moisture").hide();
   $("#table_test").hide();
   $("#area_result").hide();
+  $("#pop_alert").hide();
   //console.log(radioValue);
   /*setInterval(function()
   { ObserveInputValue($('#plantData').val());
@@ -214,10 +215,8 @@ $("#change_page1").change(function(){
             $("#select_date_temp3hour").empty();
             if($("#select_place_temp3hour").val()!=0){
                 select_time_temp(1);
-              $("#chart_temp_month").empty();
             }
             else{
-              set_chart_temp3hour();
               $("#chart_temp_year").empty();
               $("#chart_temp_month").empty();
             }
@@ -228,10 +227,8 @@ $("#change_page1").change(function(){
             $("#select_date_mois3hour").empty();
             if($("#select_place_mois3hour").val()!=0){
                 select_time_mois(1);
-              $("#chart_moisture_month").empty();
             }
             else{
-              set_chart_temp3hour();
               $("#chart_moisture_year").empty();
               $("#chart_moisture_month").empty();
             }
@@ -263,6 +260,7 @@ $("#change_page1").change(function(){
           $("#chart_temp_3hour").empty();
         }
         else{
+            set_chart_temp3hour();
           $("#chart_temp_year").empty();
           $("#chart_temp_month").empty();
         }
@@ -290,7 +288,7 @@ $("#change_page1").change(function(){
           date3: date3,
           place:place,
         },function(result){
-          console.log(result);
+
           $("#chart_temp_3hour").html(result);
 
         });
@@ -330,7 +328,7 @@ $("#change_page1").change(function(){
             place:place,
           }
           ,function(result){
-            $("#chart_temp_year").html(result);console.log(result);
+            $("#chart_temp_year").html(result);
           });
         }
         else {    //เลือกวันที่มีจำนวนตรงกับเดือน
@@ -400,7 +398,7 @@ $("#change_page1").change(function(){
           date3: date3,
           place:place,
         },function(result){
-          console.log(result);
+
           $("#chart_moisture_3hour").html(result);
         });
       });
@@ -424,7 +422,7 @@ $("#change_page1").change(function(){
             $("#select_month_mois3hour").html(result);
           });
           var place = $("#select_place_mois3hour").val();
-          $.post("./Chart/temp/chart_temp_allyear.php",{
+          $.post("./Chart/moisture/chart_moisture_year.php",{
             place:place,
           },function(result){
             $("#chart_moisture_year").html(result);
@@ -448,7 +446,6 @@ $("#change_page1").change(function(){
             month:month,
             place:place,
           },function(result){
-            console.log(result);
             $("#chart_moisture_month").html(result);
           });
         }
