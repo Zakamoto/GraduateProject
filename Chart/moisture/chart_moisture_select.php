@@ -8,9 +8,9 @@
           },
           xAxis: {
               categories: [
-                            <?php for($i=0;$i<sizeof($data);$i++){ ?>
-                              <?= json_encode($data[$i]['Name']); ?>,
-                            <?php } ?>
+                                <?php for($i=0;$i<24;$i++){ ?>
+                                  <?= $i ?>,
+                                <?php } ?>
                           ]
           },
 
@@ -24,9 +24,14 @@
               type: 'spline',
               name: 'ความชื้นสัมพันธ์',
               data: [
-                      <?php for($i=0;$i<sizeof($data);$i++){ ?>
-                        <?= $data[$i]['RH']; ?>,
-                      <?php } ?>
+                        <?php
+                        $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+                        for ($i = 0; $i < sizeof($data); $i++) {
+                          $dataSort[$data[$i]['Time']] = $data[$i]['RH'];
+                        }
+                          for($i=0;$i<24;$i++){ ?>
+                                <?= $dataSort[$i] ?>,
+                          <?php } ?>
                     ],
               marker: {
                   lineWidth: 2,

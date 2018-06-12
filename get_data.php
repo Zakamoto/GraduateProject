@@ -254,7 +254,7 @@ function get_dataSelect($y,$month,$date,$place){
   $con = conDB();
 
   //ดึงข้อมูล อุณหภูมิ + ความชื้น
-  $query = $con->query("SELECT TC, Time FROM data WHERE data.Place=$place AND Year=$year AND Month='$month' AND Date=$date");
+  $query = $con->query("SELECT TC, RH, Time FROM data WHERE Place=$place AND Year=$year AND Month='$month' AND Date=$date");
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
 
