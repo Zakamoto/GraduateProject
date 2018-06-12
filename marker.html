@@ -1808,6 +1808,18 @@
 		$(function(){
 
 			$("#linkSearch").click(function(e){
+				layer = new google.maps.FusionTablesLayer({
+						query: {
+						select: 'geometry',
+						from: '1LNSIfgRsObcmWBGu4sbXS2GRDcAlNirUsqfSq3CP',
+						where: 'rubber = "1"' // นาปี
+						},
+						options: {
+							styleId: 2,
+							templateId: 2
+						}
+				});
+					layer.setMap(map);
 				$("#itemPlant").hide();
 				$("#high_level_1").hide();
 				e.preventDefault();

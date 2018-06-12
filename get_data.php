@@ -24,16 +24,31 @@ function get_year_place($place){
 
   //ดึงข้อมูล
   if($place != 0)
-  $query = $con->query("SELECT TC,Month FROM data WHERE data.Place='$place' AND data.Year=2561");
+  $query = $con->query("SELECT TC,RH,Month FROM data WHERE data.Place='$place' AND data.Year=2561");
   else
-  $query = $con->query("SELECT TC,Month FROM data WHERE data.Year=2561");
+  $query = $con->query("SELECT TC,RH,Month FROM data WHERE data.Year=2561");
   $query->execute();
   $data = $query->fetchAll(PDO::FETCH_ASSOC);
   if($data){
       return $data;
   }
   else
-    return "ไม่พบข้อมูล";
+    return false;
+}
+
+function get_month_place($place,$month){
+  //เชื่อม database
+  $con = conDB();
+
+  //ดึงข้อมูล
+  $query = $con->query("SELECT TC,RH,Date FROM data WHERE data.Year=2561 AND data.Place='$place' AND data.Month='$month'");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+  if($data){
+      return $data;
+  }
+  else
+    return false;
 }
 
 function get_date_of_month($month){
@@ -86,7 +101,7 @@ function get_chart_rubber(){
       return $data;
   }
   else
-    return "ไม่พบข้อมูล";
+    return false;
 }
 function get_chart_cassava(){
   //เชื่อม database
@@ -121,7 +136,7 @@ function get_chart_cassava(){
       return $data;
   }
   else
-    return "ไม่พบข้อมูล";
+    return false;
 }
 function get_chart_oilplam(){
   //เชื่อม database
@@ -156,7 +171,7 @@ function get_chart_oilplam(){
       return $data;
   }
   else
-    return "ไม่พบข้อมูล";
+    return false;
 }
 function get_chart_sugarcane(){
   //เชื่อม database
@@ -191,7 +206,7 @@ function get_chart_sugarcane(){
       return $data;
   }
   else
-    return "ไม่พบข้อมูล";
+    return false;
 }
 function get_chart_rice(){
   //เชื่อม database
@@ -226,7 +241,7 @@ function get_chart_rice(){
       return $data;
   }
   else
-    return "ไม่พบข้อมูล";
+    return false;
 }
 
 function get_place(){

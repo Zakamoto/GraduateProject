@@ -2,27 +2,63 @@
 <center><div id="chart_month2" style="width:1400px;"></div></center>
 
 <script type="text/javascript">
+<?php
+
+if($month==1){$nameM="มกราคม";}
+else if($month==2){$nameM="กุมภาพันธ์";}
+else if($month==3){$nameM="มีนาคม";}
+else if($month==4){$nameM="เมษายน";}
+else if($month==5){$nameM="พฤษภาคม";}
+else if($month==6){$nameM="มิถุนายน";}
+else if($month==7){$nameM="กรกฎาคม";}
+else if($month==8){$nameM="สิงหาคม";}
+else if($month==9){$nameM="กันยายน";}
+else if($month==10){$nameM="ตุลาคม";}
+else if($month==11){$nameM="พฤศจิกายน";}
+else{$nameM="ธันวาคม";}
+
+?>
 Highcharts.chart('chart_month2', {
   title: {
-      text: 'กราฟรวมสรุปรายเดือน <?php echo $month; ?>'
+      text: 'กราฟรวมสรุปรายเดือน <?php echo $nameM; ?>'
   },
   xAxis: {
-      categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+      categories: [<?php for($i=1;$i<=$date_in_month;$i++){ ?><?=$i?>,<?php }?>]
   },
 
   yAxis: {
       title: {
-          text: 'ความชื้นสัมพันธ์'
+          text: 'ความชื้นสัมพันธ์ %'
       }
   },
   series: [
   {
-      type: 'spline',
+      type: 'column',
       name: 'ความชื้นสัมพันธ์',
-      data: [<?= $data[0]; ?>,<?= $data[1]; ?>,<?= $data[2]; ?>,
-      <?= $data[3]; ?>,<?= $data[4]; ?>,<?= $data[5]; ?>,
-      <?= $data[6]; ?>,<?= $data[7]; ?>,<?= $data[8]; ?>,
-      <?= $data[9]; ?>,<?= $data[10]; ?>,<?= $data[11]; ?>,
+      data: [
+          <?php 
+      if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
+      $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+      else if($month==2)
+      $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+      else
+      $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+      
+      for ($i = 0; $i < sizeof($data); $i++) {
+          $dataSort[$data[$i]['Date']] = $data[$i]['RH'];
+      }
+      if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
+          for($i=0;$i<31;$i++){ ?>
+              <?= $dataSort[$i] ?>,
+          <?php } 
+      else if($month==2)
+          for($i=0;$i<28;$i++){ ?>
+              <?= $dataSort[$i] ?>,
+          <?php }
+      else
+          for($i=0;$i<30;$i++){ ?>
+              <?= $dataSort[$i] ?>,
+          <?php } ?>
       ],
       marker: {
           lineWidth: 2,
