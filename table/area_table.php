@@ -4,7 +4,8 @@
 <?php
 include "../get_data.php";
 $data = get_dataAll();
-$img = "../img_weather/sun.png";
+$imgCorrect = "http://localhost/GraduateProject/img_option/correct.png";
+$imgInCorrect = "http://localhost/GraduateProject/img_option/incorrect.png";
 $plant = [];
 $plant[0] = "ข้าว";
 $plant[1] = "อ้อย";
@@ -36,9 +37,9 @@ $plant[4] = "ปาล์ม";
             <tr>
               <td><?php echo $plant[$i]; ?></td>
               <td>พอใช้</td>
-              <td><?php echo $data[$i]['TC']; ?></td>
-              <td><?php echo $data[$i]['RH']; ?></td>
-              <td><img src=<?php echo $img;?>/></td>
+              <td><img src="<?php echo $imgCorrect; ?>" style="width:60px;height:80px;"/></td>
+              <td><img src="<?php echo $imgInCorrect; ?>" style="width:50px;height:60px;padding-top:10px;"/></td>
+              <td><img src="<?php echo $imgCorrect; ?>" style="width:60px;height:80px;"/></td>
             </tr>
       <?php } ?>
       </tbody>
