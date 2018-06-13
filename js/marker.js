@@ -22,6 +22,12 @@ $(document).ready(function(){
 
   var lastSelected = "0";
   var setFirstData = false;
+  var num_page = 1;
+  var p_rice=1;
+  var p_cane=0;
+  var p_rubber=0;
+  var p_plam=0;
+  var p_cassava=0;
     $(function () {
         //if you have any radio selected by default
         lastSelected = $('[name="plant"]:checked').val();
@@ -39,26 +45,61 @@ $(document).ready(function(){
           if (lastSelected != "0" || lastSelected != "1") {
             switch($(this).val()) {
               case "1":
+                num_page = 1;
+                p_rice=1;
+                p_cane=0;
+                p_rubber=0;
+                p_plam=0;
+                p_cassava=0;
+                $("#num_page").html("page 1");
                 rice_chart();
                 dropdown_table(8);
                 table_rice("0");
                   break;
                   case "4":
+                      num_page = 1;
+                      p_rice=0;
+                      p_cane=0;
+                      p_rubber=1;
+                      p_plam=0;
+                      p_cassava=0;
+                      $("#num_page").html("page 1");
                       rubber_chart();
                       dropdown_table(7);
                       table_rubber("0");
                       break;
                   case "5":
+                      num_page = 1;
+                      p_rice=0;
+                      p_cane=0;
+                      p_rubber=0;
+                      p_plam=0;
+                      p_cassava=1;
+                      $("#num_page").html("page 1");
                       cassava_chart();
                       dropdown_table(5);
                       table_cassava("0");
                       break;
                   case "2":
+                      num_page = 1;
+                      p_rice=0;
+                      p_cane=1;
+                      p_rubber=0;
+                      p_plam=0;
+                      p_cassava=0;
+                      $("#num_page").html("page 1");
                       sugarcane_chart();
                       dropdown_table(5);
                       table_sugarcane("0");
                       break;
                   case "3":
+                      num_page = 1;
+                      p_rice=0;
+                      p_cane=0;
+                      p_rubber=0;
+                      p_plam=1;
+                      p_cassava=0;
+                      $("#num_page").html("page 1");
                       oilpalm_chart();
                       dropdown_table(7);
                       table_oilpalm("0");
@@ -122,36 +163,355 @@ $(document).ready(function(){
 
 
 //ตาราง
+$("#F_page").click(function(){
 
-
-
-
-$("#change_page1").change(function(){
-  var page = $("#change_page1").val();
-  //table_test(page);
-  switch (lastSelected) {
-    case "1": {
-      table_rice(page);
-      break;
-    }
-    case "4": {
-      table_rubber(page);
-      break;
-    }
-    case "5": {
-      table_cassava(page);
-      break;
-    }
-    case "2": {
-      table_sugarcane(page);
-      break;
-    }
-    case "3": {
-      table_oilpalm(page);
-      break;
-    }
-  }
+    if(p_rice==1){
+      switch (num_page) {
+        case 1:
+            num_page++;
+            table_rice(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 2:
+            num_page++;
+            table_rice(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 3:
+            num_page++;
+            table_rice(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 4:
+            num_page++;
+            table_rice(num_page);
+            $("#num_page").html("page 5");
+            break;
+        case 5:
+            num_page++;
+            table_rice(num_page);
+            $("#num_page").html("page 6");
+            break;
+        case 6:
+            num_page++;
+            table_rice(num_page);
+            $("#num_page").html("page 7");
+            break;
+        case 7:
+            num_page=8;
+            table_rice(num_page);
+            $("#num_page").html("page 8");
+            break;
+      }
+    }else if(p_cane==1){
+      switch (num_page) {
+        case 1:
+            num_page++;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 2:
+            num_page++;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 3:
+            num_page++;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 4:
+            num_page=5;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 5");
+            break;
+      }
+    }else if(p_rubber==1){
+      switch (num_page) {
+        case 1:
+            num_page++;
+            table_rubber(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 2:
+            num_page++;
+            table_rubber(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 3:
+            num_page++;
+            table_rubber(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 4:
+            num_page++;
+            table_rubber(num_page);
+            $("#num_page").html("page 5");
+            break;
+        case 5:
+            num_page++;
+            table_rubber(num_page);
+            $("#num_page").html("page 6");
+            break;
+        case 6:
+            num_page=7;
+            table_rubber(num_page);
+            $("#num_page").html("page 7");
+            break;
+      }
+    }else if(p_plam==1){
+      switch (num_page) {
+        case 1:
+            num_page++;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 2:
+            num_page++;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 3:
+            num_page++;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 4:
+            num_page++;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 5");
+            break;
+        case 5:
+            num_page++;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 6");
+            break;
+        case 6:
+            num_page=7;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 7");
+            break;
+      }
+    }else if(p_cassava==1){
+      switch (num_page) {
+        case 1:
+            num_page++;
+            table_cassava(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 2:
+            num_page++;
+            table_cassava(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 3:
+            num_page++;
+            table_cassava(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 4:
+            num_page=5;
+            table_cassava(num_page);
+            $("#num_page").html("page 5");
+            break;
+          }
+        }
 });
+
+$("#B_page").click(function(){
+  if(p_rice==1){
+    switch (num_page) {
+      case 2:
+          num_page=1;
+          table_rice(num_page);
+          $("#num_page").html("page 1");
+          break;
+      case 3:
+          num_page--;
+          table_rice(num_page);
+          $("#num_page").html("page 2");
+          break;
+      case 4:
+          num_page--;
+          table_rice(num_page);
+          $("#num_page").html("page 3");
+          break;
+      case 5:
+          num_page--;
+          table_rice(num_page);
+          $("#num_page").html("page 4");
+          break;
+      case 6:
+          num_page--;
+          table_rice(num_page);
+          $("#num_page").html("page 5");
+          break;
+      case 7:
+          num_page--;
+          table_rice(num_page);
+          $("#num_page").html("page 6");
+          break;
+      case 8:
+          num_page--;
+          table_rice(num_page);
+          $("#num_page").html("page 7");
+          break;
+      }
+    }else if(p_cane==1){
+      switch (num_page) {
+        case 2:
+            num_page=1;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 1");
+            break;
+        case 3:
+            num_page--;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 4:
+            num_page--;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 5:
+            num_page--;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 6:
+            num_page--;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 5");
+            break;
+        case 7:
+            num_page--;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 6");
+            break;
+        case 8:
+            num_page--;
+            table_sugarcane(num_page);
+            $("#num_page").html("page 7");
+            break;
+        }
+    }else if(p_rubber==1){
+      switch (num_page) {
+        case 2:
+            num_page=1;
+            table_rubber(num_page);
+            $("#num_page").html("page 1");
+            break;
+        case 3:
+            num_page--;
+            table_rubber(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 4:
+            num_page--;
+            table_rubber(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 5:
+            num_page--;
+            table_rubber(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 6:
+            num_page--;
+            table_rubber(num_page);
+            $("#num_page").html("page 5");
+            break;
+        case 7:
+            num_page--;
+            table_rubber(num_page);
+            $("#num_page").html("page 6");
+            break;
+        case 8:
+            num_page--;
+            table_rubber(num_page);
+            $("#num_page").html("page 7");
+            break;
+        }
+    }else if(p_plam==1){
+      switch (num_page) {
+        case 2:
+            num_page=1;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 1");
+            break;
+        case 3:
+            num_page--;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 4:
+            num_page--;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 5:
+            num_page--;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 6:
+            num_page--;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 5");
+            break;
+        case 7:
+            num_page--;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 6");
+            break;
+        case 8:
+            num_page--;
+            table_oilpalm(num_page);
+            $("#num_page").html("page 7");
+            break;
+        }
+    }else if(p_cassava==1){
+      switch (num_page) {
+        case 2:
+            num_page=1;
+            table_cassava(num_page);
+            $("#num_page").html("page 1");
+            break;
+        case 3:
+            num_page--;
+            table_cassava(num_page);
+            $("#num_page").html("page 2");
+            break;
+        case 4:
+            num_page--;
+            table_cassava(num_page);
+            $("#num_page").html("page 3");
+            break;
+        case 5:
+            num_page--;
+            table_cassava(num_page);
+            $("#num_page").html("page 4");
+            break;
+        case 6:
+            num_page--;
+            table_cassava(num_page);
+            $("#num_page").html("page 5");
+            break;
+        case 7:
+            num_page--;
+            table_cassava(num_page);
+            $("#num_page").html("page 6");
+            break;
+        case 8:
+            num_page--;
+            table_cassava(num_page);
+            $("#num_page").html("page 7");
+            break;
+        }
+    }
+});
+
 
           function table_test(page){
             $.post("./set_data_table.php",{

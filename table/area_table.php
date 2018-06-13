@@ -19,19 +19,19 @@ $count_rubber = 0;
 $count_cassava = 0;
 
 //grade rice
-if($data[0]['TC']>17 && $data[0]['TC']<25)
+if($data[0]['TC']>17 && $data[0]['TC']<26)
   { $result_rice[0] = 1;$count_rice++; }
 if($data[0]['RH']>50 && $data[0]['RH']<60)
   { $result_rice[1] = 1;$count_rice++; }
-if($data[0]['Rain']>150 && $data[0]['Rain']<400)
+if($data[0]['Rain']>=150 && $data[0]['Rain']<=400)
   { $result_rice[2] = 1;$count_rice++; }
 
 //grade sugarcane
-if($data[0]['TC']>25 && $data[0]['TC']<35)
+if($data[0]['TC']>=25 && $data[0]['TC']<=35)
   { $result_sugarcane[0] = 1;$count_sugarcane++; }
 if($data[0]['RH']>70 && $data[0]['RH']<100)
   { $result_sugarcane[1] = 1;$count_sugarcane++; }
-if($data[0]['Rain']>100 && $data[0]['Rain']<125)
+if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
   { $result_sugarcane[2] = 1;$count_sugarcane++; }
 
 //grade plam
@@ -39,7 +39,7 @@ if($data[0]['TC']>24 && $data[0]['TC']<29)
   { $result_plam[0] = 1;$count_plam++; }
 if($data[0]['RH']>75 && $data[0]['RH']<90)
   { $result_plam[1] = 1;$count_plam++; }
-if($data[0]['Rain']>150 && $data[0]['Rain']<166)
+if($data[0]['Rain']>=150 && $data[0]['Rain']<166)
   { $result_plam[2] = 1;$count_plam++; }
 
 //grade rubber
@@ -47,15 +47,15 @@ if($data[0]['TC']>25 && $data[0]['TC']<31)
   { $result_rubber[0] = 1;$count_rubber++; }
 if($data[0]['RH']>80 && $data[0]['RH']<100)
   { $result_rubber[1] = 1;$count_rubber++; }
-if($data[0]['Rain']>100 && $data[0]['Rain']<125)
+if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
   { $result_rubber[2] = 1;$count_rubber++; }
 
   //grade cassava
-  if($data[0]['TC']>25 && $data[0]['TC']<35)
+  if($data[0]['TC']>=25 && $data[0]['TC']<38)
     { $result_cassava[0] = 1;$count_cassava++; }
   if($data[0]['RH']>70 && $data[0]['RH']<80)
     { $result_cassava[1] = 1;$count_cassava++; }
-  if($data[0]['Rain']>100 && $data[0]['Rain']<125)
+  if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
     { $result_cassava[2] = 1;$count_cassava++; }
 
 /*
@@ -274,6 +274,33 @@ if($data){ ?>
             </button>
     			</div>
 
+          <table class="ui celled table" style="width:98%">
+            <thead  style="background-color:green;">
+            <tr>
+              <th></th>
+              <th>ช่วงค่าที่เหมาะสม</th>
+              <th>ค่าที่ได้จากพื้นที่</th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+              <td>อุณหภูมิ</td>
+              <td>18 - 25</td>
+              <td><?php echo $data[0]['TC']; ?></td>
+            </tr>
+            <tr>
+              <td>ความชื้น</td>
+              <td></td>
+              <td><?php echo $data[0]['RH']; ?></td>
+            </tr>
+            <tr>
+              <td>ปริมาณน้ำฝน</td>
+              <td>150 - 400</td>
+              <td><?php echo $data[0]['Rain']; ?></td>
+            </tr>
+           </tbody>
+          </table>
+
     			<div class="modal-footer">
     				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     			</div>
@@ -292,6 +319,33 @@ if($data){ ?>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
+          <table class="ui celled table" style="width:98%">
+            <thead  style="background-color:green;">
+            <tr>
+              <th></th>
+              <th>ช่วงค่าที่เหมาะสม</th>
+              <th>ค่าที่ได้จากพื้นที่</th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+              <td>อุณหภูมิ</td>
+              <td>25 - 35</td>
+              <td><?php echo $data[0]['TC']; ?></td>
+            </tr>
+            <tr>
+              <td>ความชื้น</td>
+              <td></td>
+              <td><?php echo $data[0]['RH']; ?></td>
+            </tr>
+            <tr>
+              <td>ปริมาณน้ำฝน</td>
+              <td>100 - 125</td>
+              <td><?php echo $data[0]['Rain']; ?></td>
+            </tr>
+           </tbody>
+          </table>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -312,6 +366,33 @@ if($data){ ?>
             </button>
           </div>
 
+          <table class="ui celled table" style="width:98%">
+            <thead  style="background-color:green;">
+            <tr>
+              <th></th>
+              <th>ช่วงค่าที่เหมาะสม</th>
+              <th>ค่าที่ได้จากพื้นที่</th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+              <td>อุณหภูมิ</td>
+              <td>25 - 28</td>
+              <td><?php echo $data[0]['TC']; ?></td>
+            </tr>
+            <tr>
+              <td>ความชื้น</td>
+              <td></td>
+              <td><?php echo $data[0]['RH']; ?></td>
+            </tr>
+            <tr>
+              <td>ปริมาณน้ำฝน</td>
+              <td>150 - 165</td>
+              <td><?php echo $data[0]['Rain']; ?></td>
+            </tr>
+           </tbody>
+          </table>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
@@ -331,6 +412,33 @@ if($data){ ?>
             </button>
           </div>
 
+          <table class="ui celled table" style="width:98%">
+            <thead  style="background-color:green;">
+            <tr>
+              <th></th>
+              <th>ช่วงค่าที่เหมาะสม</th>
+              <th>ค่าที่ได้จากพื้นที่</th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+              <td>อุณหภูมิ</td>
+              <td>26 - 30</td>
+              <td><?php echo $data[0]['TC']; ?></td>
+            </tr>
+            <tr>
+              <td>ความชื้น</td>
+              <td></td>
+              <td><?php echo $data[0]['RH']; ?></td>
+            </tr>
+            <tr>
+              <td>ปริมาณน้ำฝน</td>
+              <td>100 - 125</td>
+              <td><?php echo $data[0]['Rain']; ?></td>
+            </tr>
+           </tbody>
+          </table>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
@@ -349,6 +457,33 @@ if($data){ ?>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
+          <table class="ui celled table" style="width:98%">
+            <thead  style="background-color:green;">
+            <tr>
+              <th></th>
+              <th>ช่วงค่าที่เหมาะสม</th>
+              <th>ค่าที่ได้จากพื้นที่</th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+              <td>อุณหภูมิ</td>
+              <td>25 - 37</td>
+              <td><?php echo $data[0]['TC']; ?></td>
+            </tr>
+            <tr>
+              <td>ความชื้น</td>
+              <td></td>
+              <td><?php echo $data[0]['RH']; ?></td>
+            </tr>
+            <tr>
+              <td>ปริมาณน้ำฝน</td>
+              <td>100 - 125</td>
+              <td><?php echo $data[0]['Rain']; ?></td>
+            </tr>
+           </tbody>
+          </table>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
