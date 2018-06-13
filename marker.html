@@ -265,8 +265,7 @@
 				var my_Point = my_Marker.getPosition();  // หาตำแหน่งของตัว marker เมื่อกดลากแล้วปล่อย
 				get_lat_info = my_Point.lat();
 				get_lng_info = my_Point.lng();
-				$('#post_lat').html(get_lat_info);
-				$('#post_lng').html(get_lng_info);
+				get_high(my_Point);
 		        map.panTo(my_Point);  // ให้แผนที่แสดงไปที่ตัว marker
 
 				// เรียกขอข้อมูลสถานที่จาก Google Map
@@ -339,6 +338,27 @@
 			my_Marker.setPosition(my_Latlng); // กำนหดตัวแปน่ง marker
 		//	map.panTo(my_Latlng);  // ให้แผนที่แสดงไปที่ตัว marker
 		}
+
+
+
+		function get_high(posi){
+			var high = new google.maps.ElevationService;
+			high.getElevationForLocations({
+				'locations': [posi]
+			},function(result,stat){
+				if(stat==='OK'){
+					if(result[0]){
+						console.log(result[0].elevation);
+					}
+					else
+						console.log("don't found data");
+				}
+				else
+					console.log("not get data");
+			});
+		}
+
+
 		function elevation() {
 			$("#high_level_2").hide();
 			$("#high_level_1").show();
