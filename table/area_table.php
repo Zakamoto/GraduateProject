@@ -2,14 +2,16 @@
 include "../get_data.php";
 if(isset($_POST['privince'])){
 $province = $_POST['privince'];
+$high = $_POST['high'];
+$high = number_format($high,2,'.','');
 $data = get_data_area($province);
 
 
-$result_rice = [0,0,0,0];
-$result_sugarcane = [0,0,0,0];
-$result_plam = [0,0,0,0];
-$result_rubber = [0,0,0,0];
-$result_cassava = [0,0,0,0];
+$result_rice = [0,0,0];
+$result_sugarcane = [0,0,0];
+$result_plam = [0,0,0];
+$result_rubber = [0,0,0];
+$result_cassava = [0,0,0];
 
 $count = [];
 $count_rice = 0;
@@ -21,7 +23,7 @@ $count_cassava = 0;
 //grade rice
 if($data[0]['TC']>17 && $data[0]['TC']<26)
   { $result_rice[0] = 1;$count_rice++; }
-if($data[0]['RH']>50 && $data[0]['RH']<60)
+if($high<800)
   { $result_rice[1] = 1;$count_rice++; }
 if($data[0]['Rain']>=150 && $data[0]['Rain']<=400)
   { $result_rice[2] = 1;$count_rice++; }
@@ -29,7 +31,7 @@ if($data[0]['Rain']>=150 && $data[0]['Rain']<=400)
 //grade sugarcane
 if($data[0]['TC']>=25 && $data[0]['TC']<=35)
   { $result_sugarcane[0] = 1;$count_sugarcane++; }
-if($data[0]['RH']>70 && $data[0]['RH']<100)
+if($high<1500)
   { $result_sugarcane[1] = 1;$count_sugarcane++; }
 if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
   { $result_sugarcane[2] = 1;$count_sugarcane++; }
@@ -37,7 +39,7 @@ if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
 //grade plam
 if($data[0]['TC']>24 && $data[0]['TC']<29)
   { $result_plam[0] = 1;$count_plam++; }
-if($data[0]['RH']>75 && $data[0]['RH']<90)
+if($high<500)
   { $result_plam[1] = 1;$count_plam++; }
 if($data[0]['Rain']>=150 && $data[0]['Rain']<166)
   { $result_plam[2] = 1;$count_plam++; }
@@ -45,7 +47,7 @@ if($data[0]['Rain']>=150 && $data[0]['Rain']<166)
 //grade rubber
 if($data[0]['TC']>25 && $data[0]['TC']<31)
   { $result_rubber[0] = 1;$count_rubber++; }
-if($data[0]['RH']>80 && $data[0]['RH']<100)
+if($high<200)
   { $result_rubber[1] = 1;$count_rubber++; }
 if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
   { $result_rubber[2] = 1;$count_rubber++; }
@@ -53,7 +55,7 @@ if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
   //grade cassava
   if($data[0]['TC']>=25 && $data[0]['TC']<38)
     { $result_cassava[0] = 1;$count_cassava++; }
-  if($data[0]['RH']>70 && $data[0]['RH']<80)
+  if($high<200)
     { $result_cassava[1] = 1;$count_cassava++; }
   if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
     { $result_cassava[2] = 1;$count_cassava++; }
@@ -145,7 +147,7 @@ if($data){ ?>
           <th>พืช</th>
           <th>ระดับความเหมาะสม</th>
           <th>อุณหภูมิ</th>
-          <th>ความชื้น</th>
+          <th>ความสูงจากระดับน้ำทะเล</th>
           <th>ปริมาณน้ำฝน</th>
 
         </tr>
@@ -160,98 +162,98 @@ if($data){ ?>
               <?php
               if($i==0){ //ข้าว
                   if($result_rice[0]==0) {?>
-                      <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                      <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
               <?php  }else { ?>
-                <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+                <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
               <?php }
 
                   if($result_rice[1]==0) {?>
-                      <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                      <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
               <?php  }else { ?>
-                <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+                <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
               <?php }
 
                   if($result_rice[2]==0) {?>
-                      <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                      <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
               <?php  }else { ?>
-                <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+                <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
               <?php }
 
             }
             else if($i==1){
               if($result_sugarcane[0]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_sugarcane[1]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_sugarcane[2]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
             }
             else if($i==2){
               if($result_plam[0]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_plam[1]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_plam[2]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
             }
             else if($i==3){
               if($result_rubber[0]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_rubber[1]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_rubber[2]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
             }
             else{
               if($result_cassava[0]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_cassava[1]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
 
               if($result_cassava[2]==0) {?>
-                  <td><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></td>
+                  <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
           <?php  }else { ?>
-            <td><img src="img_option/correct.png" style="width:60px;height:80px;"/></td>
+            <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
           <?php }
             }
                 ?>
@@ -289,9 +291,9 @@ if($data){ ?>
               <td><?php echo $data[0]['TC']; ?></td>
             </tr>
             <tr>
-              <td>ความชื้น</td>
-              <td></td>
-              <td><?php echo $data[0]['RH']; ?></td>
+              <td>ความสูงจากระดับน้ำทะเล</td>
+              <td>0 - 800</td>
+              <td><?php echo $high; ?></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
@@ -335,9 +337,9 @@ if($data){ ?>
               <td><?php echo $data[0]['TC']; ?></td>
             </tr>
             <tr>
-              <td>ความชื้น</td>
-              <td></td>
-              <td><?php echo $data[0]['RH']; ?></td>
+              <td>ความสูงจากระดับน้ำทะเล</td>
+              <td>0 - 1500</td>
+              <td><?php echo $high; ?></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
@@ -381,9 +383,9 @@ if($data){ ?>
               <td><?php echo $data[0]['TC']; ?></td>
             </tr>
             <tr>
-              <td>ความชื้น</td>
-              <td></td>
-              <td><?php echo $data[0]['RH']; ?></td>
+              <td>ความสูงจากระดับน้ำทะเล</td>
+              <td>0 - 500</td>
+              <td><?php echo $high; ?></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
@@ -427,9 +429,9 @@ if($data){ ?>
               <td><?php echo $data[0]['TC']; ?></td>
             </tr>
             <tr>
-              <td>ความชื้น</td>
-              <td></td>
-              <td><?php echo $data[0]['RH']; ?></td>
+              <td>ความสูงจากระดับน้ำทะเล</td>
+              <td>0 - 200</td>
+              <td><?php echo $high; ?></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
@@ -473,9 +475,9 @@ if($data){ ?>
               <td><?php echo $data[0]['TC']; ?></td>
             </tr>
             <tr>
-              <td>ความชื้น</td>
-              <td></td>
-              <td><?php echo $data[0]['RH']; ?></td>
+              <td>ความสูงจากระดับน้ำทะเล</td>
+              <td>0 - 200</td>
+              <td><?php echo $high; ?></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>

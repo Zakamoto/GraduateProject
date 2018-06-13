@@ -4,7 +4,7 @@
 
   <center>
   <button id="currentLocation" class="btn btn-info" style="width:150px;height:150px;">ค้นหาตำแหน่ง<br/>ณ ปัจจุบัน<br/><img src="img_option/gps_icon.png"></button>
-  <button id="linkArea" class="btn btn-info" style="width:150px;height:150px;" onclick="toggle_area_result()"><b>ค้นหาตำแหน่ง<br/>ด้วยการปักหมุด<br/></b><img src="img_option/map.png" width="80px" height="80px"></button>
+  <button id="linkArea" class="btn btn-info" style="width:150px;height:150px;" onclick="toggle_area_result(1)">ค้นหาตำแหน่ง<br/>ด้วยการปักหมุด<br/><img src="img_option/map.png" width="80px" height="80px"></button>
   </center>
 
   <div style="padding-top:10px;"></div>
@@ -19,7 +19,7 @@ var contentString2 = '<h4>ข้อมูลตำแหน่ง</h4>'+
 '<br/>'+
 '<div id="area_value"></div>'+
 '<br/>'+
-'<button class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess2">ยืนยันตำแหน่ง</button>'
+'<button id="BT_GPS_enter" class="btn btn-info" style="float:right;" id="Display_rice" data-toggle="modal" data-target="#pop_data_seccess2">ยืนยันตำแหน่ง</button>'
 var infowindow2 = new google.maps.InfoWindow({
   content: contentString2
 });
@@ -35,6 +35,7 @@ $.get(link, function(res){
   });
 });
 $("#currentLocation").click(function(e){
+  var high_level_2;
   if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
         var pos = {
@@ -57,17 +58,55 @@ $("#currentLocation").click(function(e){
               $("#area_value").html(results[1].formatted_address); //
               infowindow2.setPosition(pos);
               address_info = results[1].formatted_address;
-              //$("#place_value").html(results[1].formatted_address + "ระดับความสูงจากน้ำทะเล " + results[0].elevation + " เมตร" );
+              var str = address_info;
+							var cut1 = 0;
+							var cut2 = 0;
+							var counter = 0;
+							for (var i = 0; i < str.length; i++) {
+								if (str.charAt(i) == ' ' ) {
+									counter++;
+									if (counter == 4) {
+										cut1 = (i+1);
+									}
+									if (counter == 5) {
+										cut2 = (i);
+										break;
+									}
+								}
+							}
+							var province_mark_2 = (str.slice(cut1, cut2)); //เก็บชื่อของจังหวัดตำแหน่งนี้
+              //หาความสูงจากระดับน้ำทะเล
+
+              var high_2 = new google.maps.ElevationService;
+        			high_2.getElevationForLocations({
+        				'locations': [pos]
+        			},function(result,stat){
+        				if(stat==='OK'){
+        					if(result[0]){
+        						high_level_2 = result[0].elevation;
+        					}
+        				}
+        			});
+
+							$("#BT_GPS_enter").click(function(){
+								$.post("table/area_table.php",{
+									privince:province_mark_2,
+                  high:high_level_2,
+								},
+								function(result){
+                  console.log(result);
+									$("#area_table").html(result);
+								});
+							});
+
+
+
             }
           } else {
             // กรณีไม่มีข้อมูล
           alert("Geocoder failed due to: " + status);
           }
         });
-
-
-
-        $('html, body').animate({scrollTop: 760}, 800);
       }, function() {
         handleLocationError(true, infowindow2, map.getCenter());
       });
