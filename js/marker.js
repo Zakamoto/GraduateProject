@@ -4,6 +4,7 @@ $(document).ready(function(){
 //  $("#Report_moisture").hide();
   $("#table_test").hide();
   $("#area_result").hide();
+  $("#Display_rice").hide();
   $("#pop_alert").hide();
   //console.log(radioValue);
   /*setInterval(function()

@@ -216,7 +216,9 @@
 		var arrayTemperature = new Array(77);
 		let radioValue = 0;
 		var collapsePlant = false;
-		var province_mark;
+		var province_mark; //ตัวแปรไว้แสดงจังหวัด
+		var togle_area_table_gps = 0; //ตัวแปรใช้ทำการ toggle ตาราง area_table
+		var togle_area_table_marker = 0; //ตัวแปรใช้ทำการ toggle ตาราง area_table
 		function initialize() { // ฟังก์ชันแสดงแผนที่
 			GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
 			// กำหนดจุดเริ่มต้นของแผนที่
@@ -273,7 +275,7 @@
 						if (results[1]) {
 							// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
 							$("#place_value").html(results[1].formatted_address); //
-							$("#place_button").html('<button class="btn btn-info" style="float:right;" onclick="popup_cal()">ยืนยันตำแหน่ง</button>');
+							$("#place_button").html('<button id="enter_pos" class="btn btn-info" style="float:right;" onclick="popup_cal()">ยืนยันตำแหน่ง</button>');
 							infowindow.setPosition(my_Point);
 							address_info = results[1].formatted_address;
 							//$("#place_value").html(results[1].formatted_address + "ระดับความสูงจากน้ำทะเล " + results[0].elevation + " เมตร" );
@@ -295,32 +297,19 @@
 							}
 							province_mark = (str.slice(cut1, cut2));
 							$('#enter_position_1').click(function(){
-								console.log(province_mark);
 								$.post("table/area_table.php",{
 									privince:province_mark,
 								},
 								function(result){
-									console.log(result);
 									$("#area_table").html(result);
 								});
-							});
-							$('#enter_position_2').click(function(){
-								console.log(province_mark);
-								$.post("table/area_table.php",{
-									privince:province_mark,
-								},
-								function(result){
-									console.log(result);
-									$("#area_table").html(result);
-								});
+								$('html, body').animate({scrollTop: 760}, 800);
 							});
 							$('#enter_position_3').click(function(){
-								console.log(province_mark);
 								$.post("table/area_table.php",{
 									privince:province_mark,
 								},
 								function(result){
-									console.log(result);
 									$("#area_table").html(result);
 								});
 							});
@@ -432,7 +421,7 @@
 				layer.setMap(map);
 			isCheckEleAvg = true;
 		}
-		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase) {
+		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase,station) {
 			if (!statusCase)
 			{
 				switch (cases)
@@ -485,6 +474,7 @@
 							getterMarker.push(new google.maps.Marker({
 							position: position,
 							map: map,
+							title:station,
 							icon:'img_weather/sun_icon.png',
 							animation: google.maps.Animation.DROP
 							}));
@@ -495,7 +485,8 @@
 							getterMarker.push(new google.maps.Marker({
 							position: position,
 							map: map,
-							icon:'img_weather/Cloud-icon.png',
+							title:station,
+							icon:'img_weather/cloud_icon.png',
 							animation: google.maps.Animation.DROP
 							}));
 						}, timeout);
@@ -505,6 +496,18 @@
 							getterMarker.push(new google.maps.Marker({
 							position: position,
 							map: map,
+							title:station,
+							icon:'img_weather/muchCloud-icon.png',
+							animation: google.maps.Animation.DROP
+							}));
+						}, timeout);
+						break;
+					case "มีเมฆเต็มท้องฟ้า":
+						window.setTimeout(function() {
+							getterMarker.push(new google.maps.Marker({
+							position: position,
+							map: map,
+							title:station,
 							icon:'img_weather/Toocloud_icon.png',
 							animation: google.maps.Animation.DROP
 							}));
@@ -559,6 +562,7 @@
 							success: function(data) {    // การทำงานลังจาก load ข้อมูลทั้งหมดมาแล้ว
 										var num = data.Stations.length;
 										var stackLatLng = [];
+										var sta = [];
 										for(var j=0;j<num;j++){
 												var getlatt = data.Stations[j]['Latitude']['Value'];
 												var lat = parseFloat(getlatt);
@@ -566,6 +570,7 @@
 												var getlngg = data.Stations[j]['Longitude']['Value'];
 												var lng = parseFloat(getlngg);
 
+												sta[j] = data.Stations[j]['StationNameTh'];
 												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
 												arrayAllWeatherCase.push(Cloud);
 												var Temper = data.Stations[j]['Observe']['Temperature']['Value'];
@@ -580,7 +585,8 @@
 													}); */
 										}
 										for (var i = 0; i < stackLatLng.length; i++) {
-											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayAllWeather, "allWeather", arrayAllWeatherCase[i]);
+											if (sta[i] != "นำร่อง")
+											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayAllWeather, "allWeather", arrayAllWeatherCase[i],sta[i]);
 										}
 
 								},
@@ -1483,6 +1489,7 @@
 			if (collapsePlant) {
 				$("#itemPlant").hide();
 				collapsePlant = false;
+				layer.setMap(null);
 			} else {
 				$("#itemPlant").show();
 				collapsePlant = true;
@@ -1584,7 +1591,7 @@
 		}
 		function get_info(){
 
-
+console.log(55555);
 			var info_lat = get_lat_info;
 			var info_lng = get_lng_info;
 
@@ -1673,9 +1680,10 @@
 					});
 
 		}
+
 		function get_info2(){
 			console.log(44444);
-			toggle_area_result();
+			toggle_area_result(0);
 
 			var info_lat = getCurrentPosition.lat;
 			var info_lng = getCurrentPosition.lng;
@@ -1804,13 +1812,37 @@
 			}
 
 
-			function toggle_area_result(){
-				var x = document.getElementById("area_result");
-		    if (x.style.display === "none") {
-		        x.style.display = "block";
-		    } else {
-		        x.style.display = "none";
-		    }
+			function toggle_area_result(check){
+				if(check==0){				//gps
+					if(togle_area_table_gps==0){
+						console.log("gps");
+						togle_area_table_gps=1;
+						var x = document.getElementById("area_result");
+				    if (x.style.display === "none") {
+				        x.style.display = "block";
+				    } else {
+				        x.style.display = "none";
+				    }
+					}
+				}
+				else {							//marker
+					console.log(togle_area_table_gps);
+					console.log("marker");
+					if(togle_area_table_gps==1){
+						console.log("marker1");
+						togle_area_table_gps=0;
+					}
+					else{
+						console.log("marker2");
+						var x = document.getElementById("area_result");
+				    if (x.style.display === "none") {
+				        x.style.display = "block";
+				    } else {
+				        x.style.display = "none";
+				    }
+					}
+
+				}
 			}
 
 			function toggle_weather() {
@@ -1856,6 +1888,11 @@
 		$(function(){
 
 			$("#linkSearch").click(function(e){
+				if (checkWeather)
+				for (var i = 0; i < arrayAllWeather.length; i++) {
+						arrayAllWeather[i].setMap(null);
+				}
+				checkWeather = false;
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
