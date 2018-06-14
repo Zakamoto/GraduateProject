@@ -36,21 +36,21 @@ Highcharts.chart('chart_month2', {
       type: 'column',
       name: 'ความชื้นสัมพันธ์',
       data: [
-          <?php 
+          <?php
       if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
       $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
       else if($month==2)
       $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
       else
       $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-      
+
       for ($i = 0; $i < sizeof($data); $i++) {
-          $dataSort[$data[$i]['Date']] = $data[$i]['RH'];
+          $dataSort[($data[$i]['Date']-1)] = $data[$i]['RH'];
       }
       if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
           for($i=0;$i<31;$i++){ ?>
               <?= $dataSort[$i] ?>,
-          <?php } 
+          <?php }
       else if($month==2)
           for($i=0;$i<28;$i++){ ?>
               <?= $dataSort[$i] ?>,

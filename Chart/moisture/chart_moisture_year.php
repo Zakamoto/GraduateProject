@@ -5,7 +5,8 @@
 <?php
 include "../../get_data.php";
 $place = $_POST['place'];
-$data = get_year_place($place);
+$year = $_POST['year'];
+$data = get_year_place($place,$year);
 ?>
 Highcharts.chart('chart_year2', {
   title: {

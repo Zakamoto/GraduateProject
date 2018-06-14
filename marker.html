@@ -1591,6 +1591,7 @@
 		}
 
 		function popup_cal(){
+			console.log(province_mark);
 			$.post("popup_cal.php",{area:province_mark,},function(result){
 				if(result==1)
 					$("#Display_rice").click();
@@ -1630,6 +1631,7 @@
 
 			function toggle_area_result(check){
 				if(check==0){				//gps
+						$("#address").html(address_info);
 					if(togle_area_table_gps==0){
 						togle_area_table_gps=1;
 						var x = document.getElementById("area_result");
@@ -1699,11 +1701,20 @@
 		$(function(){
 
 			$("#linkSearch").click(function(e){
+				$("#Report").hide();
 				if (checkWeather)
 				for (var i = 0; i < arrayAllWeather.length; i++) {
 						arrayAllWeather[i].setMap(null);
 				}
 				checkWeather = false;
+				collapsePlant = false;
+				if (checkRadioGeo) {
+				checkRadioGeo = false;
+				}
+				var x = document.getElementById("table_test");
+				x.style.display = "none";
+				if (checkRadioPlant)
+				layer.setMap(null);
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
@@ -1727,6 +1738,7 @@
 
 
 				$('#enter_position_1').click(function(){
+					$("#address").html(address_info);
 					$.post("table/area_table.php",{
 						privince:province_mark,
 						high:high_level,
@@ -1737,6 +1749,7 @@
 					$('html, body').animate({scrollTop: 760}, 800);
 				});
 				$('#enter_position_3').click(function(){
+					$("#address").html(address_info);
 					$.post("table/area_table.php",{
 						privince:province_mark,
 						high:high_level,
@@ -1857,9 +1870,9 @@
 		<div style="width:1500px;background-color:#D5F5E3;">
 			<div class="row">
 
-				<div style="width:720px;"><button id="B_page"> << </button></div>
-				<div id="num_page" style="width:60px;">page 1</div>
-				<div style="width:720px;"><button id="F_page"> >> </button></div>
+				<div class="col-md-5"><button class="btn" style="background-color:#D5D8DC;float:right;" id="B_page"> << </button></div>
+				<div id="num_page" class="col-md-2">page 1</div>
+				<div class="col-md-5"><button class="btn" style="background-color:#D5D8DC;float:left;" id="F_page"> >> </button></div>
 
 			</div>
 		</div>

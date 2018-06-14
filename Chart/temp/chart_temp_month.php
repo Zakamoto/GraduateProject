@@ -47,7 +47,7 @@ Highcharts.chart('chart_month', {
             $dataSort = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
             for ($i = 0; $i < sizeof($data); $i++) {
-                $dataSort[$data[$i]['Date']] = $data[$i]['TC'];
+                $dataSort[($data[$i]['Date']-1)] = $data[$i]['TC'];
             }
             if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
                 for($i=0;$i<31;$i++){ ?>

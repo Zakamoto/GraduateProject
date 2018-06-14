@@ -124,7 +124,6 @@ $(document).ready(function(){
           $("#area_table").html(result);
         });
     }
-
     function rubber_chart(){
       //console.log("runber_charat used");
       $.post("./Chart/plant/rubber_chart.php",function(result){
@@ -132,24 +131,21 @@ $(document).ready(function(){
         $("#chart_content").html(result);
       });
     }
-
-  function cassava_chart(){
+    function cassava_chart(){
     //console.log(radioValue);
     $.post("./Chart/plant/cassava_chart.php",function(result){
       console.log("cassava chart");
       $("#chart_content").html(result);
     });
   }
-
-  function oilpalm_chart(){
+    function oilpalm_chart(){
     //console.log(radioValue);
     $.post("./Chart/plant/oilpalm_chart.php",function(result){
       console.log("oilpalm chart");
       $("#chart_content").html(result);
       });
     }
-
-  function sugarcane_chart(){
+    function sugarcane_chart(){
     //console.log(radioValue);
     $.post("./Chart/plant/sugarcane_chart.php",function(result){
       console.log("sugarcane chart");
@@ -560,6 +556,7 @@ $("#B_page").click(function(){
               $("#table_content").html(result);
             });
           }
+
           function dropdown_table(page){
             $.post("./dropdown_page.php",{
               page:page,
@@ -575,11 +572,12 @@ $("#B_page").click(function(){
             $("#select_month_temp3hour").empty();
             $("#select_date_temp3hour").empty();
             if($("#select_place_temp3hour").val()!=0){
-                select_time_temp(1);
+                select_time_temp(1,0);
             }
             else{
               $("#chart_temp_year").empty();
               $("#chart_temp_month").empty();
+              $("#chart_temp_3hour").empty();
             }
           });
           $("#select_place_mois3hour").change(function(){
@@ -587,11 +585,12 @@ $("#B_page").click(function(){
             $("#select_month_mois3hour").empty();
             $("#select_date_mois3hour").empty();
             if($("#select_place_mois3hour").val()!=0){
-                select_time_mois(1);
+                select_time_mois(1,0);
             }
             else{
               $("#chart_moisture_year").empty();
               $("#chart_moisture_month").empty();
+              $("#chart_moisture_3hour").empty();
             }
           });
 
@@ -616,7 +615,8 @@ $("#B_page").click(function(){
         $("#select_month_temp3hour").empty();
         $("#select_date_temp3hour").empty();
         if($("#select_year_temp3hour").val()!=0){
-          select_time_temp(2);
+          var year = $("#select_year_temp3hour").val();
+          select_time_temp(2,year);
           $("#chart_temp_month").empty();
           $("#chart_temp_3hour").empty();
         }
@@ -629,7 +629,8 @@ $("#B_page").click(function(){
       $("#select_month_temp3hour").change(function(){
         $("#select_date_temp3hour").empty();
         if($("#select_month_temp3hour").val()!=0){
-          select_time_temp(3);
+          var year = $("#select_year_temp3hour").val();
+          select_time_temp(3,year);
           $("#chart_temp_3hour").empty();
         }
         else {
@@ -649,10 +650,10 @@ $("#B_page").click(function(){
           date3: date3,
           place:place,
         },function(result){
-
           $("#chart_temp_3hour").html(result);
-
+          console.log(result);
         });
+        $('html, body').animate({scrollTop: 760}, 800);
       });
 
 
@@ -668,7 +669,7 @@ $("#B_page").click(function(){
       }
 
 
-      function select_time_temp(settime){
+      function select_time_temp(settime,year){
         if(settime==1){         //นำปีมาแสดง(เป็นส่วนเริ่มต้น)
           $.post("./dropdown_time.php",{
             type:1,
@@ -687,13 +688,13 @@ $("#B_page").click(function(){
           var place = $("#select_place_temp3hour").val();
           $.post("./Chart/temp/chart_temp_allyear.php",{
             place:place,
+            year:year,
           }
           ,function(result){
             $("#chart_temp_year").html(result);
           });
         }
         else {    //เลือกวันที่มีจำนวนตรงกับเดือน
-          var year = $("#select_year_temp3hour").val();
           var month = $("#select_month_temp3hour").val();
           var place = $("#select_place_temp3hour").val();
           $.post("./dropdown_time.php",{
@@ -725,7 +726,8 @@ $("#B_page").click(function(){
         $("#select_date_mois3hour").empty();
         $("#select_mois3hour").empty();
         if($("#select_year_mois3hour").val()!=0){
-          select_time_mois(2);
+          var year = $("#select_year_mois3hour").val();
+          select_time_mois(2,year);
           $("#chart_moisture_month").empty();
           $("#chart_moisture_3hour").empty();
         }
@@ -739,8 +741,10 @@ $("#B_page").click(function(){
         $("#select_date_mois3hour").empty();
         $("#chart_moisture_3hour").empty();
         if($("#select_month_mois3hour").val()!=0){
-          select_time_mois(3);
+          var year = $("#select_year_mois3hour").val();
+          select_time_mois(3,year);
           $("#chart_moisture_3hour").empty();
+          $('html, body').animate({scrollTop: 760}, 800);
         }
         else{
           $("#chart_moisture_month").empty();
@@ -762,11 +766,12 @@ $("#B_page").click(function(){
 
           $("#chart_moisture_3hour").html(result);
         });
+        $('html, body').animate({scrollTop: 760}, 800);
       });
 
 
 
-      function select_time_mois(settime){
+      function select_time_mois(settime,year){
         if(settime==1){         //นำปีมาแสดง(เป็นส่วนเริ่มต้น)
           $.post("./dropdown_time.php",{
             type:1,
@@ -785,12 +790,12 @@ $("#B_page").click(function(){
           var place = $("#select_place_mois3hour").val();
           $.post("./Chart/moisture/chart_moisture_year.php",{
             place:place,
+            year:year,
           },function(result){
             $("#chart_moisture_year").html(result);
           });
         }
         else {    //เลือกวันที่มีจำนวนตรงกับเดือน
-          var year = $("#select_year_mois3hour").val();
           var month = $("#select_month_mois3hour").val();
           var place = $("#select_place_mois3hour").val();
           $.post("./dropdown_time.php",{

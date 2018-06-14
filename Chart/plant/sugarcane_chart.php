@@ -12,7 +12,7 @@
           },
           xAxis: {
               categories: [
-                            <?php for($i=0;$i<sizeof($data);$i++){ ?>
+                            <?php for($i=0;$i<25;$i++){ ?>
                               <?= json_encode($data[$i][0]['Name']); ?>,
                             <?php } ?>
                           ]
@@ -28,7 +28,7 @@
               type: 'spline',
               name: 'ตัน',
               data: [
-                      <?php for($i=0;$i<sizeof($data);$i++){ ?>
+                      <?php for($i=0;$i<25;$i++){ ?>
                         <?= $data[$i][0]['Sum']; ?>,
                       <?php } ?>
                     ],

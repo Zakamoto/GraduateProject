@@ -4,7 +4,9 @@ if(isset($_POST['privince'])){
 $province = $_POST['privince'];
 $high = $_POST['high'];
 $high = number_format($high,2,'.','');
-$data = get_data_area($province);
+$month = date('n');
+
+$data = get_data_area($province,$month);
 
 
 $result_rice = [0,0,0];
@@ -287,18 +289,18 @@ if($data){ ?>
            <tbody>
             <tr>
               <td>อุณหภูมิ</td>
-              <td>18 - 25</td>
-              <td><?php echo $data[0]['TC']; ?></td>
+              <td><center>18 - 25</center></td>
+              <td><p align="right"><?php echo $data[0]['TC']; ?></p></td>
             </tr>
             <tr>
               <td>ความสูงจากระดับน้ำทะเล</td>
-              <td>0 - 800</td>
-              <td><?php echo $high; ?></td>
+              <td><center>0 - 800</center></td>
+              <td><p align="right"><?php echo $high; ?></p></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
-              <td>150 - 400</td>
-              <td><?php echo $data[0]['Rain']; ?></td>
+              <td><center>150 - 400</center></td>
+              <td><p align="right"><?php echo $data[0]['Rain']; ?></p></td>
             </tr>
            </tbody>
           </table>
@@ -333,18 +335,18 @@ if($data){ ?>
            <tbody>
             <tr>
               <td>อุณหภูมิ</td>
-              <td>25 - 35</td>
-              <td><?php echo $data[0]['TC']; ?></td>
+              <td><center>25 - 35</center></td>
+              <td><p align="right"><?php echo $data[0]['TC']; ?></p></td>
             </tr>
             <tr>
               <td>ความสูงจากระดับน้ำทะเล</td>
-              <td>0 - 1500</td>
-              <td><?php echo $high; ?></td>
+              <td><center>0 - 1500</center></td>
+              <td><p align="right"><?php echo $high; ?></p></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
-              <td>100 - 125</td>
-              <td><?php echo $data[0]['Rain']; ?></td>
+              <td><center>100 - 125</center></td>
+              <td><p align="right"><?php echo $data[0]['Rain']; ?></p></td>
             </tr>
            </tbody>
           </table>
@@ -379,18 +381,18 @@ if($data){ ?>
            <tbody>
             <tr>
               <td>อุณหภูมิ</td>
-              <td>25 - 28</td>
-              <td><?php echo $data[0]['TC']; ?></td>
+              <td><center>25 - 28</center></td>
+              <td><p align="right"><?php echo $data[0]['TC']; ?></p></td>
             </tr>
             <tr>
               <td>ความสูงจากระดับน้ำทะเล</td>
-              <td>0 - 500</td>
-              <td><?php echo $high; ?></td>
+              <td><center>0 - 500</center></td>
+              <td><p align="right"><?php echo $high; ?></p></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
-              <td>150 - 165</td>
-              <td><?php echo $data[0]['Rain']; ?></td>
+              <td><center>150 - 165</center></td>
+              <td><p align="right"><?php echo $data[0]['Rain']; ?></p></td>
             </tr>
            </tbody>
           </table>
@@ -425,18 +427,18 @@ if($data){ ?>
            <tbody>
             <tr>
               <td>อุณหภูมิ</td>
-              <td>26 - 30</td>
-              <td><?php echo $data[0]['TC']; ?></td>
+              <td><center>26 - 30</center></td>
+              <td><p align="right"><?php echo $data[0]['TC']; ?></p></td>
             </tr>
             <tr>
               <td>ความสูงจากระดับน้ำทะเล</td>
-              <td>0 - 200</td>
-              <td><?php echo $high; ?></td>
+              <td><center>0 - 200</center></td>
+              <td><p align="right"><?php echo $high; ?></p></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
-              <td>100 - 125</td>
-              <td><?php echo $data[0]['Rain']; ?></td>
+              <td><center>100 - 125</center></td>
+              <td><p align="right"><?php echo $data[0]['Rain']; ?></p></td>
             </tr>
            </tbody>
           </table>
@@ -471,18 +473,18 @@ if($data){ ?>
            <tbody>
             <tr>
               <td>อุณหภูมิ</td>
-              <td>25 - 37</td>
-              <td><?php echo $data[0]['TC']; ?></td>
+              <td><center>25 - 37</center></td>
+              <td><p align="right"><?php echo $data[0]['TC']; ?></p></td>
             </tr>
             <tr>
               <td>ความสูงจากระดับน้ำทะเล</td>
-              <td>0 - 200</td>
-              <td><?php echo $high; ?></td>
+              <td><center>0 - 200</center></td>
+              <td><p align="right"><?php echo $high; ?></p></td>
             </tr>
             <tr>
               <td>ปริมาณน้ำฝน</td>
-              <td>100 - 125</td>
-              <td><?php echo $data[0]['Rain']; ?></td>
+              <td><center>100 - 125</center></td>
+              <td><p align="right"><?php echo $data[0]['Rain']; ?></p></td>
             </tr>
            </tbody>
           </table>

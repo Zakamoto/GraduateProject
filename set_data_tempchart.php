@@ -63,7 +63,7 @@ else{    //ข้อมูลแผนภูมิรายเดือน
   $place = $_POST['place'];
 
   $date_in_month = get_date_of_month($month);
-  $data = get_month_place($place,$month);
+  $data = get_month_place($place,$month,$year);
 
   if($data)
     {include 'chart/temp/chart_temp_month.php';}
