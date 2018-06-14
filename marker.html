@@ -192,7 +192,7 @@
 		var my_Marker;
 		var producMarker = [];
 		var layer;
-		var address_info;
+		let address_info;
 		var checkRadioPlant = false;
 		var checkRadioWeather = false;
 		var checkRadioGeo = false;
@@ -356,8 +356,20 @@
 				// Retrieve the first result
 				if (results[0]) {
 					// Open the infowindow indicating the elevation at the clicked position.
-					infowindow.setContent('ความสูงจากระดับน้ำทะเล ' +
-						results[0].elevation + ' เมตร');
+				geocoder.geocode({"latLng": location}, function(results, status) {
+				  if (status == GGM.GeocoderStatus.OK) {
+						if (results[1]) {
+							// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
+							$("#place_value").html(results[1].formatted_address); //
+							address_info = results[1].formatted_address;
+						}
+				  } else {
+					  // กรณีไม่มีข้อมูล
+					alert("Geocoder failed due to: " + status);
+				  }
+				});
+					infowindow.setContent(/*address_info + '</br>' + */'ความสูงจากระดับน้ำทะเล ' +
+					Number(results[0].elevation).toFixed(2) + ' เมตร');
 					elevatorValue = results[0].elevation;
 				} else {
 					infowindow.setContent('No results found');
@@ -466,6 +478,7 @@
 					break;
 				}
 			} else {
+				station = station + "\n" + "สภาพอากาศ : " + statusCase;
 				switch (statusCase)
 				{
 					case "ท้องฟ้าแจ่มใส":
@@ -803,7 +816,19 @@
 							templateId: 2
 						}
 				});
-					layer.setMap(map);
+				layer.setMap(map);
+				/*
+				var url = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT detail4 FROM 10ZNDaq7OmWqvnIGSu-SYVAJrUdfHDEKLv1zKevkZ&key=AIzaSyD17yJ8x8JJ0unSUF8OVddXqYaPCd7uFGg";
+				httpGet(url);
+				function httpGet(theUrl)
+				{
+						var xmlHttp = new XMLHttpRequest();
+						xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+						xmlHttp.send( null );
+						return xmlHttp.responseText;
+				}
+				console.log(url);
+				*/
 		}
 		function cane() {
 			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
