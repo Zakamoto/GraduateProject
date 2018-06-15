@@ -36,6 +36,7 @@ $(document).ready(function(){
           rice_chart();
           dropdown_table(8);
           table_rice("0");
+          table_rice_averge();
         }
         setFirstData = true;
     });
@@ -55,6 +56,7 @@ $(document).ready(function(){
                 rice_chart();
                 dropdown_table(8);
                 table_rice("0");
+                table_rice_averge();
                   break;
                   case "4":
                       num_page = 1;
@@ -153,7 +155,12 @@ $(document).ready(function(){
       });
     }
 
-
+function table_rice_averge(){
+  console.log("aver");
+  $.post("./table/table_plant_averge/table_rice_averge.php",function(result){console.log(result);
+    $("#other_content").html(result);
+  });
+}
 
 
 
@@ -651,7 +658,6 @@ $("#B_page").click(function(){
           place:place,
         },function(result){
           $("#chart_temp_3hour").html(result);
-          console.log(result);
         });
         $('html, body').animate({scrollTop: 760}, 800);
       });

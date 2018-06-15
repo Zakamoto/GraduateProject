@@ -432,7 +432,7 @@
 				layer.setMap(map);
 			isCheckEleAvg = true;
 		}
-		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase,station) {
+		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase,station,area) {
 			if (!statusCase)
 			{
 				switch (cases)
@@ -478,7 +478,7 @@
 					break;
 				}
 			} else {
-				station = station + "\n" + "สภาพอากาศ : " + statusCase;
+				station = station + "\n" + "จังหวัด : " + area + "\n" + "สภาพอากาศ : " + statusCase;
 				switch (statusCase)
 				{
 					case "ท้องฟ้าแจ่มใส":
@@ -575,6 +575,7 @@
 										var num = data.Stations.length;
 										var stackLatLng = [];
 										var sta = [];
+										var sta_area = [];
 										for(var j=0;j<num;j++){
 												var getlatt = data.Stations[j]['Latitude']['Value'];
 												var lat = parseFloat(getlatt);
@@ -583,6 +584,7 @@
 												var lng = parseFloat(getlngg);
 
 												sta[j] = data.Stations[j]['StationNameTh'];
+												sta_area[j] = data.Stations[j]['Province'];
 												console.log(data.Stations[j]['Observe']['TotolCloud']);
 												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
 												arrayAllWeatherCase.push(Cloud);
@@ -599,7 +601,7 @@
 										}
 										for (var i = 0; i < stackLatLng.length; i++) {
 											if (sta[i] != "นำร่อง")
-											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayAllWeather, "allWeather", arrayAllWeatherCase[i],sta[i]);
+											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayAllWeather, "allWeather", arrayAllWeatherCase[i],sta[i],sta_area[i]);
 										}
 
 								},
@@ -1889,6 +1891,7 @@
 
 
 <div id="table_test">
+	<div id="other_content"></div>
 	<div id="chart_content"></div>
 	<div id="table_content"></div>
   <center>

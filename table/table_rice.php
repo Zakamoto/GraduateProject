@@ -3,6 +3,7 @@
 
 
 <?php
+
   $start = $page;
  ?>
 
@@ -16,7 +17,10 @@
       <thead  style="background-color:green;">
           <th>ลำดับ</th>
           <th>จังหวัด</th>
-          <th>ผลผลิต (กิโลกรัม)</th>
+          <th>ผลผลิต 2557 (กิโลกรัม)</th>
+          <th>ผลผลิต 2558 (กิโลกรัม)</th>
+          <th>ผลผลิต 2559 (กิโลกรัม)</th>
+          <th>ผลผลิตเฉลี่ย (กิโลกรัม)</th>
         </tr>
       </thead>
 
@@ -29,7 +33,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
@@ -40,7 +47,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right" backg><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
@@ -51,7 +61,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
@@ -62,7 +75,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
@@ -73,7 +89,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
@@ -84,7 +103,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
@@ -95,7 +117,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
@@ -106,7 +131,10 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2557),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2558),2,'.',''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)get_history_rice($data[$i][0]['Name'],2559),2,'.',''); ?></p></td>
+                  <td style="background-color:#58D68D;"><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
                 </tr>
         <?php
               }
