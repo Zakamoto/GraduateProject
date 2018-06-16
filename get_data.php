@@ -243,6 +243,56 @@ function get_chart_rice(){
   else
     return false;
 }
+function get_history_rice($place,$year){
+  $con = conDB();
+
+  $query = $con->query("SELECT product_per_plant FROM rice_product WHERE province='$place' AND year=$year");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data['product_per_plant'];
+  else
+    return 0;
+}
+function get_history_cassava($place,$year){
+  $con = conDB();
+
+  $query = $con->query("SELECT product_per_crop FROM cassava_product WHERE province='$place' AND year=$year");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data['product_per_crop'];
+  else
+    return 0;
+}
+
+function get_history_plam($place,$year){
+  $con = conDB();
+
+  $query = $con->query("SELECT product_per_crop FROM plam_product WHERE province='$place' AND year=$year");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data['product_per_crop'];
+  else
+    return 0;
+}
+
+function get_history_rubber($place,$year){
+  $con = conDB();
+
+  $query = $con->query("SELECT product_per_crop FROM rubber_product WHERE province='$place' AND year=$year");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data['product_per_crop'];
+  else
+    return 0;
+}
 
 function get_place(){
   $con = conDB();

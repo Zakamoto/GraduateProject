@@ -36,6 +36,7 @@ $(document).ready(function(){
           rice_chart();
           dropdown_table(8);
           table_rice("0");
+          table_rice_averge("ข้าว");
         }
         setFirstData = true;
     });
@@ -55,6 +56,7 @@ $(document).ready(function(){
                 rice_chart();
                 dropdown_table(8);
                 table_rice("0");
+                table_rice_averge("ข้าว");
                   break;
                   case "4":
                       num_page = 1;
@@ -67,6 +69,7 @@ $(document).ready(function(){
                       rubber_chart();
                       dropdown_table(7);
                       table_rubber("0");
+                      table_rice_averge("ยางพารา");
                       break;
                   case "5":
                       num_page = 1;
@@ -79,6 +82,7 @@ $(document).ready(function(){
                       cassava_chart();
                       dropdown_table(5);
                       table_cassava("0");
+                      table_rice_averge("มันสำปะหลัง");
                       break;
                   case "2":
                       num_page = 1;
@@ -91,6 +95,7 @@ $(document).ready(function(){
                       sugarcane_chart();
                       dropdown_table(5);
                       table_sugarcane("0");
+                      table_rice_averge("อ้อย");
                       break;
                   case "3":
                       num_page = 1;
@@ -103,6 +108,7 @@ $(document).ready(function(){
                       oilpalm_chart();
                       dropdown_table(7);
                       table_oilpalm("0");
+                      table_rice_averge("ปาล์มน้ำมัน");
                       break;
                 }
               }
@@ -153,7 +159,14 @@ $(document).ready(function(){
       });
     }
 
-
+function table_rice_averge(typeInput){
+  $.post("./table/table_plant_averge/table_rice_averge.php",
+  {
+    type:typeInput,
+  },function(result){console.log(result);
+    $("#other_content").html(result);
+  });
+}
 
 
 
@@ -651,7 +664,6 @@ $("#B_page").click(function(){
           place:place,
         },function(result){
           $("#chart_temp_3hour").html(result);
-          console.log(result);
         });
         $('html, body').animate({scrollTop: 760}, 800);
       });

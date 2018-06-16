@@ -1,5 +1,5 @@
 
-<center><div id="chart_sugarcane" style="width:1500px;"></div></center>
+<center><div id="chart_sugarcane" style="width:1400px;"></div></center>
 
 <script type="text/javascript">
         <?php
