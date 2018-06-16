@@ -192,7 +192,7 @@
 		var my_Marker;
 		var producMarker = [];
 		var layer;
-		var address_info;
+		let address_info;
 		var checkRadioPlant = false;
 		var checkRadioWeather = false;
 		var checkRadioGeo = false;
@@ -204,6 +204,11 @@
 		var isCheckRubber = false;
 		var isCheckCassava = false;
 		var checkWeather = false;
+		var collapRice = false;
+		var collapCane = false;
+		var collapRubber = false;
+		var collapPalm = false;
+		var collapCassava = false;
 		var arrayAllWeather = [];
 		var arrayAllWeatherCase = [];
 		var arrayWarm = [];
@@ -356,8 +361,20 @@
 				// Retrieve the first result
 				if (results[0]) {
 					// Open the infowindow indicating the elevation at the clicked position.
-					infowindow.setContent('ความสูงจากระดับน้ำทะเล ' +
-						results[0].elevation + ' เมตร');
+				geocoder.geocode({"latLng": location}, function(results, status) {
+				  if (status == GGM.GeocoderStatus.OK) {
+						if (results[1]) {
+							// แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
+							$("#place_value").html(results[1].formatted_address); //
+							address_info = results[1].formatted_address;
+						}
+				  } else {
+					  // กรณีไม่มีข้อมูล
+					alert("Geocoder failed due to: " + status);
+				  }
+				});
+					infowindow.setContent(/*address_info + '</br>' + */'ความสูงจากระดับน้ำทะเล ' +
+					Number(results[0].elevation).toFixed(2) + ' เมตร');
 					elevatorValue = results[0].elevation;
 				} else {
 					infowindow.setContent('No results found');
@@ -420,7 +437,7 @@
 				layer.setMap(map);
 			isCheckEleAvg = true;
 		}
-		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase,station) {
+		function addMarkerWithTimeout(position, timeout, getterMarker, cases, statusCase,station,area) {
 			if (!statusCase)
 			{
 				switch (cases)
@@ -466,6 +483,7 @@
 					break;
 				}
 			} else {
+				station = station + "\n" + "จังหวัด : " + area + "\n" + "สภาพอากาศ : " + statusCase;
 				switch (statusCase)
 				{
 					case "ท้องฟ้าแจ่มใส":
@@ -562,6 +580,7 @@
 										var num = data.Stations.length;
 										var stackLatLng = [];
 										var sta = [];
+										var sta_area = [];
 										for(var j=0;j<num;j++){
 												var getlatt = data.Stations[j]['Latitude']['Value'];
 												var lat = parseFloat(getlatt);
@@ -570,6 +589,7 @@
 												var lng = parseFloat(getlngg);
 
 												sta[j] = data.Stations[j]['StationNameTh'];
+												sta_area[j] = data.Stations[j]['Province'];
 												console.log(data.Stations[j]['Observe']['TotolCloud']);
 												var Cloud = data.Stations[j]['Observe']['TotolCloud'];
 												arrayAllWeatherCase.push(Cloud);
@@ -586,7 +606,7 @@
 										}
 										for (var i = 0; i < stackLatLng.length; i++) {
 											if (sta[i] != "นำร่อง")
-											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayAllWeather, "allWeather", arrayAllWeatherCase[i],sta[i]);
+											addMarkerWithTimeout(stackLatLng[i], i * 30, arrayAllWeather, "allWeather", arrayAllWeatherCase[i],sta[i],sta_area[i]);
 										}
 
 								},
@@ -785,6 +805,11 @@
 		}
 		function rice(){
 			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			$("#rice_color").show();
+			$("#cane_color").hide();
+			$("#palm_color").hide();
+			$("#rubber_color").hide();
+			$("#cassava_color").hide();
 			toggle_table();
 				if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
@@ -796,17 +821,56 @@
 				layer = new google.maps.FusionTablesLayer({
 						query: {
 						select: 'geometry',
-						from: '10ZNDaq7OmWqvnIGSu-SYVAJrUdfHDEKLv1zKevkZ', // นาปี
+						from: '10ZNDaq7OmWqvnIGSu-SYVAJrUdfHDEKLv1zKevkZ', // ข้าว
 						},
 						options: {
 							styleId: 2,
 							templateId: 2
+						},
+						styles: [{
+							where: 'detail4 >= 600',
+							polygonOptions: {
+							fillColor: '#e60000' 
+							} 
+						}, {
+							where: 'detail4 < 600 AND detail4 >= 400',
+							polygonOptions: {
+								fillColor: '#ff3333'
+							}
+						}, {
+							where: 'detail4 < 400 AND detail4 >= 200',
+							polygonOptions: {
+								fillColor: '#ff9999'
+							}
+						}, {
+							where: 'detail4 < 200',
+							polygonOptions: {
+								fillColor: '#ffe6e6'
+							}
 						}
+						]
 				});
-					layer.setMap(map);
+				layer.setMap(map);
+				/*
+				var url = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT detail4 FROM 10ZNDaq7OmWqvnIGSu-SYVAJrUdfHDEKLv1zKevkZ&key=AIzaSyD17yJ8x8JJ0unSUF8OVddXqYaPCd7uFGg";
+				httpGet(url);
+				function httpGet(theUrl)
+				{
+						var xmlHttp = new XMLHttpRequest();
+						xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+						xmlHttp.send( null );
+						return xmlHttp.responseText;
+				}
+				console.log(url);
+				*/
 		}
 		function cane() {
 			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			$("#rice_color").hide();
+			$("#cane_color").show();
+			$("#palm_color").hide();
+			$("#rubber_color").hide();
+			$("#cassava_color").hide();
 			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
@@ -824,7 +888,29 @@
 						options: {
 							styleId: 2,
 							templateId: 2
+						},
+						styles: [{
+							where: 'detail4 >= 600',
+							polygonOptions: {
+							fillColor: '#996600' 
+							} 
+						}, {
+							where: 'detail4 < 600 AND detail4 >= 400',
+							polygonOptions: {
+								fillColor: '#ffb31a'
+							}
+						}, {
+							where: 'detail4 < 400 AND detail4 >= 200',
+							polygonOptions: {
+								fillColor: '#ffdd99'
+							}
+						}, {
+							where: 'detail4 < 200',
+							polygonOptions: {
+								fillColor: '#fff7e6'
+							}
 						}
+						]
 				});
 					layer.setMap(map);
 			/*	$.ajax({
@@ -876,6 +962,11 @@
 		}
 		function palm(){
 			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			$("#rice_color").hide();
+			$("#cane_color").hide();
+			$("#palm_color").show();
+			$("#rubber_color").hide();
+			$("#cassava_color").hide();
 			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
@@ -893,7 +984,29 @@
 						options: {
 							styleId: 2,
 							templateId: 2
+						},
+						styles: [{
+							where: 'detail3 >= 3300',
+							polygonOptions: {
+							fillColor: '#ac00e6' 
+							} 
+						}, {
+							where: 'detail3 < 3300 AND detail3 >= 2475',
+							polygonOptions: {
+								fillColor: '#d966ff'
+							}
+						}, {
+							where: 'detail3 < 2475 AND detail3 >= 1650',
+							polygonOptions: {
+								fillColor: '#ecb3ff'
+							}
+						}, {
+							where: 'detail4 < 1650',
+							polygonOptions: {
+								fillColor: '#f9e6ff'
+							}
 						}
+						]
 				});
 					layer.setMap(map);
 			/*
@@ -945,6 +1058,11 @@
 		}
 		function rubber(){
 			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			$("#rice_color").hide();
+			$("#cane_color").hide();
+			$("#palm_color").hide();
+			$("#rubber_color").show();
+			$("#cassava_color").hide();
 			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
@@ -962,7 +1080,29 @@
 						options: {
 							styleId: 2,
 							templateId: 2
+						},
+						styles: [{
+							where: 'detail3 >= 240',
+							polygonOptions: {
+							fillColor: '#002ee6' 
+							} 
+						}, {
+							where: 'detail3 < 240 AND detail3 >= 180',
+							polygonOptions: {
+								fillColor: '#4d70ff'
+							}
+						}, {
+							where: 'detail3 < 180 AND detail3 >= 120',
+							polygonOptions: {
+								fillColor: '#b3c2ff'
+							}
+						}, {
+							where: 'detail3 < 120',
+							polygonOptions: {
+								fillColor: '#e6ebff'
+							}
 						}
+						]
 				});
 					layer.setMap(map);
 					checkRadioPlant = true;
@@ -1015,6 +1155,11 @@
 		}
 		function cassava(){
 			radioValue = parseInt(document.querySelector('input[name="plant"]:checked').value);
+			$("#rice_color").hide();
+			$("#cane_color").hide();
+			$("#palm_color").hide();
+			$("#rubber_color").hide();
+			$("#cassava_color").show();
 			toggle_table();
 			if (checkRadioGeo || checkRadioWeather || checkRadioPlant) {
 					layer.setMap(null);
@@ -1032,7 +1177,29 @@
 						options: {
 							styleId: 2,
 							templateId: 2
+						},
+						styles: [{
+							where: 'detail3 >= 4200',
+							polygonOptions: {
+							fillColor: '#cc5200' 
+							} 
+						}, {
+							where: 'detail3 < 4200 AND detail3 >= 3150',
+							polygonOptions: {
+								fillColor: '#ff8533'
+							}
+						}, {
+							where: 'detail3 < 3150 AND detail3 >= 2100',
+							polygonOptions: {
+								fillColor: '#ffc299'
+							}
+						}, {
+							where: 'detail3 < 2100',
+							polygonOptions: {
+								fillColor: '#fff0e6'
+							}
 						}
+						]
 				});
 					layer.setMap(map);
 			/*
@@ -1468,6 +1635,16 @@
 			checkRadioWeather = true;
 		}
 		function radioPlant() {
+			collapCane = false;
+			collapRice = false;
+			collapPalm = false;
+			collapCassava = false;
+			collapRubber = false;
+			$("#rice_color").hide();
+			$("#cane_color").hide();
+			$("#palm_color").hide();
+			$("#cassava_color").hide();
+			$("#rubber_color").hide();
 			if (checkWeather)
 			for (var i = 0; i < arrayAllWeather.length; i++) {
 					arrayAllWeather[i].setMap(null);
@@ -1719,7 +1896,7 @@
 						query: {
 						select: 'geometry',
 						from: '1LNSIfgRsObcmWBGu4sbXS2GRDcAlNirUsqfSq3CP',
-						where: 'rubber = "1"' // นาปี
+						where: 'rubber = 1'
 						},
 						options: {
 							styleId: 2,
@@ -1831,11 +2008,56 @@
 		<button class="btn btn-info btn-block" data-toggle="collapse" data-target="#itemPlant" onclick="radioPlant()"><h5>ผลผลิตของพืช</h5></button>
 		<div id="itemPlant" class="panel-collapse collapse">
 			<ul class="list-group">
-				<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="1" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font></li>
-				<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="2" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font></li>
-				<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="3" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font></li>
-				<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="4" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font></li>
-				<li class="list-group-item"><input type="radio" name="plant" id="plantData" value="5" onclick="cassava()"/><font style="padding-left: 25px;">มันสัมปะหลัง</font></li>
+				<li class="list-group-item">
+					<input type="radio" name="plant" id="plantData" value="1" onclick="rice()"><font style="padding-left: 25px;">ข้าว</font>
+						<div id="rice_color">
+							</br>
+							<button class="btn" style="background: #e60000"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 600 กก./ไร่ ขึ้นไป</font></br>
+							<button class="btn" style="background: #ff3333"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 599 - 400 กก./ไร่</font></br>
+							<button class="btn" style="background: #ff9999"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 399 - 200 กก./ไร่</font></br>
+							<button class="btn" style="background: #ffe6e6"></button><font style="padding-left:25px;">ผลผลิตต่อไร่น้อยกว่าหรือเท่ากับ 200 กก./ไร่ </font>
+						</div>
+				</li>
+				<li class="list-group-item">
+					<input type="radio" name="plant" id="plantData" value="2" onclick="cane()"><font style="padding-left: 25px;">อ้อย</font>
+						<div id="cane_color">
+							</br>
+							<button class="btn" style="background: #996600"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 600 กก./ไร่ ขึ้นไป</font></br>
+							<button class="btn" style="background: #ffb31a"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 599 - 400 กก./ไร่</font></br>
+							<button class="btn" style="background: #ffdd99"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 399 - 200 กก./ไร่</font></br>
+							<button class="btn" style="background: #fff7e6"></button><font style="padding-left:25px;">ผลผลิตต่อไร่น้อยกว่า 200 กก./ไร่ </font>
+						</div>
+				</li>
+				<li class="list-group-item">
+					<input type="radio" name="plant" id="plantData" value="3" onclick="palm()"><font style="padding-left: 25px;">ปาล์มน้ำมัน</font>
+						<div id="palm_color">	
+							</br>
+							<button class="btn" style="background: #ac00e6"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 3300 กก./ไร่ ขึ้นไป</font></br>
+							<button class="btn" style="background: #d966ff"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 3329 - 2475 กก./ไร่</font></br>
+							<button class="btn" style="background: #ecb3ff"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 2474 - 1650 กก./ไร่</font></br>
+							<button class="btn" style="background: #f9e6ff"></button><font style="padding-left:25px;">ผลผลิตต่อไร่น้อยกว่าหรือเท่ากับ 1650 กก./ไร่ </font>
+						</div>
+				</li>
+				<li class="list-group-item">
+					<input type="radio" name="plant" id="plantData" value="4" onclick="rubber()"/><font style="padding-left: 25px;">ยางพารา</font>
+						<div id="rubber_color">
+							</br>
+							<button class="btn" style="background: #002ee6"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 240 กก./ไร่ ขึ้นไป</font></br>
+							<button class="btn" style="background: #4d70ff"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 239 - 180 กก./ไร่</font></br>
+							<button class="btn" style="background: #b3c2ff"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 179 - 120 กก./ไร่</font></br>
+							<button class="btn" style="background: #e6ebff"></button><font style="padding-left:25px;">ผลผลิตต่อไร่น้อยกว่า 120 กก./ไร่ </font>
+						</div>
+				</li>
+				<li class="list-group-item">
+					<input type="radio" name="plant" id="plantData" value="5" onclick="cassava()"/><font style="padding-left: 25px;" >มันสัมปะหลัง</font>
+						<div id="cassava_color">
+							</br>
+							<button class="btn" style="background: #cc5200"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 4200 กก./ไร่ ขึ้นไป</font></br>
+							<button class="btn" style="background: #ff8533"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 4199 - 3150 กก./ไร่</font></br>
+							<button class="btn" style="background: #ffc299"></button><font style="padding-left:25px;">ผลผลิตต่อไร่ตั้งแต่ 3149 - 2100 กก./ไร่</font></br>
+							<button class="btn" style="background: #fff0e6"></button><font style="padding-left:25px;">ผลผลิตต่อไร่น้อยกว่าหรือเท่ากับ 2100 กก./ไร่ </font>
+						</div>
+				</li>
 			</ul>
 		</div>
 		<button id="weatherBT" class="btn btn-success btn-block" onclick="weatherBT()"><h5>สภาพภูมิอากาศ</h5></button><div class="panel-collapse collapse"></div>
@@ -1864,6 +2086,7 @@
 
 
 <div id="table_test">
+	<div id="other_content"></div>
 	<div id="chart_content"></div>
 	<div id="table_content"></div>
   <center>
