@@ -7,11 +7,16 @@ $high = number_format($high,2,'.','');
 $month = date('n');
 
 $data = get_data_area($province,$month);
-
+$product = [];
+$product[0] = get_proAvg_rice($province);
+$product[1] = get_proAvg_sugarcane($province);
+$product[2] = get_proAvg_oilplam($province);
+$product[3] = get_proAvg_rubber($province);
+$product[4] = get_proAvg_cassava($province);
 
 $result_rice = [0,0,0];
-$result_sugarcane = [0,0,0];
-$result_plam = [0,0,0];
+$result_sugarcane = [0,0,0,0];
+$result_plam = [0,0,0,0];
 $result_rubber = [0,0,0];
 $result_cassava = [0,0,0];
 
@@ -37,6 +42,8 @@ if($high<1500)
   { $result_sugarcane[1] = 1;$count_sugarcane++; }
 if($data[0]['Rain']>=100 && $data[0]['Rain']<=125)
   { $result_sugarcane[2] = 1;$count_sugarcane++; }
+if($data[0]['RH']>44 && $data[0]['RH']<86)
+  { $result_sugarcane[3] = 1;$count_sugarcane++; }
 
 //grade plam
 if($data[0]['TC']>24 && $data[0]['TC']<29)
@@ -45,6 +52,8 @@ if($high<500)
   { $result_plam[1] = 1;$count_plam++; }
 if($data[0]['Rain']>=150 && $data[0]['Rain']<166)
   { $result_plam[2] = 1;$count_plam++; }
+if($data[0]['RH']<76)
+  { $result_plam[3] = 1;$count_plam++; }
 
 //grade rubber
 if($data[0]['TC']>25 && $data[0]['TC']<31)
@@ -130,9 +139,9 @@ $pass_3 = "ทุกค่าอยู่ในช่วงที่เหมา
 $plant = [];
 $plant[0] = "ข้าว";
 $plant[1] = "อ้อย";
-$plant[2] = "มันสำปะหลัง";
+$plant[2] = "ปาล์ม";
 $plant[3] = "ยางพารา";
-$plant[4] = "ปาล์ม";
+$plant[4] = "มันสำปะหลัง";
 
 if($data){ ?>
 <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" media="all">
@@ -147,12 +156,12 @@ if($data){ ?>
       <thead  style="background-color:green;">
         <tr>
           <th>พืช</th>
-          <th>ระดับความเหมาะสม</th>
-          <th>อุณหภูมิ</th>
-          <th>ความสูงจากระดับน้ำทะเล</th>
-          <th>ปริมาณน้ำฝน</th>
-          <th>ความชื้น</th>
-          <th>ความลาดชัน</th>
+          <th style="width:180px;"><p>ระดับความเหมาะสม</p></th>
+          <th style="width:150px;"><p align="center">อุณหภูมิ</p></th>
+          <th style="max-width:200px;"><p>ความสูงจากระดับน้ำทะเล</p></th>
+          <th style="width:150px;"><p align="center">ปริมาณน้ำฝน</p></th>
+          <th style="width:150px;"><p align="center">ความชื้น</p></th>
+          <th style="max-width:200px;"><p>ผลผลิตเฉลี่ยในจังหวัด/ไร่</p></th>
 
         </tr>
       </thead>
@@ -164,33 +173,36 @@ if($data){ ?>
               <td><?php echo $plant[$i]; ?></td>
               <td><?php echo $result[$i]; ?></td>
               <?php
-              if($i==0){ //ข้าว
+              if($i==0){                //ข้าว
                 for($j=0;$j<3;$j++){
                   if($result_rice[$j]==0) {?>
                       <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
               <?php  }else { ?>
                 <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
               <?php }
-                }
-
+            } ?>
+                  <td><p align="center">ยังไม่มีเกณฑ์ข้อมูล</p></td>
+                  <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[0]['Sum'], 2, '.', ''); ?></h6></td><?php
             }
-            else if($i==1){
-              for($j=0;$j<3;$j++){
+            else if($i==1){            //อ้อย
+              for($j=0;$j<4;$j++){
                 if($result_sugarcane[$j]==0) {?>
                     <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
             <?php  }else { ?>
               <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
             <?php }
-              }
+              }?>
+                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[1]['Sum'], 2, '.', ''); ?></h6></td>  <?php
             }
             else if($i==2){
-              for($j=0;$j<3;$j++){
+              for($j=0;$j<4;$j++){
                 if($result_plam[$j]==0) {?>
                     <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
             <?php  }else { ?>
               <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
             <?php }
-              }
+              }?>
+                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[2]['Sum'], 2, '.', ''); ?></h6></td>  <?php
             }
             else if($i==3){
               for($j=0;$j<3;$j++){
@@ -199,7 +211,9 @@ if($data){ ?>
             <?php  }else { ?>
               <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
             <?php }
-              }
+              }?>
+                    <td><p align="center">ยังไม่มีเกณฑ์ข้อมูล</p></td>
+                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[3]['Sum'], 2, '.', ''); ?></h6></td>  <?php
             }
             else{
               for($j=0;$j<3;$j++){
@@ -208,11 +222,11 @@ if($data){ ?>
             <?php  }else { ?>
               <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
             <?php }
-              }
+              }?>
+                    <td><p align="center">ยังไม่มีเกณฑ์ข้อมูล</p></td>
+                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[4]['Sum'], 2, '.', ''); ?></h6></td>  <?php
             }
                 ?>
-                <td></td>
-                <td></td>
                 <td><button class="btn" data-toggle="modal" data-target="#pop_<?php echo $i;?>">info</button></td>
             </tr>
       <?php } ?>
@@ -221,6 +235,8 @@ if($data){ ?>
     </table>
 
 
+
+<!--result-->
     <div id="pop_0" class="modal fade">
       <div class="modal-dialog">
     		<div class="modal-content">
@@ -258,15 +274,15 @@ if($data){ ?>
             </tr>
             <tr>
               <td>ความชื้น</td>
-              <td><center></center></td>
-              <td><p align="right">/p></td>
-            </tr>
-            <tr>
-              <td>ความลาดชัน<</td>
-              <td><center></center></td>
+              <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
               <td><p align="right"></p></td>
             </tr>
-            
+            <tr>
+              <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร(กก.)่</td>
+              <td><center><?php echo number_format(get_proAvg_riceAll(),2,'.',''); ?></center></td>
+              <td><p align="right"><?php echo number_format((float)$product[0]['Sum'], 2, '.', ''); ?></p></td>
+            </tr>
+
            </tbody>
           </table>
 
@@ -315,13 +331,13 @@ if($data){ ?>
             </tr>
             <tr>
               <td>ความชื้น</td>
-              <td><center></center></td>
-              <td><p align="right">/p></td>
+              <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
+              <td><p align="right"><?php ?></p></td>
             </tr>
             <tr>
-              <td>ความลาดชัน<</td>
-              <td><center></center></td>
-              <td><p align="right"></p></td>
+              <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร่(กก.)</td>
+              <td><center><?php echo number_format(get_proAvg_sugarcaneAll(),2,'.',''); ?></center></td>
+              <td><p align="right"><?php echo number_format((float)$product[1]['Sum'], 2, '.', ''); ?></p></td>
             </tr>
            </tbody>
           </table>
@@ -371,13 +387,13 @@ if($data){ ?>
             </tr>
             <tr>
               <td>ความชื้น</td>
-              <td><center></center></td>
+              <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
               <td><p align="right">/p></td>
             </tr>
             <tr>
-              <td>ความลาดชัน<</td>
-              <td><center></center></td>
-              <td><p align="right"></p></td>
+              <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร่(กก.)</td>
+              <td><center><?php echo number_format(get_proAvg_oilplamAll(),2,'.',''); ?></center></td>
+              <td><p align="right"><?php echo number_format((float)$product[2]['Sum'], 2, '.', ''); ?></p></td>
             </tr>
            </tbody>
           </table>
@@ -427,13 +443,13 @@ if($data){ ?>
             </tr>
             <tr>
               <td>ความชื้น</td>
-              <td><center></center></td>
+              <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
               <td><p align="right">/p></td>
             </tr>
             <tr>
-              <td>ความลาดชัน<</td>
-              <td><center></center></td>
-              <td><p align="right"></p></td>
+              <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร(กก.)่</td>
+              <td><center><?php echo number_format(get_proAvg_rubberAll(),2,'.',''); ?></center></td>
+              <td><p align="right"><?php echo number_format((float)$product[3]['Sum'], 2, '.', ''); ?></p></td>
             </tr>
            </tbody>
           </table>
@@ -483,13 +499,13 @@ if($data){ ?>
             </tr>
             <tr>
               <td>ความชื้น</td>
-              <td><center></center></td>
+              <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
               <td><p align="right">/p></td>
             </tr>
             <tr>
-              <td>ความลาดชัน<</td>
-              <td><center></center></td>
-              <td><p align="right"></p></td>
+              <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร่(กก.)</td>
+              <td><center><?php echo number_format(get_proAvg_cassavaAll(),2,'.',''); ?></center></td>
+              <td><p align="right"><?php echo number_format((float)$product[4]['Sum'], 2, '.', ''); ?></p></td>
             </tr>
            </tbody>
           </table>

@@ -243,6 +243,158 @@ function get_chart_rice(){
   else
     return false;
 }
+
+function get_proAvg_rice($province){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM ricepee WHERE Name='$province'");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return 0;
+}
+function get_proAvg_riceAll(){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM ricepee");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+  if($data){
+    $sum=0;
+    for($i=0;$i<sizeof($data);$i++){
+      $sum += $data[$i]['Sum'];
+    }
+    $result = $sum/77;
+    return $result;
+  }
+  else
+    return 0;
+}
+function get_proAvg_rubber($province){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM rubber WHERE Name='$province'");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return 0;
+}
+function get_proAvg_rubberAll(){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM rubber");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+  if($data){
+    $sum=0;
+    for($i=0;$i<sizeof($data);$i++){
+      $sum += $data[$i]['Sum'];
+    }
+    $result = $sum/77;
+    return $result;
+  }
+  else
+    return 0;
+}
+function get_proAvg_cassava($province){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM cassava WHERE Name='$province'");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return 0;
+}
+function get_proAvg_cassavaAll(){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM cassava");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+  if($data){
+    $sum=0;
+    for($i=0;$i<sizeof($data);$i++){
+      $sum += $data[$i]['Sum'];
+    }
+    $result = $sum/77;
+    return $result;
+  }
+  else
+    return 0;
+}
+function get_proAvg_sugarcane($province){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM sugarcane WHERE Name='$province'");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return 0;
+}
+function get_proAvg_sugarcaneAll(){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM sugarcane");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+  if($data){
+    $sum=0;
+    for($i=0;$i<sizeof($data);$i++){
+      $sum += $data[$i]['Sum'];
+    }
+    $result = $sum/77;
+    return $result;
+  }
+  else
+    return 0;
+}
+function get_proAvg_oilplam($province){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM oilplam WHERE Name='$province'");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data;
+  else
+    return 0;
+}
+function get_proAvg_oilplamAll(){
+  $con = conDB();
+  $query = $con->query("SELECT Sum, Name FROM oilplam");
+  $query->execute();
+  $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+  if($data){
+    $sum=0;
+    for($i=0;$i<sizeof($data);$i++){
+      $sum += $data[$i]['Sum'];
+    }
+    $result = $sum/77;
+    return $result;
+  }
+  else
+    return 0;
+}
+
 function get_history_rice($place,$year){
   $con = conDB();
 

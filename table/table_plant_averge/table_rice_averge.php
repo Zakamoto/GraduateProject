@@ -24,7 +24,7 @@
               $sum57 += $data[$countData]['num_product_tun'];
               $sumAvg57 += $data[$countData]['product_per_plant'];
             }
-          }         
+          }
           $sum57 = ($sum57 / 77);
           $sumAvg57 = ($sumAvg57 / 77);
         } else if ($countYear == 1) {
@@ -60,7 +60,7 @@
               $sum57 += $data[$countData]['num_product_tun'];
               $sumAvg57 += $data[$countData]['product_per_crop'];
             }
-          }         
+          }
           $sum57 = ($sum57 / 67);
           $sumAvg57 = ($sumAvg57 / 67);
         } else if ($countYear == 1) {
@@ -96,7 +96,7 @@
               $sum57 += $data[$countData]['num_product_tun'];
               $sumAvg57 += $data[$countData]['product_per_crop'];
             }
-          }         
+          }
           $sum57 = ($sum57 / 50);
           $sumAvg57 = ($sumAvg57 / 50);
         } else if ($countYear == 1) {
@@ -132,7 +132,7 @@
               $sum57 += $data[$countData]['num_product_tun'];
               $sumAvg57 += $data[$countData]['product_per_crop'];
             }
-          }         
+          }
           $sum57 = ($sum57 / 45);
           $sumAvg57 = ($sumAvg57 / 45);
         } else if ($countYear == 1) {
@@ -168,7 +168,7 @@
               $sum57 += $data[$countData]['num_product_tun'];
               $sumAvg57 += $data[$countData]['product_per_crop'];
             }
-          }         
+          }
           $sum57 = ($sum57 / 66);
           $sumAvg57 = ($sumAvg57 / 66);
         } else if ($countYear == 1) {
@@ -194,7 +194,7 @@
       break;
     }
   }
-  
+
 ?>
 <html>
   <body>
@@ -230,12 +230,12 @@
             <tr>
               <td>เฉลี่ย</td>
               <td><p align="right">
-                <?php 
+                <?php
                 $sumAllAVG = ($sum57 + $sum58 + $sum59)/3;
                 echo number_format((float)$sumAllAVG, 2, '.', ''); ?></p>
               </td>
               <td><p align="right">
-              <?php 
+              <?php
                 $sumAVG = ($sumAvg57 + $sumAvg58 + $sumAvg59)/3;
                 echo number_format((float)$sumAVG, 2, '.', ''); ?>
               </p></td>
