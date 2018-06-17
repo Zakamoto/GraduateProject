@@ -161,7 +161,7 @@ if($data){ ?>
           <th style="max-width:200px;"><p>ความสูงจากระดับน้ำทะเล</p></th>
           <th style="width:150px;"><p align="center">ปริมาณน้ำฝน</p></th>
           <th style="width:150px;"><p align="center">ความชื้น</p></th>
-          <th style="max-width:200px;"><p>ผลผลิตเฉลี่ยในจังหวัด/ไร่</p></th>
+          <th style="max-width:170px;"><p>ผลผลิตเฉลี่ย</p><p>ในจังหวัดต่อไร่</p></th>
 
         </tr>
       </thead>
@@ -275,7 +275,7 @@ if($data){ ?>
             <tr>
               <td>ความชื้น</td>
               <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
-              <td><p align="right"></p></td>
+              <td><p align="right"><?php echo $data[0]['RH'] ?></p></td>
             </tr>
             <tr>
               <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร(กก.)่</td>
@@ -331,8 +331,8 @@ if($data){ ?>
             </tr>
             <tr>
               <td>ความชื้น</td>
-              <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
-              <td><p align="right"><?php ?></p></td>
+              <td><center>45 - 85</center></td>
+              <td><p align="right"><?php echo $data[0]['RH'] ?></p></td>
             </tr>
             <tr>
               <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร่(กก.)</td>
@@ -387,8 +387,8 @@ if($data){ ?>
             </tr>
             <tr>
               <td>ความชื้น</td>
-              <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
-              <td><p align="right">/p></td>
+              <td><center>ไม่เกิน 75</center></td>
+              <td><p align="right"><?php echo $data[0]['RH'] ?></p></td>
             </tr>
             <tr>
               <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร่(กก.)</td>
@@ -444,7 +444,7 @@ if($data){ ?>
             <tr>
               <td>ความชื้น</td>
               <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
-              <td><p align="right">/p></td>
+              <td><p align="right"><?php echo $data[0]['RH'] ?></p></td>
             </tr>
             <tr>
               <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร(กก.)่</td>
@@ -500,7 +500,7 @@ if($data){ ?>
             <tr>
               <td>ความชื้น</td>
               <td><center>ไม่มีเกณฑ์ข้อมูล</center></td>
-              <td><p align="right">/p></td>
+              <td><p align="right"><?php echo $data[0]['RH'] ?></p></td>
             </tr>
             <tr>
               <td><p>ผลผลิตเฉลี่ยทั่วประเทศ</p>ต่อ 1 ไร่(กก.)</td>
