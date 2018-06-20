@@ -446,6 +446,19 @@ function get_history_rubber($place,$year){
     return 0;
 }
 
+function get_history_sugarcane($place,$year){
+  $con = conDB();
+
+  $query = $con->query("SELECT product_per_crop FROM sugarcane_product WHERE province='$place' AND year=$year");
+  $query->execute();
+  $data = $query->fetch(PDO::FETCH_ASSOC);
+
+  if($data)
+    return $data['product_per_crop'];
+  else
+    return 0;
+}
+
 function get_place(){
   $con = conDB();
 

@@ -1770,7 +1770,8 @@
 		function popup_cal(){
 			console.log(province_mark);
 			$.post("popup_cal.php",{area:province_mark,},function(result){
-				if(result==1)
+				console.log(result);
+				if(result!=0)
 					$("#Display_rice").click();
 				else
 					$("#pop_alert").click();
@@ -1916,6 +1917,7 @@
 
 				$('#enter_position_1').click(function(){
 					$("#address").html(address_info);
+					console.log(high_level);
 					$.post("table/area_table.php",{
 						privince:province_mark,
 						high:high_level,
@@ -1928,6 +1930,7 @@
 				});
 				$('#enter_position_3').click(function(){
 					$("#address").html(address_info);
+					console.log(high_level);
 					$.post("table/area_table.php",{
 						privince:province_mark,
 						high:high_level,
