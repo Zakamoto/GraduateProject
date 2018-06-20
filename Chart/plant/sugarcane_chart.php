@@ -26,7 +26,7 @@
           series: [
           {
               type: 'spline',
-              name: 'ตัน',
+              name: 'ค่าเฉลี่ยทุกปี',
               data: [
                       <?php for($i=0;$i<25;$i++){ ?>
                         <?= $data[$i][0]['Sum']; ?>,
@@ -37,6 +37,49 @@
                   lineColor: Highcharts.getOptions().colors[1],
                   fillColor: 'white'
               }
-          }]
+          },
+          {
+              type: 'spline',
+              name: 'ผลผลิตต่อไร่ 2557',
+              data: [
+                      <?php for($i=0;$i<25;$i++){ ?>
+                        <?= get_history_sugarcane($data[$i][0]['Name'],2557); ?>,
+                      <?php } ?>
+                    ],
+              marker: {
+                  lineWidth: 2,
+                  lineColor: Highcharts.getOptions().colors[2],
+                  fillColor: 'white'
+              }
+          },
+          {
+              type: 'spline',
+              name: 'ผลผลิตต่อไร่ 2558',
+              data: [
+                      <?php for($i=0;$i<25;$i++){ ?>
+                        <?= get_history_sugarcane($data[$i][0]['Name'],2558); ?>,
+                      <?php } ?>
+                    ],
+              marker: {
+                  lineWidth: 2,
+                  lineColor: Highcharts.getOptions().colors[3],
+                  fillColor: 'white'
+              }
+          },
+          {
+              type: 'spline',
+              name: 'ผลผลิตต่อไร่ 2559',
+              data: [
+                      <?php for($i=0;$i<25;$i++){ ?>
+                        <?= get_history_sugarcane($data[$i][0]['Name'],2559); ?>,
+                      <?php } ?>
+                    ],
+              marker: {
+                  lineWidth: 2,
+                  lineColor: Highcharts.getOptions().colors[4],
+                  fillColor: 'white'
+              }
+          }
+        ]
         });
 </script>
