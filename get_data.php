@@ -298,7 +298,7 @@ function get_proAvg_rubberAll(){
     for($i=0;$i<sizeof($data);$i++){
       $sum += $data[$i]['Sum'];
     }
-    $result = $sum/77;
+    $result = $sum/67;
     return $result;
   }
   else
@@ -328,7 +328,7 @@ function get_proAvg_cassavaAll(){
     for($i=0;$i<sizeof($data);$i++){
       $sum += $data[$i]['Sum'];
     }
-    $result = $sum/77;
+    $result = $sum/50;
     return $result;
   }
   else
@@ -358,7 +358,7 @@ function get_proAvg_sugarcaneAll(){
     for($i=0;$i<sizeof($data);$i++){
       $sum += $data[$i]['Sum'];
     }
-    $result = $sum/77;
+    $result = $sum/45;
     return $result;
   }
   else
@@ -388,7 +388,7 @@ function get_proAvg_oilplamAll(){
     for($i=0;$i<sizeof($data);$i++){
       $sum += $data[$i]['Sum'];
     }
-    $result = $sum/77;
+    $result = $sum/66;
     return $result;
   }
   else

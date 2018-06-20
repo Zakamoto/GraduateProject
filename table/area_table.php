@@ -155,13 +155,13 @@ if($data){ ?>
     <table class="ui celled table" style="width:100%">
       <thead  style="background-color:green;">
         <tr>
-          <th>พืช</th>
+          <th style="width:100px;"><p align="center">พืช</p></th>
           <th style="width:180px;"><p>ระดับความเหมาะสม</p></th>
           <th style="width:150px;"><p align="center">อุณหภูมิ</p></th>
           <th style="max-width:200px;"><p>ความสูงจากระดับน้ำทะเล</p></th>
           <th style="width:150px;"><p align="center">ปริมาณน้ำฝน</p></th>
           <th style="width:150px;"><p align="center">ความชื้น</p></th>
-          <th style="max-width:170px;"><p>ผลผลิตเฉลี่ย</p><p>ในจังหวัดต่อไร่</p></th>
+          <th style="max-width:200px;" colspan="2"><p align="center">ผลผลิตเฉลี่ยทั่วประเทศ</p><p align="center">และ</p><p align="center">ผลผลิตเฉลี่ยในจังหวัด</p></th>
 
         </tr>
       </thead>
@@ -182,7 +182,8 @@ if($data){ ?>
               <?php }
             } ?>
                   <td><p align="center">ยังไม่มีเกณฑ์ข้อมูล</p></td>
-                  <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[0]['Sum'], 2, '.', ''); ?></h6></td><?php
+                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format(get_proAvg_riceAll(),2,'.',''); ?></h6></td>
+                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[0]['Sum'], 2, '.', ''); ?></h6></td><?php
             }
             else if($i==1){            //อ้อย
               for($j=0;$j<4;$j++){
@@ -192,9 +193,10 @@ if($data){ ?>
               <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
             <?php }
               }?>
-                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[1]['Sum'], 2, '.', ''); ?></h6></td>  <?php
+                      <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format(get_proAvg_sugarcaneAll(),2,'.',''); ?></h6></td>
+                      <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[1]['Sum'], 2, '.', ''); ?></h6></td><?php
             }
-            else if($i==2){
+            else if($i==2){   //ปาล์มน้ำมัน
               for($j=0;$j<4;$j++){
                 if($result_plam[$j]==0) {?>
                     <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
@@ -202,9 +204,12 @@ if($data){ ?>
               <td><center><img src="img_option/correct.png" style="width:60px;height:80px;"/></center></td>
             <?php }
               }?>
-                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[2]['Sum'], 2, '.', ''); ?></h6></td>  <?php
+
+                <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format(get_proAvg_oilplamAll(),2,'.',''); ?></h6></td>
+                <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[2]['Sum'], 2, '.', ''); ?></h6></td>
+              <?php
             }
-            else if($i==3){
+            else if($i==3){         //ยางพารา
               for($j=0;$j<3;$j++){
                 if($result_rubber[$j]==0) {?>
                     <td><center><img src="img_option/incorrect.png" style="width:55px;height:70px;padding-top:15px;"/></center></td>
@@ -213,8 +218,10 @@ if($data){ ?>
             <?php }
               }?>
                     <td><p align="center">ยังไม่มีเกณฑ์ข้อมูล</p></td>
-                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[3]['Sum'], 2, '.', ''); ?></h6></td>  <?php
-            }
+
+                      <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format(get_proAvg_rubberAll(),2,'.',''); ?></h6></td>
+                      <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[3]['Sum'], 2, '.', ''); ?></h6></td>
+                    <?php    }
             else{
               for($j=0;$j<3;$j++){
                 if($result_cassava[$j]==0) {?>
@@ -224,8 +231,10 @@ if($data){ ?>
             <?php }
               }?>
                     <td><p align="center">ยังไม่มีเกณฑ์ข้อมูล</p></td>
-                    <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[4]['Sum'], 2, '.', ''); ?></h6></td>  <?php
-            }
+
+                      <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format(get_proAvg_cassavaAll(),2,'.',''); ?></h6></td>
+                      <td style="background-color:#58D68D;"><h6 align="right"><?php echo number_format((float)$product[4]['Sum'], 2, '.', ''); ?></h6></td>
+                    <?php          }
                 ?>
                 <td><button class="btn" data-toggle="modal" data-target="#pop_<?php echo $i;?>">info</button></td>
             </tr>
