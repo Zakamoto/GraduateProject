@@ -163,7 +163,7 @@ function table_rice_averge(typeInput){
   $.post("./table/table_plant_averge/table_rice_averge.php",
   {
     type:typeInput,
-  },function(result){console.log(result);
+  },function(result){
     $("#other_content").html(result);
   });
 }

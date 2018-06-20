@@ -214,30 +214,30 @@
       <tbody>
             <tr>
               <td>2557</td>
-              <td><p align="right"><?php echo number_format((float)$sum57, 2, '.', ''); ?></p></td>
-              <td><p align="right"><?php echo number_format((float)$sumAvg57, 2, '.', ''); ?></p></td>
+              <td><p align="right"><?php echo number_format((float)$sum57, 2, '.', ','); ?></p></td>
+              <td><p align="right"><?php echo number_format((float)$sumAvg57, 2, '.', ','); ?></p></td>
             </tr>
             <tr>
               <td>2558</td>
-              <td><p align="right"><?php echo number_format((float)$sum58, 2, '.', ''); ?></p></td>
-              <td><p align="right"><?php echo number_format((float)$sumAvg58, 2, '.', ''); ?></p></td>
+              <td><p align="right"><?php echo number_format((float)$sum58, 2, '.', ','); ?></p></td>
+              <td><p align="right"><?php echo number_format((float)$sumAvg58, 2, '.', ','); ?></p></td>
             </tr>
             <tr>
               <td>2559</td>
-              <td><p align="right"><?php echo number_format((float)$sumAvg59, 2, '.', ''); ?></p></td>
-              <td><p align="right"><?php echo number_format((float)$sumAvg59, 2, '.', ''); ?></p></td>
+              <td><p align="right"><?php echo number_format((float)$sumAvg59, 2, '.', ','); ?></p></td>
+              <td><p align="right"><?php echo number_format((float)$sumAvg59, 2, '.', ','); ?></p></td>
             </tr>
             <tr>
               <td>เฉลี่ย</td>
               <td><p align="right">
                 <?php
                 $sumAllAVG = ($sum57 + $sum58 + $sum59)/3;
-                echo number_format((float)$sumAllAVG, 2, '.', ''); ?></p>
+                echo number_format((float)$sumAllAVG, 2, '.', ','); ?></p>
               </td>
               <td><p align="right">
               <?php
                 $sumAVG = ($sumAvg57 + $sumAvg58 + $sumAvg59)/3;
-                echo number_format((float)$sumAVG, 2, '.', ''); ?>
+                echo number_format((float)$sumAVG, 2, '.', ','); ?>
               </p></td>
             </tr>
       </tbody>

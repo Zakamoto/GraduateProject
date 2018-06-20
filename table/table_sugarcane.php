@@ -13,7 +13,7 @@
 <div class="header"><center><h1>ตารางข้อมูล อ้อย</h1></center></div>
 <center>
   <div class="content">
-  <div id="table1" style="max-width: 600px">
+  <div id="table1" style="max-width: 800px">
     <table class="ui celled table" style="width:100%">
       <thead  style="background-color:green;">
           <th>ลำดับ</th>
@@ -31,7 +31,7 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ','); ?></p></td>
                 </tr>
         <?php
               }
@@ -42,7 +42,7 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ','); ?></p></td>
                 </tr>
         <?php
               }
@@ -53,7 +53,7 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ','); ?></p></td>
                 </tr>
         <?php
               }
@@ -64,7 +64,7 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ','); ?></p></td>
                 </tr>
         <?php
               }
@@ -75,7 +75,7 @@
                   <tr>
                   <td><p align="center"><?php echo ($i+1); ?></p></td>
                   <td><?php echo $data[$i][0]['Name']; ?></td>
-                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ''); ?></p></td>
+                  <td><p align="right"><?php echo number_format((float)$data[$i][0]['Sum'], 2, '.', ','); ?></p></td>
                 </tr>
         <?php
               }

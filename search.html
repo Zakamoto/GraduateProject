@@ -43,7 +43,6 @@ $("#currentLocation").click(function(e){
           lng: position.coords.longitude
         };
         getCurrentPosition = pos;
-        console.log(getCurrentPosition);
         infowindow2.setPosition(pos);
         //infowindow.setContent(contentString2);
         infowindow2.open(map);
@@ -55,10 +54,11 @@ $("#currentLocation").click(function(e){
           if (status == GGM.GeocoderStatus.OK) {
             if (results[1]) {
               // แสดงข้อมูลสถานที่ใน textarea ที่มี id เท่ากับ place_value
-              $("#area_value").html(results[1].formatted_address); //
+              $("#area_value").html(results[1].formatted_address);
+              $("#address").html(results[1].formatted_address);
               infowindow2.setPosition(pos);
-              address_info = results[1].formatted_address;
-              var str = address_info;
+              address_info_gps = results[1].formatted_address;
+              var str = address_info_gps;
 							var cut1 = 0;
 							var cut2 = 0;
 							var counter = 0;
@@ -92,9 +92,9 @@ $("#currentLocation").click(function(e){
 								$.post("table/area_table.php",{
 									privince:province_mark_2,
                   high:high_level_2,
+                  area:address_info_gps,
 								},
 								function(result){
-                  console.log(result);
 									$("#area_table").html(result);
 								});
 							});
@@ -116,9 +116,6 @@ $("#currentLocation").click(function(e){
   alert("เบาวน์เซอร์ไม่รองรับ การทำงานของฟังก์ชันนี้");
   }
   function handleLocationError(browserHasGeolocation, infowindow2, pos) {
-    console.log("can't access");
-    console.log(browserHasGeolocation);
-    console.log(pos);
     alert("มีข้อผิดพลาดเกิดขึ้นในการเข้าถึงตำแหน่งปัจจุบันของคุณ");
   }
 });
